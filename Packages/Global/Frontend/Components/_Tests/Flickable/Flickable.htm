@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=720, user-scalable=no'>
+        <!-- <meta name='viewport' content='width=device-width, user-scalable=no'> -->
+        <title>Flickable</title>
+
+        <style>
+            * {
+                &:not(:defined) {
+                    display: none;
+                }
+
+
+                &[_building] {
+                    display: none;
+                }
+            }
+
+
+            body {
+                margin: 0;
+            }
+
+            textArea {
+                background: transparent;
+                border: none;
+                margin: 0;
+                outline: none;
+                padding: 50px;
+                resize: none;
+                /* white-space: pre; */
+            }
+
+            x-flickable {
+                --Flickable__scrollBar__width: 100px;
+                --Flickable__gap: 4px;
+                --Flickable__puck__margin_outer: 10px;
+                border: 1px solid #444;
+                font: 24px 'Arial';
+                /* overflow-y: clip; */
+
+                &::part(content) {
+                    display: inline-block;
+                    margin: 20px;
+                    padding: 20px;
+                }
+
+                &:active {
+                    background: #f002;
+                }
+
+                &::part(puck) {
+                    background: #00f4;
+                }
+
+                &::part(scrollBar) {
+                    --TrackBar__width: 20px;
+                }
+                &::part(scrollBar):state(disabled) {
+                    background: gray;
+                }
+            }
+
+
+            #root {
+                -webkit-user-select: none;
+                border: 1px solid #000;
+                box-sizing: border-box;
+                display: grid;
+                gap: 10px;
+                grid-template: 100% / 1fr 1fr;
+                height: 100dvh;
+                padding: 10px;
+                /* touch-action: none; */
+                user-select: none;
+            }
+        </style>
+
+        <script type='module'>
+            import {TextField} from '../../TextField/TextField.js';
+            import {Flickable} from '../../Flickable/Flickable.js';
+
+
+            await TextField._defined;
+            window.textFields = document.querySelectorAll('x-textField');
+            await Promise.all([...textFields].map((item) => item._built));
+
+            await Flickable._defined;
+            window.flickables = document.querySelectorAll('x-flickable');
+            await Promise.all([...flickables].map((item) => item._built));
+
+
+            let root = document.querySelector('#root');
+            root.addEventListener('touchstart', (event) => event.preventDefault(), {passive: false});
+
+            window.addEventListener('error', (event) => {
+                alert(event.filename + ' ' + event.message + ' ' + event.lineno);
+            });
+
+            window.textArea = document.querySelector('textArea');
+
+            textArea.value = Array(100).join(flickables[1].textContent);
+            flickables[0].refresh();
+            flickables[1].innerHTML = Array(100).join(flickables[1].innerHTML);
+            flickables[1].refresh();
+
+            // flickables[1].scroll_x = 100;
+            // flickables[1].scroll_y = 0;
+            // flickables[1].refresh();
+
+            flickables[0].eventListeners__add({
+                press: (event) => console.log(event, event.detail.taps_count),
+                tap: (event) => console.log(event, event.detail.taps_count),
+            });
+        </script>
+    </head>
+
+    <body>
+        <div id='root'>
+            <x-flickable shift='50' disabled_ swipe_disabled tap_disabled_>
+                <textArea slot='display' spellCheck='false' disabled_ readOnly_></textArea>
+            </x-flickable>
+
+            <x-flickable shift='20' snag='button' shift_jump_>
+                <!-- <button>Button</button> -->
+                abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
+            </x-flickable>
+        </div>
+    </body>
+</html>

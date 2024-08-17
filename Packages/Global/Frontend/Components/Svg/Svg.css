@@ -1,0 +1,24 @@
+@layer init {
+    :host {
+        display: block;
+        height: 32px;
+        width: 32px;
+    }
+
+
+    svg {
+        display: block;
+        height: 100%;
+        width: 100%;
+    }
+
+
+    .resource {
+        height: 0;
+        width: 0;
+    }
+
+    .root {
+        display: contents;
+    }
+}

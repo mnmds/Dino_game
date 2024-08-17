@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8' content='user-scalable=no, width=device-width' name='viewport'>
+        <title>TextField</title>
+
+        <style>
+            * {
+                &:not(:defined) {
+                    display: none;
+                }
+                &[_building] {
+                    display: none;
+                }
+            }
+
+
+            .textField_1 {
+                caret-color: blue;
+                font: 50px 'Arial';
+                width: 600px;
+
+                &:not([_building]) {
+                    animation: fadeIn 0.5s;
+                }
+                &::part(button) {
+                    background: red;
+                }
+                &::part(button_clear) {
+                    background: blue;
+                }
+            }
+
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {TextField} from '../../TextField/TextField.js';
+
+
+            await TextField._defined;
+            window.textFields = document.querySelectorAll('x-textField');
+            await Promise.all([...textFields].map((item) => item._built));
+
+            textFields[0].value = '123';
+        </script>
+    </head>
+
+    <body>
+        <x-textField
+            class='textField_1'
+
+            button_clear
+            button_mask
+            dragAndDrop
+            length_max='20'
+            mask_char='👨‍👩‍👧‍👦12'
+            masked_
+            placeholder='password'
+            regExp='^[^@\s]+?@[^\.\s]+?\.[^\.\s]+$'
+            template='+7 ([\d][\d][\d]) [\d][\d][\d]-[\d][\d]-[\d][\d]'
+            template_char='⚽23'
+        >
+        </x-textField>
+
+        <input>
+    </body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta content='user-scalable=no, width=720' name='viewport'>
+        <title>Resizable</title>
+
+        <style>
+            * {
+                &[_building] {
+                    display: none;
+                }
+                &:not(:defined) {
+                    display: none;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {Resizable} from '../../Resizable/Resizable.js';
+
+
+            await Resizable._defined;
+            window.resizables = document.querySelectorAll('x-resizable');
+            await Promise.all([...resizables].map((item) => item._built));
+        </script>
+    </head>
+
+    <body>
+        <x-resizable></x-resizable>
+    </body>
+</html>

@@ -1,0 +1,125 @@
+@layer init {
+    /* :host(x-edit) { */
+    /*     background: #afa; */
+
+        /* &::part(button_clear) { */
+            /* mask-image: url('./Edit.svg#cross'); */
+
+        /*     background: blue; */
+        /* } */
+    /* } */
+
+    /* :host(x-edit)::part(button_clear) { */
+    /*     mask-image: url('./Edit.svg#cross'); */
+
+    /*     background: blue; */
+    /* } */
+
+
+    :root {
+        --Theme__background: #fff;
+    }
+
+
+    /* * { */
+    /*     &[_building] { */
+    /*         display: none; */
+    /*     } */
+    /*     &:not(:defined) { */
+    /*         display: none; */
+    /*     } */
+    /* } */
+
+
+    body {
+        margin: 0;
+
+        /* container-name: body; */
+        container-type: size;
+
+        &[theme='dark'] {
+            --Theme__name: dark;
+            height: 1px;
+        }
+    }
+
+    x-edit {
+        background: #afa;
+        text-overflow: ellipsis;
+    }
+
+    x-flickable {
+        box-sizing: border-box;
+        padding: 8px;
+
+        /* @container style(--Theme__name: dark) { */
+        /*     &::part(puck) { */
+        /*         background: blue; */
+        /*     } */
+        /* } */
+
+        @container (height) {
+        /* @container (height = 1px) { */
+        /* @container body style(height: 1px) { */
+            &::part(puck) {
+                background: blue;
+            }
+        }
+    }
+
+    x-textArea {
+        --TextArea__padding: 8px;
+
+        @container (height: 1px) {
+            &::part(puck) {
+                background: red;
+            }
+        }
+    }
+
+    /* x-viewport { */
+    /*     &[_building] { */
+    /*         display: none; */
+    /*     } */
+    /*     &:not(:defined) { */
+    /*         display: none; */
+    /*     } */
+    /* } */
+
+
+    .Theme__ghost {
+        /* &:not([_building]) { */
+        /*     animation: fadeIn 0.5s; */
+        /* } */
+    }
+
+
+    :not(:defined) {
+        display: none;
+    }
+
+    :state(_building) {
+        display: none;
+    }
+
+
+    /* [_building] { */
+    /*     display: none; */
+    /* } */
+
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+    }
+
+
+    /* @container body style(--theme: dark) { */
+    /*     x-flickable { */
+    /*         &::part(puck) { */
+    /*             background: blue; */
+    /*         } */
+    /*     } */
+    /* } */
+}

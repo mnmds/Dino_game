@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta content='user-scalable=no, width=360' name='viewport'>
+        <title>Popup</title>
+
+        <style>
+            * {
+                &[_building] {
+                    display: none;
+                }
+                &:not(:defined) {
+                    display: none;
+                }
+            }
+
+
+            body {
+                height: 100dvh;
+                margin: 0;
+            }
+
+            x-popup {
+                width: 300px;
+            }
+            x-popup:nth-of-type(1) {
+                left: 100px;
+                margin: 0;
+                top: 100px;
+                /* z-index: 1; */
+
+                &::part(root)::backdrop {
+                    backdrop-filter: blur(2px);
+                    background: #00f2;
+                }
+            }
+            x-popup:nth-of-type(2) {
+                left: 100px;
+                margin: 0;
+                top: 200px;
+            }
+            x-popup:nth-of-type(3) {
+                left: 100px;
+                margin: 0;
+                top: 300px;
+            }
+            x-popup[mode='modal'] {
+                --Popup__backdrop_color: #0f04;
+                --Popup__backdrop_filter: blur(1px);
+
+                &::part(root)::backdrop {
+                    backdrop-filter: blur(2px);
+                    background: #00f2;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {Popup} from '../../Popup/Popup.js';
+
+
+            await Popup._defined;
+            window.popups = document.querySelectorAll('x-popup');
+            await Promise.all([...popups].map((item) => item._built));
+
+            let buttons = document.querySelectorAll('button');
+
+            buttons[0].onclick = () => popups[0].open();
+            buttons[1].onclick = () => popups[1].open();
+            buttons[2].onclick = () => popups[2].open();
+            buttons[3].onclick = () => popups[3].open();
+
+            // popups[1].onclick = () => popups[1].close();
+            // popups[2].onclick = () => popups[2].close();
+            // popups[3].onclick = () => popups[3].close();
+
+            popups[1].addEventListener('close', (event) => console.log(event));
+
+            document.body.addEventListener('pointerdown', (event) => {
+                // if (event.target instanceof Popup) return;
+
+                // document.body.focus();
+            });
+
+            setTimeout(() => popups[1].open());
+            setTimeout(() => popups[2].open(), 1e3);
+        </script>
+    </head>
+
+    <body tabIndex='-1'>
+        <button>Button_0</button>
+        <button>Button_1</button>
+        <button>Button_2</button>
+        <button>Button_4</button>
+
+        <x-popup>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna ipsum, luctus non nisi in, venenatis tempus risus. Vivamus ut ligula at ipsum tincidunt tempus. Praesent imperdiet dolor at nulla placerat gravida. Phasellus mollis ipsum et libero fermentum convallis. Aliquam sapien tortor, imperdiet a nibh ac, eleifend convallis dolor. In et elit eget tellus facilisis suscipit. Vestibulum consequat non risus et dignissim. Donec malesuada vel lectus at iaculis. Sed feugiat laoreet lorem, quis congue turpis iaculis in. Vestibulum consequat dapibus risus, eu eleifend purus egestas in.
+        </x-popup>
+
+        <x-popup mode='lite'>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna ipsum, luctus non nisi in, venenatis tempus risus. Vivamus ut ligula at ipsum tincidunt tempus. Praesent imperdiet dolor at nulla placerat gravida. Phasellus mollis ipsum et libero fermentum convallis. Aliquam sapien tortor, imperdiet a nibh ac, eleifend convallis dolor. In et elit eget tellus facilisis suscipit. Vestibulum consequat non risus et dignissim. Donec malesuada vel lectus at iaculis. Sed feugiat laoreet lorem, quis congue turpis iaculis in. Vestibulum consequat dapibus risus, eu eleifend purus egestas in.
+
+            <button>Button</button>
+            <button>Button</button>
+        </x-popup>
+
+        <x-popup mode='lite'>
+            <div tabIndex='-1'>
+                <div>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna ipsum, luctus non nisi in, venenatis tempus risus. Vivamus ut ligula at ipsum tincidunt tempus. Praesent imperdiet dolor at nulla placerat gravida. Phasellus mollis ipsum et libero fermentum convallis. Aliquam sapien tortor, imperdiet a nibh ac, eleifend convallis dolor. In et elit eget tellus facilisis suscipit. Vestibulum consequat non risus et dignissim. Donec malesuada vel lectus at iaculis. Sed feugiat laoreet lorem, quis congue turpis iaculis in. Vestibulum consequat dapibus risus, eu eleifend purus egestas in.
+                </div>
+
+                <button>Button</button>
+                <button>Button</button>
+            </div>
+        </x-popup>
+
+        <x-popup mode='modal'><button>Popup_1</button></x-popup>
+    </body>
+</html>

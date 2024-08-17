@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>TrackBar</title>
+
+        <style>
+            :not(:defined) {
+                display: none;
+            }
+
+
+            body {
+                height: 100vh;
+                margin: 0;
+            }
+
+            x-trackBar {
+                display: inline-block;
+                margin: 10px;
+
+                &::part(puck) {
+                    cursor: pointer;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {TrackBar} from '../../TrackBar/TrackBar.js';
+
+
+            await TrackBar._defined;
+        </script>
+    </head>
+
+    <body>
+        <x-trackBar value='50'></x-trackBar>
+        <x-trackBar value_min='-10' value_max='10'></x-trackBar>
+        <x-trackBar value='999' vertical></x-trackBar>
+    </body>
+</html>

@@ -1,0 +1,55 @@
+@layer init {
+    :host {
+        --TextArea__gap: 0px;
+        --TextArea__padding: var(--TextArea__gap);
+        --TextArea__padding_horizontal: var(--TextArea__padding);
+        --TextArea__padding_vertical: var(--TextArea__padding);
+        --TextArea__placeholder_color: currentColor;
+        --TextArea__placeholder_opacity: 0.4;
+
+        border: 1px solid #888;
+        border-radius: 2px;
+        display: block;
+        font-family: 'Arial';
+        line-height: 1.5;
+        max-height: 120px;
+        padding: 0 !important;
+        width: 400px;
+    }
+    :host([_focused]) {
+        border-color: #000;
+    }
+    :host([disabled]) {
+        background: #eee;
+        border-color: #ccc;
+    }
+
+
+    .input {
+        background: transparent !important;
+        border: none !important;
+        box-sizing: border-box !important;
+        color: inherit;
+        font: inherit;
+        height: 100%;
+        margin: 0 !important;
+        outline: none;
+        padding: var(--TextArea__padding_vertical) var(--TextArea__padding_horizontal) !important;
+        resize: none !important;
+
+        &::placeholder {
+            color: var(--TextArea__placeholder_color);
+            opacity: var(--TextArea__placeholder_opacity);
+        }
+
+        .root[_scroll_height] & {
+            margin-right: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+
+    .root {
+        --Flickable__gap: var(--TextArea__gap);
+        height: 100%;
+    }
+}

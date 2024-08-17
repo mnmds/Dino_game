@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8' content='user-scalable=no, viewport-fit=contain, width=device-width' name='viewport'>
+        <title>Viewport</title>
+
+        <link href='../../../Themes/Basic/Basic.css' rel='stylesheet'>
+        <script src='../../../Frontend.js' type='module'></script>
+
+        <style>
+            /* * { */
+            /*     &[_building] { */
+            /*         display: none; */
+            /*     } */
+            /*     &:not(:defined) { */
+            /*         display: none; */
+            /*     } */
+            /* } */
+
+
+            /* body { */
+            /*     margin: 0; */
+            /* } */
+
+            input {
+                font-size: inherit;
+            }
+
+            x-flickable {
+                height: 100%;
+            }
+
+            x-viewport {
+                -webkit-user-select: none;
+                background: #0002;
+                border: #00f solid 10px;
+                font-size: 20px;
+                /* padding: 20px; */
+                user-select: none;
+            }
+        </style>
+
+        <script type='module'>
+            import {Component} from '../../Component/Component.js';
+            import {Flickable} from '../../Flickable/Flickable.js';
+            import {Repeater} from '../../Repeater/Repeater.js';
+            import {Viewport} from '../../Viewport/Viewport.js';
+
+
+            let styleSheet = new CSSStyleSheet();
+            styleSheet.replace(`
+                @layer init {
+                    * {
+                        color: red;
+                    }
+
+                    .input {
+                        background: blue;
+                    }
+                }
+            `);
+            Component.init({
+                styleSheets: {
+                    a: styleSheet,
+                },
+                styleSheets_descriptors: {
+                    main: '../../Themes/Basic/Basic.css',
+                    // main: document.styleSheets[0].href,
+                },
+            });
+
+            await Component._defined;
+            await Repeater._defined;
+
+            await Flickable._defined;
+            window.flickables = document.querySelectorAll('x-flickable');
+            await Promise.all([...flickables].map((item) => item._built));
+
+            await Viewport._defined;
+            window.viewports = document.querySelectorAll('x-viewport');
+            await Promise.all([...viewports].map((item) => item._built));
+
+            viewports[0].refresh();
+
+
+            let button = document.querySelector('.button');
+            let input = document.querySelector('input');
+            let span = document.querySelector('span');
+            let flickable = document.querySelector('x-flickable');
+            let textArea = document.querySelector('x-textArea');
+
+            flickable.addEventListener('tap', (event) => {
+                flickables[0].refresh();
+            });
+            // setTimeout(() => flickable.refresh());
+        </script>
+    </head>
+
+    <body theme='dark'>
+        <x-viewport class='Theme__ghost'>
+            <x-flickable autoRefresh disabled_ jerk='2' shift='10' snag_='x-edit' swipe_disabled_ velocity_max_='100'>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna ipsum, luctus non nisi in, venenatis tempus risus. Vivamus ut ligula at ipsum tincidunt tempus. Praesent imperdiet dolor at nulla placerat gravida. Phasellus mollis ipsum et libero fermentum convallis. Aliquam sapien tortor, imperdiet a nibh ac, eleifend convallis dolor. In et elit eget tellus facilisis suscipit. Vestibulum consequat non risus et dignissim. Donec malesuada vel lectus at iaculis. Sed feugiat laoreet lorem, quis congue turpis iaculis in. Vestibulum consequat dapibus risus, eu eleifend purus egestas in.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna ipsum, luctus non nisi in, venenatis tempus risus. Vivamus ut ligula at ipsum tincidunt tempus. Praesent imperdiet dolor at nulla placerat gravida. Phasellus mollis ipsum et libero fermentum convallis. Aliquam sapien tortor, imperdiet a nibh ac, eleifend convallis dolor. In et elit eget tellus facilisis suscipit. Vestibulum consequat non risus et dignissim. Donec malesuada vel lectus at iaculis. Sed feugiat laoreet lorem, quis congue turpis iaculis in. Vestibulum consequat dapibus risus, eu eleifend purus egestas in.
+                </p>
+
+                <button class='button'>Scroll</button>
+
+                <x-edit button_clear button_mask></x-edit>
+                <x-edit></x-edit>
+                <x-textArea autoRefresh_></x-textArea>
+
+                <x-repeater model='20'>
+                    <template Repeater__delegate>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna ipsum, luctus non nisi in, venenatis tempus risus. Vivamus ut ligula at ipsum tincidunt tempus. Praesent imperdiet dolor at nulla placerat gravida. Phasellus mollis ipsum et libero fermentum convallis. Aliquam sapien tortor, imperdiet a nibh ac, eleifend convallis dolor. In et elit eget tellus facilisis suscipit. Vestibulum consequat non risus et dignissim. Donec malesuada vel lectus at iaculis. Sed feugiat laoreet lorem, quis congue turpis iaculis in. Vestibulum consequat dapibus risus, eu eleifend purus egestas in.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna ipsum, luctus non nisi in, venenatis tempus risus. Vivamus ut ligula at ipsum tincidunt tempus. Praesent imperdiet dolor at nulla placerat gravida. Phasellus mollis ipsum et libero fermentum convallis. Aliquam sapien tortor, imperdiet a nibh ac, eleifend convallis dolor. In et elit eget tellus facilisis suscipit. Vestibulum consequat non risus et dignissim. Donec malesuada vel lectus at iaculis. Sed feugiat laoreet lorem, quis congue turpis iaculis in. Vestibulum consequat dapibus risus, eu eleifend purus egestas in.
+                        </p>
+                    </template>
+                </x-repeater>
+            </x-flickable>
+        </x-viewport>
+    </body>
+</html>

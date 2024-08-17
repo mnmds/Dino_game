@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>Repeater</title>
+
+        <style>
+            body {
+                user-select: none;
+            }
+
+            div {
+                background: #EEE;
+                border: 1px solid #000;
+                display: inline-block;
+                margin: 10px;
+                padding: 10px;
+                vertical-align: middle;
+
+                &[_Repeater__filtered] {
+                    /* display: none; */
+                    opacity: 0.2;
+                }
+
+                &[selected] {
+                    background: #AFA;
+                }
+            }
+
+            span {
+                pointer-events: none;
+            }
+
+            x-repeater {
+                border: 1px solid #000;
+                display: block;
+                margin: 10px 0;
+                /* display: contents; */
+            }
+
+
+            :not(:defined) {
+                display: none;
+            }
+        </style>
+
+        <script type='module'>
+            import {Model} from '../../../Units/Model/Model.js';
+            import {Repeater} from '../../Repeater/Repeater.js';
+
+
+            await Repeater._defined;
+
+            let button_add = document.querySelector('#button_add');
+            let button_delete = document.querySelector('#button_delete');
+            let button_sort = document.querySelector('#button_sort');
+            let input_filter = document.querySelector('#input_filter');
+            let repeaters = document.querySelectorAll('x-repeater');
+
+            let model = repeaters[0].model;
+            repeaters[1].Manager = class extends Repeater.Manager {
+                init() {
+                    // this._item.textContent = `${this._model_item._index} (${this._key}): ${this._model_item.data}`;
+                }
+            };
+            // repeaters[1].delegate = document.createElement('button');
+            // repeaters[1].delegate = repeaters[0].delegate;
+            // repeaters[1].Manager = repeaters[0].Manager;
+            repeaters[1].model = model;
+            repeaters[1].refresh();
+
+            button_add.addEventListener('click', (event) => {
+                let items = [
+                    {
+                        data: Math.random() + '',
+                        selected: true,
+                    },
+                    {
+                        data: Math.random() + '',
+                    },
+                ];
+                model.add(items, 2);
+            });
+
+            button_delete.addEventListener('click', (event) => {
+                let keys = [...model._items.entries()].filter(([key, value]) => value.selected).map((entry) => entry[0]);
+                model.delete(keys);
+            });
+
+            input_filter.addEventListener('input', (event) => {
+                let s = input_filter.value.split('').join('.*?');
+                model.filter_regExp = new RegExp(s);
+                model.filter();
+            });
+
+            button_sort.addEventListener('click', (event) => {
+                model.sort();
+            });
+
+            // repeaters[0].addEventListener('click', (event) => {
+            //     if (!event.target.Repeater__manager) return;
+
+            //     // let key = event.target.Repeater__manager._key;
+            //     // let model_item = model.get(key);
+            //     let model_item = event.target.Repeater__manager._model_item;
+            //     model.update(model_item._index, {selected: !model_item.selected});
+            // });
+
+
+            window.model = model;
+        </script>
+    </head>
+
+
+    <body>
+        <button id='button_add'>+</button>
+        <button id='button_delete'>X</button>
+        <button id='button_sort'>Sort</button>
+        <input id='input_filter' placeholder='Filter'></input>
+
+        <x-repeater interpolation_='repeater'>
+            <template Repeater__delegate>
+                <div>
+                    <span class='label_index'></span>:
+                    <input class='input' value='{{repeater: data}}'></input>
+                    <button class='button_remove'>X</button>
+                    <button class='button_move_left'><-</button>
+                    <button class='button_move_right'>-></button>
+                </div>
+
+                <script>
+                    class Manager extends Repeater.Manager {
+                        static _elements = {
+                            button_move_left: '',
+                            button_move_right: '',
+                            button_remove: '',
+                            input: '',
+                            label_index: '',
+                        };
+
+                        static _eventListeners = {
+                            click: function (event) {
+                                if (event.target != this._item) return;
+
+                                this._model.update(this._model_item._index, {selected: !this._model_item.selected});
+                            },
+                        };
+
+                        static _eventListeners_elements = {
+                            button_move_left: {
+                                click: '_button_move_left__on_click',
+                            },
+                            button_move_right: {
+                                click: '_button_move_right__on_click',
+                            },
+                            button_remove: {
+                                click: '_button_remove__on_click',
+                            },
+                            input: {
+                                input: '_input__on_input',
+                            },
+                        };
+
+
+                        _button_move_left__on_click() {
+                            this._model.move(this._model_item._index, this._model_item._index - 1);
+                        }
+
+                        _button_move_right__on_click() {
+                            this._model.move(this._model_item._index, this._model_item._index + 1);
+                        }
+
+                        _button_remove__on_click() {
+                            this._model.delete(this._model_item._index);
+                        }
+
+                        // _eventListeners__define() {
+                        //     this._elements.input.addEventListener('input', this._input__on_input.bind(this));
+                        //     this._elements.button_move_left.addEventListener('click', this._button_move_left__on_click.bind(this));
+                        //     this._elements.button_move_right.addEventListener('click', this._button_move_right__on_click.bind(this));
+                        //     this._elements.button_remove.addEventListener('click', this._button_remove__on_click.bind(this));
+                        // }
+
+                        _input__on_input() {
+                            this.data__update();
+                        }
+
+
+                        data__apply() {
+                            this._elements.input.value = this._model_item.data;
+                            this._item.style.background = this._model_item.data;
+                            Repeater.attribute__set(this._item, 'selected', this._model_item.selected);
+                        }
+
+                        data__update() {
+                            let props = {
+                                data: this._elements.input.value,
+                            };
+                            this._model.update(this._model_item._index, props);
+                        }
+
+                        index__apply() {
+                            this._elements.label_index.textContent = this._model_item._index;
+                        }
+
+                        init() {
+                            this.data__apply();
+                            this.index__apply();
+                        }
+                    }
+                </script>
+            </template>
+
+            <template Repeater__model>
+                <script>
+                    ['red', 'orange', 'lime', 'green', 'yellow']
+                </script>
+            </template>
+        </x-repeater>
+
+        <x-repeater interpolation='repeater'>
+            <template Repeater__delegate>
+                <div style='background: {{repeater: data}}'>
+                    <span>{{repeater: _index}} - {{repeater: data}} - {{repeater: selected}}</span>
+                </div>
+            </template>
+        </x-repeater>
+
+        <x-repeater interpolation='repeater' model='10'>
+            <template Repeater__delegate>
+                <div>{{repeater: _index}} - {{repeater: data}}</div>
+
+                <script>
+                    class Manager extends Repeater.Manager {
+                        init() {
+                            this._item.textContent = this._model_item.data ** 2;
+                        }
+                    }
+                </script>
+            </template>
+        </x-repeater>
+    </body>
+</html>

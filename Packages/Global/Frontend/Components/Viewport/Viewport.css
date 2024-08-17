@@ -1,0 +1,22 @@
+@layer init {
+    :host {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        box-sizing: border-box;
+        display: block !important;
+        height: 100dvh;
+        overflow: hidden;
+        touch-action: none;
+
+        /* position: fixed; */
+        /* position: absolute; */
+        /* left: 0; */
+        /* top: 0; */
+    }
+    /* :host([_building]) { */
+    /*     display: none !important; */
+    /* } */
+    /* :host(:not(:defined)) { */
+    /*     display: none !important; */
+    /* } */
+}

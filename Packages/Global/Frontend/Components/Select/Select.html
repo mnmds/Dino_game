@@ -1,0 +1,15 @@
+<div class='root'>
+    <x-textField class='textField' button_clear button_mask part='textField'></x-textField>
+
+    <x-popup class='popup' part='popup'>
+        <x-flickable class='flickable' part='flickable' tabIndex='-1'>
+            <slot></slot>
+
+            <x-repeater class='repeater' interpolation='repeater'>
+                <template Repeater__delegate>
+                    <div class='item' part='item'>{{repeater: data}}</div>
+                </template>
+            </x-repeater>
+        </x-flickable>
+    </x-popup>
+</div>

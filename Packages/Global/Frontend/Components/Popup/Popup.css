@@ -1,0 +1,35 @@
+@layer init {
+    :host {
+        --Popup__backdrop_color: #0004;
+        --Popup__backdrop_filter: unset;
+
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 0 4px 4px #0004;
+        display: contents !important;
+        height: fit-content;
+        inset: 0;
+        margin: auto;
+        padding: 8px;
+        position: absolute;
+        width: fit-content;
+    }
+
+
+    .root {
+        all: inherit;
+        display: revert !important;
+
+        &::backdrop {
+            backdrop-filter: var(--Popup__backdrop_filter);
+            background: var(--Popup__backdrop_color);
+            pointer-events: none;
+        }
+    }
+
+    .slot {
+        &::slotted(*) {
+            outline: none;
+        }
+    }
+}

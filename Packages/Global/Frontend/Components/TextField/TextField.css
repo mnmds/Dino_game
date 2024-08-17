@@ -1,0 +1,97 @@
+@layer init {
+    :host {
+        --Edit__button__size: 1.2em;
+        --Edit__gap: 4px;
+        --Edit__padding: var(--Edit__gap);
+        --Edit__padding_horizontal: var(--Edit__padding);
+        --Edit__padding_vertical: var(--Edit__padding);
+        --Edit__placeholder_color: currentColor;
+        --Edit__placeholder_opacity: 0.4;
+
+        border: 1px solid #888;
+        border-radius: 2px;
+        display: inline-block;
+        font: 16px 'Arial';
+        line-height: 1.5;
+        overflow: hidden !important;
+        padding: 0 !important;
+        user-select: none !important;
+        width: 200px;
+    }
+    :host([_focused]) {
+        border-color: #000;
+    }
+    :host([_invalid]) {
+        background: #faa;
+    }
+    :host([disabled]) {
+        background: #eee;
+        border-color: #ccc;
+    }
+
+
+    .button {
+        background: #888;
+        cursor: pointer;
+        display: none !important;
+        height: var(--Edit__button__size);
+        mask: center no-repeat;
+        width: var(--Edit__button__size);
+
+        &:hover {
+            background: #000;
+        }
+    }
+
+    .button_clear {
+        mask-image: url('{{: url}}/../TextField.svg#cross');
+
+        :host([_notEmpty][button_clear]:not([disabled])) & {
+            display: block !important;
+        }
+    }
+
+    .button_mask {
+        mask-image: url('{{: url}}/../TextField.svg#eye_open');
+
+        :host([button_mask]:not([disabled])) & {
+            display: block !important;
+        }
+        :host([masked]) & {
+            mask-image: url('{{: url}}/../TextField.svg#eye_closed');
+        }
+    }
+
+    .input {
+        align-self: stretch !important;
+        background: transparent !important;
+        border: none;
+        color: inherit;
+        font: inherit;
+        outline: none;
+        padding: var(--Edit__padding_vertical) var(--Edit__padding_horizontal) !important;
+
+        &::placeholder {
+            color: var(--Edit__placeholder_color);
+            opacity: var(--Edit__placeholder_opacity);
+        }
+
+        :host(:is([_notEmpty][button_clear], [button_mask])) & {
+            padding-right: 0 !important;
+        }
+    }
+
+    .root {
+        align-items: center;
+        box-sizing: border-box;
+        display: grid;
+        gap: var(--Edit__gap);
+        grid-auto-columns: auto min-content min-content;
+        grid-auto-flow: column;
+        height: 100%;
+
+        :host(:is([_notEmpty][button_clear], [button_mask])) & {
+            padding-right: var(--Edit__padding_horizontal) !important;
+        }
+    }
+}

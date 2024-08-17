@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta content='user-scalable=no, width=720' name='viewport'>
+        <title>Test</title>
+
+        <style>
+            * {
+                &:not(:defined) {
+                    display: none;
+                }
+                &[_building] {
+                    display: none;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {Test} from '../../Test/Test.js';
+
+
+            await Test._defined;
+        </script>
+    </head>
+
+    <body>
+        <x-test>Test</x-test>
+    </body>
+</html>

@@ -1,0 +1,67 @@
+@layer init {
+    :host {
+        display: block;
+        width: 200px;
+        position: relative !important;
+    }
+
+
+    .flickable {
+        /* border: 1px solid #888; */
+        /* border-radius: 2px; */
+        /* height: 100%; */
+        /* padding: 10px; */
+        /* min-height: 0px; */
+        /* max-height: 100px; */
+        /* height: 1000px; */
+        /* position: relative; */
+        /* --Flickable__display__height_max: 100px; */
+
+        &::part(display) {
+            max-height: 100px;
+            padding: 8px;
+        }
+    }
+
+    .popup {
+        border-radius: 2px;
+        border: 1px solid #888;
+        box-shadow: 2px 2px 2px #0004;
+        margin: 0;
+        padding: 0;
+        top: 100%;
+        width: auto !important;
+        z-index: 1;
+    }
+
+    .repeater {
+        display: contents;
+    }
+
+    .root {
+        display: contents;
+    }
+
+    .textField {
+        display: block;
+        width: unset;
+
+        /* &::part(input) { */
+        /*     user-select: none; */
+        /* } */
+
+        :host(:not([editable])) & {
+            /* display: none; */
+            /* visibility: hidden; */
+        }
+    }
+
+
+    /* @media (max-width: 1080px) { */
+    /*     .popup { */
+    /*         margin: auto 100px; */
+    /*         position: fixed; */
+    /*         top: 0; */
+    /*     } */
+    /* } */
+}

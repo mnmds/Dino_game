@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width, user-scalable=no'>
+        <title>Draggable</title>
+
+        <style>
+            body {
+                /* -webkit-user-select: none; */
+                /* box-sizing: border-box; */
+                /* height: 100dvh; */
+                margin: 0;
+                /* padding: 100px; */
+                /* position: relative; */
+                /* touch-action: none; */
+                /* user-select: none; */
+            }
+
+            x-draggable {
+                border: 1px solid red;
+                display: inline-block;
+                position: relative;
+                height: 100px;
+                width: 100px;
+
+                &:active {
+                    background: #faa;
+                }
+
+                &[_drag] {
+                    background: #afa;
+                }
+            }
+
+
+            #root {
+                -webkit-user-select: none;
+                box-sizing: border-box;
+                height: 100dvh;
+                padding: 20px;
+                position: relative;
+                touch-action: none;
+                user-select: none;
+            }
+
+            #stick {
+                border-radius: 100%;
+                border: 4px solid blue;
+                display: inline-block;
+                height: 100px;
+                margin-right: 50px;
+                padding: 10px;
+                position: relative;
+                vertical-align: top;
+                width: 100px;
+            }
+
+            #stick__puck {
+                border-radius: 100%;
+                border: 4px solid blue;
+                box-sizing: border-box;
+                display: grid;
+                height: 100%;
+                place-content: center;
+                width: 100%;
+
+                &:not([_drag]) {
+                /* &:not(:active) { */
+                    transition: 0.2s;
+                    transition-property: left, top;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {Draggable} from '../../Draggable/Draggable.js';
+
+
+            await Draggable._defined;
+            window.draggables = document.querySelectorAll('x-draggable');
+            await Promise.all([...draggables].map((item) => item._built));
+
+            draggables[0].eventListeners__add({
+                tap: (event) => {
+                    console.log(event)
+                },
+            });
+            // draggables[0].handle = draggables[1];
+            draggables[0].handle = '#stick__puck';
+            draggables[1].eventListeners__add({
+                press: (event) => {
+                    console.log(event)
+                },
+                tap: (event) => {
+                    console.log(event)
+                },
+            });
+
+
+            // window.addEventListener('error', (event) => {
+            //     alert(event.filename + ' ' + event.message + ' ' + event.lineno);
+            // });
+
+            // let root = document.querySelector('#root');
+            root.addEventListener('touchstart', (event) => event.preventDefault());
+        </script>
+    </head>
+
+    <body>
+        <div id='root'>
+            <x-draggable id='stick' axis='y' handle_='#stick__puck' shift='50' tap_disabled_>
+                <x-draggable
+                    id='stick__puck'
+
+                    axis='x'
+                    gain_='0.5'
+                    radius_='100'
+                    shift='20'
+                    shift_jump
+                    swipe_disabled_
+                    tap_disabled_
+                    unbounded
+                ></x-draggable>
+
+                <div id='stick__puck'></div>
+            </x-draggable>
+
+            <div id='stick'>
+                <x-draggable
+                    id='stick__puck'
+
+                    gain='0.5'
+                    radius='50'
+                    shift='20'
+                    spring
+                    unbounded
+                ></x-draggable>
+            </div>
+
+            <x-draggable></x-draggable>
+            <x-draggable axis='x'></x-draggable>
+            <x-draggable axis='y'></x-draggable>
+        </div>
+    </body>
+</html>

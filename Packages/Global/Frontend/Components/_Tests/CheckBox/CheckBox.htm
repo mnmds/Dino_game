@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta content='user-scalable=no, width=720' name='viewport'>
+        <title>CheckBox</title>
+
+        <style>
+            * {
+                &:not(:defined) {
+                    display: none;
+                }
+                &[_building] {
+                    display: none;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {CheckBox} from '../../CheckBox/CheckBox.js';
+
+
+            await CheckBox._defined;
+        </script>
+    </head>
+
+    <body>
+        <x-checkBox>CheckBox</x-checkBox>
+    </body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8' content='user-scalable=no, width=720' name='viewport'>
+        <title>Select</title>
+
+        <style>
+            * {
+                &[_building] {
+                    display: none;
+                }
+                &:not(:defined) {
+                    display: none;
+                }
+            }
+
+
+            body {
+                height: 200vh;
+            }
+
+            button {
+                color: red;
+            }
+
+            x-select {
+                /* display: none; */
+                user-select: none;
+
+                &::part(item) {
+                    color: red;
+                }
+                &::part(item):hover {
+                    color: blue;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {Select} from '../../Select/Select.js';
+
+
+            await Select._defined;
+        </script>
+    </head>
+
+    <body>
+        <x-select editable tabIndex_='-1'>
+            <template Select__model>
+                <script>
+                    [
+                        'Item_1', 'Item_2',
+                    ]
+                </script>
+            </template>
+        </x-select>
+
+        <x-select editable tabIndex_='-1'>
+            <template Select__delegate>
+                <button>{{repeater: data}}</button>
+            </template>
+
+            <template Select__model>
+                <script>
+                    [
+                        'Item_1', 'Item_2',
+                    ]
+                </script>
+            </template>
+        </x-select>
+    </body>
+</html>

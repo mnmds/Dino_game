@@ -1,0 +1,10 @@
+@layer init {
+    :host {
+        display: block;
+    }
+
+
+    .main {
+        color: red;
+    }
+}

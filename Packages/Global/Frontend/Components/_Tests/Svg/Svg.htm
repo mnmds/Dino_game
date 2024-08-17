@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta content='user-scalable=no, width=720' name='viewport'>
+        <title>Svg</title>
+
+        <style>
+            * {
+                &:not(:defined) {
+                    display: none;
+                }
+                &[_building] {
+                    display: none;
+                }
+            }
+
+
+            x-svg {
+                fill: none;
+                stroke: #000;
+
+                &:hover {
+                    stroke: red;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {Svg} from '../../Svg/Svg.js';
+            await Svg._defined;
+        </script>
+    </head>
+
+    <body>
+        <x-svg url='./Svg.svg#cross'></x-svg>
+        <x-svg url='./Svg.svg#eye_closed'></x-svg>
+        <x-svg url='./Svg.svg#eye_open'></x-svg>
+        <x-svg url='./Svg.svg#a'></x-svg>
+        <x-svg url='./Svg.svg#'></x-svg>
+        <x-svg></x-svg>
+    </body>
+</html>

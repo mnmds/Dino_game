@@ -1,0 +1,64 @@
+@layer init {
+    :not(:defined) {
+        display: none;
+    }
+
+    :root {
+        --Theme__accent_hue: 220;
+        --Theme__background: hsl(var(--Theme__hue), 9%, 14%);
+        --Theme__block__background: hsl(var(--Theme__hue), 0%, 10%);
+        --Theme__block__background_accent: hsl(var(--Theme__accent_hue), 90%, 60%);
+        --Theme__block__background_accent_dark: hsl(var(--Theme__accent_hue), 35%, 25%);
+        --Theme__block__background_accent_light: hsl(var(--Theme__accent_hue), 32%, 52%);
+        --Theme__block__background_light: hsl(var(--Theme__hue), 0%, 40%);
+        --Theme__block__gap: 8px;
+        --Theme__button__background: hsl(var(--Theme__hue), 0%, 80%);
+        --Theme__button__foreground: hsl(var(--Theme__hue), 0%, 20%);
+        --Theme__button__foreground_light: hsl(var(--Theme__hue), 10%, 80%);
+        --Theme__block_rounding: 10px;
+        --Theme__block__padding: 20px;
+        --Theme__edge__width: 16px;
+        --Theme__font: var(--Theme__font_size) / var(--Theme__font_lineHeight) var(--Theme__font_family);
+        --Theme__font_family: 'TtNorms';
+        --Theme__font_lineHeight: 2;
+        --Theme__font_size: 18px;
+        --Theme__foreground: #fff;
+        --Theme__ghost_transition: opacity 0.6s ease-out;
+        --Theme__hue: 200;
+        --Theme__shadow: #0004;
+
+        background: var(--Theme__background);
+        color: var(--Theme__foreground);
+        font: var(--Theme__font);
+        overflow: hidden;
+    }
+
+
+    * {
+        user-select: none !important;
+    }
+
+    body {
+        margin: 0;
+    }
+
+    x-flickable {
+        --Flickable__puck__margin_inner: 32px;
+        /* position: relative; */
+
+        &[_scroll_y]:not([_scrollEdge_y_end])::after {
+            opacity: 1;
+        }
+        &[_scroll_y]:not([_scrollEdge_y_begin])::before {
+            opacity: 1;
+        }
+
+        &::part(puck) {
+            background: var(--Theme__block__background_accent);
+        }
+    }
+
+    [_building] {
+        visibility: hidden;
+    }
+}
