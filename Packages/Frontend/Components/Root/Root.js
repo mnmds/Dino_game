@@ -1,7 +1,7 @@
-import {Components} from '../../../Global/Frontend/frontend.js';
+import {Components} from '../../../Global/Frontend/Frontend.js';
 
 
-export class Root extends Components.Component {
+export class Root extends Components.Viewport {
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;
