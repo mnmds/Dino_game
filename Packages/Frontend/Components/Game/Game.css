@@ -1,0 +1,28 @@
+@layer init;
+
+@import '../../Theme/Theme.css' layer(theme);
+
+@layer init {
+    :host {
+        display: contents;
+    }
+
+    .hero {
+        grid-area: 1 / 1 / 2 / 2;
+        height: inherit;
+        width: inherit;
+    }
+
+    .points {
+        grid-area: 1 / 1 / 2 / 2;
+        height: 100%;
+        /* width: 100%; */
+    }
+
+    .root {
+        display: grid;
+        height: inherit;
+        justify-content: start;
+        width: fit-content;
+    }
+}
