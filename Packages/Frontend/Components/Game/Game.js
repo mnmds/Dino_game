@@ -1,4 +1,6 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
+import {RestClient} from '../../../Global/Js/Js.js';
+
 import {Point} from '../Point/Point.js';
 
 
@@ -37,6 +39,8 @@ export class Game extends Components.Component {
     static {
         this.init();
     }
+
+    _rest = new RestClient(new URL(`../../../../Packages/Backend/Game_manager/Game_manager`, location));
 
 
     get disabled() {
@@ -89,7 +93,9 @@ export class Game extends Components.Component {
         let point = new Point(event.offsetX, event.offsetY);
         this._elements.points.append(point);
         point.profit = this.level;
+        let tg_id = 0;
 
+        this._rest.call('on_tap', tg_id)
         this.event__dispatch('tap');
     }
 }
