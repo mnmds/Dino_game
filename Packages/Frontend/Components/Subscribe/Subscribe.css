@@ -1,0 +1,35 @@
+@layer init;
+
+@import '../../Theme/Theme.css' layer(theme);
+
+@layer init {
+    .reward {
+        border-radius: var(--Theme__block_rounding);
+        display: flex;
+        font-size: 17px;
+        align-items: center;
+        width: 42dvw;
+        height: 6dvh;
+        background: var(--Theme__button__foreground);
+        padding: 5px;
+        gap: 10px;
+        line-height: 1em;
+
+        &[disabled]{
+            background: var(--Theme__button__foreground);
+        }
+
+        &:active {
+            background: var(--Theme__block__background);
+        }
+    }
+
+    .image {
+        height: 6dvh;
+    }
+
+    .root {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
