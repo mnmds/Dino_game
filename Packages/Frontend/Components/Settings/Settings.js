@@ -1,10 +1,8 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 
-import {Shop} from '../Shop/Shop.js';
-import {Settings} from '../Settings/Settings.js';
+import {ButtonBack} from '../ButtonBack/ButtonBack.js';
 
-
-export class Root extends Components.Viewport {
+export class Settings extends Components.Component {
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;
