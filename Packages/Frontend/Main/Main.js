@@ -1,5 +1,4 @@
 import {Root} from '../Components/Root/Root.js';
-import {Subscribe} from '../Components/Subscribe/Subscribe.js'
 // import {Telegram} from '../Api/Units/Telegram/Telegram.js';
 // import 'https://telegram.org/js/telegram-web-app.js';
 
