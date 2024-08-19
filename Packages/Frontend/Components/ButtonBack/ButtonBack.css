@@ -1,0 +1,23 @@
+@layer init;
+
+@import '../../Theme/Theme.css' layer(theme);
+
+@layer init {
+    :host {
+        aspect-ratio: 1;
+        background: var(--Theme__block__background);
+        border-radius: 100%;
+        height: 15px;
+        padding: 7px;
+    }
+
+    .root {
+        height: inherit;
+        width: inherit;
+    }
+
+    x-svg {
+        height: inherit;
+        width: inherit;
+    }
+}

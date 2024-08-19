@@ -4,10 +4,10 @@
     }
 
     :root {
-        --Theme__accent_hue: 220;
+        --Theme__accent_hue: 120;
         --Theme__background: hsl(var(--Theme__hue), 9%, 14%);
-        --Theme__block__background: hsl(var(--Theme__hue), 0%, 10%);
-        --Theme__block__background_accent: hsl(var(--Theme__accent_hue), 90%, 60%);
+        --Theme__block__background: hsl(var(--Theme__hue), 56%, 9%);
+        --Theme__block__background_accent: hsl(var(--Theme__accent_hue), 75%, 43%);
         --Theme__block__background_accent_dark: hsl(var(--Theme__accent_hue), 35%, 25%);
         --Theme__block__background_accent_light: hsl(var(--Theme__accent_hue), 32%, 52%);
         --Theme__block__background_light: hsl(var(--Theme__hue), 0%, 40%);
@@ -24,7 +24,7 @@
         --Theme__font_size: 18px;
         --Theme__foreground: #fff;
         --Theme__ghost_transition: opacity 0.6s ease-out;
-        --Theme__hue: 200;
+        --Theme__hue: 14;
         --Theme__shadow: #0004;
 
         background: var(--Theme__background);

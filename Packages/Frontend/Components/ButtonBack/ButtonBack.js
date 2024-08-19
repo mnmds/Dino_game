@@ -1,9 +1,7 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 
-import {Shop} from '../Shop/Shop.js';
 
-
-export class Root extends Components.Viewport {
+export class ButtonBack extends Components.Component {
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;
@@ -12,9 +10,9 @@ export class Root extends Components.Viewport {
         ...super._attributes,
     };
 
-    static _elements = {};
-
-    static _eventListeners = {};
+    static _eventListeners_target = {
+        pointerdown: '_on__pointerDown'
+    };
 
 
     static {
@@ -22,7 +20,7 @@ export class Root extends Components.Viewport {
     }
 
 
-    _init() {
-
+    _on__pointerDown() {
+        this.event__dispatch('back_click');
     }
 }
