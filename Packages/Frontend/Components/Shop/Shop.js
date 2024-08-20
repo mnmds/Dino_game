@@ -10,9 +10,12 @@ export class Shop extends Components.Component {
 
     static _attributes = {
         ...super._attributes,
+
+        balance: 0,
     };
 
     static _elements = {
+        balance: '',
         control_panel: '',
         leafable: '',
     };
@@ -26,6 +29,15 @@ export class Shop extends Components.Component {
 
     static {
         this.init();
+    }
+
+
+    get balance() {
+        return this._attributes.balance;
+    }
+    set balance(balance) {
+        this._attribute__set('balance', balance);
+        this._elements.balance.textContent = balance;
     }
 
 
@@ -43,6 +55,6 @@ export class Shop extends Components.Component {
 
 
     _init() {
-
+        this.props__sync();
     }
 }

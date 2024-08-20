@@ -3,14 +3,41 @@
 @import '../../Theme/Theme.css' layer(theme);
 
 @layer init {
+    .balance_container {
+        align-items: center;
+        background: var(--Theme__block__background);
+        border-radius: var(--Theme__block_rounding);
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        padding: 10px;
+        width: 70%;
+    }
+
     .control_panel {
         align-items: center;
         display: flex;
-        justify-content: space-between;
+        justify-content: space-evenly;
 
         [active] {
             background: var(--Theme__block__background_accent);
         }
+    }
+
+    .label {
+        align-items: center;
+        background: var(--Theme__block__background);
+        border-radius: var(--Theme__block_rounding);
+        display: grid;
+        grid-template: repeat(2, auto) / repeat(3, auto);
+        justify-items: center;
+        padding: 7px;
+        width: 70%;
+    }
+
+    .label_title {
+        grid-area: 1 / 1 / 1 / 4;
+        text-align: center;
     }
 
     .leafable {
@@ -36,5 +63,12 @@
         display: grid;
         grid-template-rows: min-content auto min-content;
         height: 100dvh;
+    }
+
+    .shop_page {
+        align-content: start;
+        display: grid;
+        gap: var(--Theme__block__padding);
+        justify-items: center;
     }
 }

@@ -15,7 +15,7 @@
         --Theme__button__background: hsl(var(--Theme__hue), 0%, 80%);
         --Theme__button__foreground: hsl(var(--Theme__hue), 0%, 20%);
         --Theme__button__foreground_light: hsl(var(--Theme__hue), 10%, 80%);
-        --Theme__block_rounding: 20px;
+        --Theme__block_rounding: 40px;
         --Theme__block__padding: 20px;
         --Theme__edge__width: 16px;
         --Theme__font: var(--Theme__font_size) / var(--Theme__font_lineHeight) var(--Theme__font_family);
