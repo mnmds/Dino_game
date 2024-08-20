@@ -31,6 +31,7 @@
         color: var(--Theme__foreground);
         font: var(--Theme__font);
         overflow: hidden;
+        line-height: 1.2em;
     }
 
 

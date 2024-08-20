@@ -2,6 +2,7 @@ import {Components} from '../../../Global/Frontend/Frontend.js';
 
 import {Settings} from '../Settings/Settings.js';
 import {Shop} from '../Shop/Shop.js';
+import {Game} from '../Game/Game.js';
 
 
 export class Root extends Components.Viewport {

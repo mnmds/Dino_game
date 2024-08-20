@@ -23,14 +23,25 @@
                 <div>50 000</div>
                 <input type='checkbox'>
             </div>
-            <x-repeater>
-                <x-flickable interpolation='repeater'>
+            <x-flickable class='display' autoRefresh scrollBars='hidden'>
+                <x-repeater interpolation='repeater' model='10' class='repeater_level'>
                     <template Repeater__delegate>
-                        <x-shopleval></x-shopleval>
+                        <div class='level_container'>
+                            <div class='level'></div>
+                            <x-shopbutton class='level_status'></x-shopbutton>
+                        </div>
                     </template>
-                </x-flickable>
-            </x-repeater>
+                </x-repeater>
+            </x-flickable>
         </div>
-        <div class='shop_page'></div>
+        <div class='shop_page'>
+            <x-leafable animation_implicit class='slider' disabled loop></x-leafable>
+            <x-repeater interpolation='repeater' target='.slider'>
+                <template Repeater__delegate>
+                    <img src='{{repeater: hero_image}}'>
+                </template>
+            </x-repeater>
+            <x-shopbutton></x-shopbutton>
+        </div>
     </x-leafable>
 </div>

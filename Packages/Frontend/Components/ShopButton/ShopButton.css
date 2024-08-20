@@ -1,0 +1,24 @@
+@layer init;
+
+@import '../../Theme/Theme.css' layer(theme);
+
+@layer init {
+    :host {
+        border-radius: var(--Theme__block_rounding);
+        display: flex;
+        gap: 10px;
+        padding: 7px 15px;
+    }
+
+    :host([status='sale']) {
+        background: var(--Theme__block__background);
+    }
+
+    :host([status='selected']) {
+        background: var(--Theme__block__background_accent);
+    }
+
+    :host([status='sold']) {
+        background: #0005;
+    }
+}

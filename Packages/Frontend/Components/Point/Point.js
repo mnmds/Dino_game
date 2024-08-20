@@ -10,7 +10,7 @@ export class Point extends Components.Component {
     static _attributes = {
         ...super._attributes,
 
-        animation_duration: 0.8,
+        animation_duration: 800,
         animation_move_length: 3,
         profit: 1,
     };
@@ -56,18 +56,20 @@ export class Point extends Components.Component {
         this.props__sync('animation_duration', 'animation_move_length', 'profit');
 
         this._animation_move_length = this._strat_height + this.animation_move_length;
+        // this._animation_move_length = this.animation_move_length / this.animation_duration;
 
         this._renderer.start();
     }
 
     _render() {
-        let opacity = 1 - this._renderer._duration / (this.animation_duration * 1e3);
-        let top = this._animation_move_length - this._renderer._duration / (this.animation_duration * 1e3) * 90;
+        let opacity = 1.2 - this._renderer._duration / this.animation_duration;
+        let top = this._animation_move_length - this._renderer._duration / this.animation_duration * 90;
+        // let top = this._strat_height + this._animation_move_length * this._renderer._dt;
 
         this.css__set('opacity', opacity);
         this.css__set('top', top + 'px');
 
-        if (this._renderer._duration < this.animation_duration * 1e3) return;
+        if (this._renderer._duration < this.animation_duration) return;
 
         this._renderer.stop();
         this.remove();

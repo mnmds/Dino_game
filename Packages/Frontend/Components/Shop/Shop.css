@@ -24,8 +24,13 @@
         }
     }
 
+    .display {
+        overflow: hidden;
+        width: 100%;
+    }
+
     .label {
-        align-items: center;
+        align-items: end;
         background: var(--Theme__block__background);
         border-radius: var(--Theme__block_rounding);
         display: grid;
@@ -38,6 +43,7 @@
     .label_title {
         grid-area: 1 / 1 / 1 / 4;
         text-align: center;
+        align-self: center;
     }
 
     .leafable {
@@ -46,12 +52,30 @@
             display: grid;
             grid-template: 100% / 100%;
             height: 100%;
-            padding: var(--Theme__block__padding);
             width: 100%;
         }
     }
 
+    .level {
+        align-items: center;
+        background: var(--Theme__block__background);
+        border-radius: var(--Theme__block_rounding);
+        display: flex;
+        padding: 7px;
+
+        &::after {
+            content: ' уровень';
+        }
+    }
+
+    .level_container {
+        display: flex;
+        gap: var(--Theme__block__padding);
+        justify-content: space-around;
+    }
+
     .panel_button {
+        align-items: center;
         background: var(--Theme__block__background);
         border-radius: var(--Theme__block_rounding);
         display: flex;
@@ -59,16 +83,23 @@
         padding: 7px 15px;
     }
 
+    .repeater_level {
+        display: grid;
+        gap: 10px;
+    }
+
     .root {
         display: grid;
         grid-template-rows: min-content auto min-content;
-        height: 100dvh;
+        height: 100%;
     }
 
     .shop_page {
         align-content: start;
         display: grid;
         gap: var(--Theme__block__padding);
+        grid-template-rows: repeat(3, auto);
         justify-items: center;
+        padding-top: var(--Theme__block__padding);
     }
 }
