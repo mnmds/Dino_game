@@ -15,7 +15,7 @@
         --Theme__button__background: hsl(var(--Theme__hue), 0%, 80%);
         --Theme__button__foreground: hsl(var(--Theme__hue), 0%, 20%);
         --Theme__button__foreground_light: hsl(var(--Theme__hue), 10%, 80%);
-        --Theme__block_rounding: 10px;
+        --Theme__block_rounding: 20px;
         --Theme__block__padding: 20px;
         --Theme__edge__width: 16px;
         --Theme__font: var(--Theme__font_size) / var(--Theme__font_lineHeight) var(--Theme__font_family);
@@ -24,7 +24,7 @@
         --Theme__font_size: 18px;
         --Theme__foreground: #fff;
         --Theme__ghost_transition: opacity 0.6s ease-out;
-        --Theme__hue: 14;
+        --Theme__hue: 15;
         --Theme__shadow: #0004;
 
         background: var(--Theme__background);

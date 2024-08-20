@@ -2,12 +2,17 @@
 
 
 export class EventManager extends EventTarget {
-    static event__dispatch(eventTarget, event_name, event_detail = null) {
+    static event__dispatch(eventTarget, event_name, event_detail = null, event_opts_extra = null) {
         let event_opts = {
             bubbles: true,
             cancelable: true,
             detail: event_detail,
         };
+
+        if (event_opts != null) {
+            event_opts = Object.assign(event_opts, event_opts_extra)
+        }
+
         let event = new CustomEvent(event_name, event_opts);
 
         return eventTarget.dispatchEvent(event);
@@ -103,8 +108,8 @@ export class EventManager extends EventTarget {
     }
 
 
-    event__dispatch(event_name, event_detail = null) {
-        return this.constructor.event__dispatch(this, event_name, event_detail);
+    event__dispatch(event_name, event_detail = null, event_opts_extra = null) {
+        return this.constructor.event__dispatch(this, event_name, event_detail, event_opts_extra);
     }
 
     event_async__dispatch(event_name, event_detail = null) {

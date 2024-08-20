@@ -28,7 +28,7 @@
     }
 
     .setting_language_list {
-        background: black;
+        background: var(--Theme__block__background);
         border-radius: 24px;
         border: none;
         color: white;
@@ -43,14 +43,14 @@
         --Switch__width: 30px;
 
         align-self: center;
-        background: black;
+        background: var(--Theme__block__background);
 
         &::part(puck) {
             background: gray;
         }
 
         &[on]::part(puck) {
-            background: green;
+            background: var(--Theme__block__background_accent);
         }
     }
 }

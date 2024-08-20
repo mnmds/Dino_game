@@ -1,7 +1,7 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 
-import {Shop} from '../Shop/Shop.js';
 import {Settings} from '../Settings/Settings.js';
+import {Shop} from '../Shop/Shop.js';
 
 
 export class Root extends Components.Viewport {
@@ -13,9 +13,13 @@ export class Root extends Components.Viewport {
         ...super._attributes,
     };
 
-    static _elements = {};
+    static _elements = {
+        leafable: '',
+    };
 
-    static _eventListeners = {};
+    static _eventListeners_target = {
+        back_click: '_on__back_click',
+    };
 
 
     static {
@@ -23,7 +27,9 @@ export class Root extends Components.Viewport {
     }
 
 
-    _init() {
+    _init() {}
 
+    _on__back_click() {
+        this._elements.leafable.index = 0;
     }
 }

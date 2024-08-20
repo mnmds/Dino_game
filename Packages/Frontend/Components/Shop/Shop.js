@@ -12,13 +12,33 @@ export class Shop extends Components.Component {
         ...super._attributes,
     };
 
-    static _elements = {};
+    static _elements = {
+        control_panel: '',
+        leafable: '',
+    };
 
-    static _eventListeners = {};
+    static _eventListeners_elements = {
+        control_panel: {
+            pointerdown: '_control_panel__on_pointerDown'
+        }
+    };
 
 
     static {
         this.init();
+    }
+
+
+    _control_panel__on_pointerDown(event) {
+        let button = event.target.classList.contains('panel_button') ? event.target : event.target.parentElement;
+
+        if (!button.classList.contains('panel_button')) return;
+
+        let button_prev = this._elements.control_panel.children[2 - button.dataset.index];
+        this._elements.leafable.index = button.dataset.index;
+
+        button_prev.removeAttribute('active');
+        button.setAttribute('active', true);
     }
 
 
