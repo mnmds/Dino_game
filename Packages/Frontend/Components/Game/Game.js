@@ -1,6 +1,6 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
-import {Units} from '../../../Global/Frontend/Frontend.js';
 import {RestClient} from '../../../Global/Js/Js.js';
+import {Units} from '../../../Global/Frontend/Frontend.js';
 
 import {Point} from '../Point/Point.js';
 
@@ -45,7 +45,6 @@ export class Game extends Components.Component {
     }
 
     _renderer = new Units.Renderer({render: this._render.bind(this)});
-    _rest = new RestClient(new URL(`../../../../Packages/Backend/Game_manager/Game_manager`, location));
 
 
     get disabled() {
@@ -73,10 +72,6 @@ export class Game extends Components.Component {
     }
 
 
-    _init() {
-        this.props__sync();
-    }
-
     async _hero__load() {
         let hero_url = import.meta.url + `/../Storage/${this.hero}/${this.level}.webm`;
         this._elements.hero_source.src = hero_url;
@@ -92,23 +87,32 @@ export class Game extends Components.Component {
         }
     }
 
-    async _points__on_pointerUp(event) {
-        if (this.disabled) return;
+    _init() {
+        this.props__sync();
+    }
 
-        this._renderer.start();
-
+    async _points__create(x, y) {
         let point = new Point();
         this._elements.points.append(point);
         await point._built;
-        point.position_initial.x = event.offsetX;
-        point.position_initial.y = event.offsetY;
+        point.position_initial.x = x;
+        point.position_initial.y = y;
         point.position.set_vector(point.position_initial);
         point.velocity.y = -100;
         point.profit = this.level;
+    }
 
+    _points__on_pointerUp(event) {
+        if (this.disabled) return;
+
+        this._renderer.start();
+        this._points__create(event.offsetX, event.offsetY);
+        this._points__ping();
+    }
+
+    _points__ping() {
         let tg_id = 0;
 
-        // this._rest.call('on_tap', tg_id)
         this.event__dispatch('tap');
     }
 

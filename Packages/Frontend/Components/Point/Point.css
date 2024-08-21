@@ -13,8 +13,7 @@
 
     .point {
         aspect-ratio: 1;
-        background: #000;
-        /* background: #7075791a; */
+        background: #70757955;
         border-radius: 100%;
         height: 30px;
         display: inline-block;
