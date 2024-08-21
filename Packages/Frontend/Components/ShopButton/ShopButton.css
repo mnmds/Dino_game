@@ -4,6 +4,7 @@
 
 @layer init {
     :host {
+        align-items: center;
         border-radius: var(--Theme__block_rounding);
         display: flex;
         gap: 10px;

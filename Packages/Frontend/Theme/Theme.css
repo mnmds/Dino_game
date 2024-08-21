@@ -19,9 +19,9 @@
         --Theme__block__padding: 20px;
         --Theme__edge__width: 16px;
         --Theme__font: var(--Theme__font_size) / var(--Theme__font_lineHeight) var(--Theme__font_family);
-        --Theme__font_family: 'TtNorms';
+        --Theme__font_family: 'Arial';
         --Theme__font_lineHeight: 2;
-        --Theme__font_size: 18px;
+        --Theme__font_size: 26px;
         --Theme__foreground: #fff;
         --Theme__ghost_transition: opacity 0.6s ease-out;
         --Theme__hue: 15;

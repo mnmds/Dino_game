@@ -82,9 +82,62 @@ export class Shop extends Components.Component {
 
     _init() {
         this.props__sync();
+        this._elements.repeater_level.Manager = this.constructor.Repeater_level_manager;
+
+        this.data__insert([
+            {
+                level: 1,
+                level_status: 'sold',
+            },
+            {
+                level: 2,
+                level_status: 'selected',
+            },
+            {
+                level: 3,
+                level_status: 'sale',
+                level_price: 100000
+            },
+            {
+                level: 4,
+                level_status: 'sale',
+                level_price: 100001
+            },
+            {
+                level: 5,
+                level_status: 'sale',
+                level_price: 100002
+            },
+            {
+                level: 6,
+                level_status: 'sale',
+                level_price: 100003
+            },
+            {
+                level: 7,
+                level_status: 'sale',
+                level_price: 100004
+            },
+            {
+                level: 8,
+                level_status: 'sale',
+                level_price: 100005
+            },
+            {
+                level: 9,
+                level_status: 'sale',
+                level_price: 100006
+            },
+        ]);
     }
 
     _repeater_level__on_add() {
         this._elements.display.refresh();
+    }
+
+
+    data__insert(level_shop, hero_shop) {
+        this._elements.repeater_level.model.clear();
+        this._elements.repeater_level.model.add(level_shop);
     }
 }

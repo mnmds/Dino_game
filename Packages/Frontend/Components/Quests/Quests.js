@@ -20,7 +20,5 @@ export class Root extends Components.Component {
     }
 
 
-    _init() {
-
-    }
+    _init() {}
 }

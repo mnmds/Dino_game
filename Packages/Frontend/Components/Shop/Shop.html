@@ -19,15 +19,17 @@
             </div>
             <div class='label'>
                 <div class='label_title'>Оффлайн-доставка</div>
-                <x-svg url='./Storage/Images/Main.svg#crystals'></x-svg>
-                <div>50 000</div>
-                <input type='checkbox'>
+                <x-svg class='label_icon' url='./Storage/Images/Main.svg#crystals'></x-svg>
+                <div class='label_price'>50 000</div>
+                <input class='label_checkBox' type='checkbox'>
             </div>
             <x-flickable class='display' autoRefresh scrollBars='hidden'>
-                <x-repeater interpolation='repeater' model='10' class='repeater_level'>
+                <x-repeater interpolation='repeater' class='repeater_level'>
                     <template Repeater__delegate>
                         <div class='level_container'>
-                            <div class='level'></div>
+                            <div class='level'>
+                                <x-svg url='./Storage/Images/Main.svg#level'></x-svg>
+                            </div>
                             <x-shopbutton class='level_status'></x-shopbutton>
                         </div>
                     </template>
