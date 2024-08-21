@@ -43,6 +43,9 @@ export class Shop extends Components.Component {
         data__apply() {
             this._level.innerHTML += this._model_item.level;
             this._level_status.status = this._model_item.level_status;
+            this._level_status.statuses_values.sale.text = this._model_item.level_price || 0;
+
+            this._level_status.status_value__refresh();
         }
 
         init() {

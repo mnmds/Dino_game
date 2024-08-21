@@ -42,7 +42,7 @@ export class ShopButton extends Components.Component {
     }
     set status(status) {
         this._attribute__set('status', status);
-        this._status_value__refresh();
+        this.status_value__refresh();
     }
 
 
@@ -50,7 +50,8 @@ export class ShopButton extends Components.Component {
         this.props__sync('status');
     }
 
-    _status_value__refresh() {
+
+    status_value__refresh() {
         this.innerHTML = '';
 
         if (this.statuses_values[this.status]['icon_svg']) {
