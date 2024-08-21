@@ -9,21 +9,21 @@
             <x-svg url='./Storage/Images/Main.svg#mini_dino'></x-svg>
             <span>Скины</span>
         </div>
+        <div class='balance_container'>
+            <x-svg url='./Storage/Images/Main.svg#crystal'></x-svg>
+            <div class='balance'></div>
+        </div>
     </div>
 
     <x-leafable animation_implicit class='leafable' disabled>
         <div class='shop_page'>
-            <div class='balance_container'>
-                <x-svg url='./Storage/Images/Main.svg#crystal'></x-svg>
-                <div class='balance'></div>
-            </div>
-            <div class='label'>
-                <div class='label_title'>Оффлайн-доставка</div>
-                <x-svg class='label_icon' url='./Storage/Images/Main.svg#crystals'></x-svg>
-                <div class='label_price'>50 000</div>
-                <input class='label_checkBox' type='checkbox'>
-            </div>
             <x-flickable class='display' autoRefresh scrollBars='hidden'>
+                <div class='label'>
+                    <div class='label_title'>Оффлайн-доставка</div>
+                    <x-svg class='label_icon' url='./Storage/Images/Main.svg#crystals'></x-svg>
+                    <div class='label_price'>50 000</div>
+                    <input class='label_checkBox' type='checkbox'>
+                </div>
                 <x-repeater interpolation='repeater' class='repeater_level'>
                     <template Repeater__delegate>
                         <div class='level_container'>
@@ -38,12 +38,15 @@
         </div>
         <div class='shop_page'>
             <x-leafable animation_implicit class='slider' disabled loop></x-leafable>
-            <x-repeater interpolation='repeater' target='.slider'>
+            <x-repeater interpolation='repeater' target='.slider' class='repeater_slider'>
                 <template Repeater__delegate>
-                    <img src='{{repeater: hero_image}}'>
+                    <div class='hero_container'>
+                        <div class='hero_name'></div>
+                        <img class='hero_image' src='{{repeater: hero_image}}'>
+                        <x-shopbutton class='hero_status'></x-shopbutton>
+                    </div>
                 </template>
             </x-repeater>
-            <x-shopbutton></x-shopbutton>
         </div>
     </x-leafable>
 </div>

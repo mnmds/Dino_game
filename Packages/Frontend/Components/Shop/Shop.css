@@ -9,15 +9,19 @@
         border-radius: var(--Theme__block_rounding);
         display: flex;
         gap: 10px;
+        grid-column: 1 / -1;
         justify-content: center;
+        justify-self: center;
         padding: 10px;
         width: 70%;
     }
 
     .control_panel {
         align-items: center;
-        display: flex;
+        display: grid;
+        grid-template: repeat(2, auto) / repeat(3, auto);
         justify-content: space-evenly;
+        gap: 20px 0px;
 
         [active] {
             background: var(--Theme__block__background_accent);
@@ -36,6 +40,8 @@
         display: grid;
         grid-template: repeat(2, auto) / repeat(3, auto);
         justify-items: center;
+        margin: auto;
+        margin-bottom: var(--Theme__block__padding);
         padding: 7px;
         width: 70%;
     }
@@ -79,6 +85,7 @@
         border-radius: var(--Theme__block_rounding);
         display: flex;
         gap: 15px;
+        justify-content: center;
         padding: var(--Theme__block__padding);
 
         &::after {
@@ -87,9 +94,7 @@
     }
 
     .level_container {
-        display: flex;
-        gap: var(--Theme__block__padding);
-        justify-content: space-around;
+        display: contents;
     }
 
     .panel_button {
@@ -98,12 +103,13 @@
         border-radius: var(--Theme__block_rounding);
         display: flex;
         gap: 7px;
-        padding: 7px 15px;
+        padding: var(--Theme__block__padding);
     }
 
     .repeater_level {
         display: grid;
-        gap: 10px;
+        gap: 10px 5%;
+        grid-template: 1fr 1fr / 1fr 1fr;
     }
 
     .root {
@@ -116,7 +122,7 @@
         align-content: start;
         display: grid;
         gap: var(--Theme__block__padding);
-        grid-template-rows: repeat(3, auto);
+        grid-template-rows: repeat(2, auto);
         justify-items: center;
         padding-top: var(--Theme__block__padding);
     }

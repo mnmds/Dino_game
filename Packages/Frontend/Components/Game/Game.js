@@ -73,7 +73,7 @@ export class Game extends Components.Component {
 
 
     async _hero__load() {
-        let hero_url = import.meta.url + `/../Storage/${this.hero}/${this.level}.webm`;
+        let hero_url = `./Storage/Videos/Game/${this.hero}/${this.level}.webm`;
         this._elements.hero_source.src = hero_url;
 
         this._elements.hero.load();

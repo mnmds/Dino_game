@@ -19,9 +19,10 @@ export class Shop extends Components.Component {
     static _elements = {
         balance: '',
         control_panel: '',
+        display: '',
         leafable: '',
         repeater_level: '',
-        display: '',
+        repeater_slider: '',
     };
 
     static _eventListeners_elements = {
@@ -31,6 +32,7 @@ export class Shop extends Components.Component {
         repeater_level: {
             add: '_repeater_level__on_add',
             define: '_repeater_level__on_add',
+            pointerdown: '_repeater_level__on_pointerDown',
         },
     };
 
@@ -39,7 +41,7 @@ export class Shop extends Components.Component {
         _level_status = null;
 
         data__apply() {
-            this._level.textContent = this._model_item.level;
+            this._level.innerHTML += this._model_item.level;
             this._level_status.status = this._model_item.level_status;
         }
 
@@ -47,6 +49,16 @@ export class Shop extends Components.Component {
             this._level = this._item.querySelector('.level');
             this._level_status = this._item.querySelector('.level_status');
 
+            this.data__apply();
+        }
+    };
+
+    static Repeater_slider_manager = class extends Components.Repeater.Manager {
+        data__apply() {
+            this._item.src = this._model_item.image_url;
+        }
+
+        init() {
             this.data__apply();
         }
     };
@@ -135,9 +147,16 @@ export class Shop extends Components.Component {
         this._elements.display.refresh();
     }
 
+    _repeater_level__on_pointerDown(event) {
+        let button = event.target.classList.contains('level_status') ? event.target : event.target.parentElement;
+
+        if (!button.classList.contains('level_status')) return;
+    }
+
 
     data__insert(level_shop, hero_shop) {
-        this._elements.repeater_level.model.clear();
+        // this._elements.repeater_level.model.clear();
+        this._elements.repeater_slider.model.clear();
         this._elements.repeater_level.model.add(level_shop);
     }
 }
