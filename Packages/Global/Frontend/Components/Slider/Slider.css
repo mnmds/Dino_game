@@ -1,0 +1,155 @@
+@layer init {
+    :host {
+        --animation: 0.5s ease-in-out;
+        --animation_in_0_name: in_left;
+        --animation_in_1_name: in_right;
+        --animation_out_0_name: out_right;
+        --animation_out_1_name: out_left;
+        --arrow_color: #fff8;
+        --arrow_size: 20px;
+        --gap: 10px;
+        --point_color: #fff8;
+        --point_gap: 10px;
+        --point_size: 10px;
+
+
+        display: contents;
+
+        & * {
+            position: relative;
+        }
+    }
+
+    .arrow {
+        align-self: center;
+        border: var(--arrow_size) solid transparent;
+        cursor: pointer;
+        margin: var(--gap);
+
+        :host(:not([arrows])) & {
+            display: none;
+        }
+    }
+
+    .arrow_next {
+        border-left-color: var(--arrow_color);
+        border-right: none;
+        justify-self: end;
+    }
+
+    .arrow_prev {
+        border-left: none;
+        border-right-color: var(--arrow_color);
+        justify-self: start;
+    }
+
+    .display {
+        display: grid;
+        grid-template: 100% / 100%;
+        overflow: hidden;
+
+        &::slotted(*) {
+            height: 100%;
+            object-fit: cover;
+            width: 100%;
+        }
+    }
+
+    .point {
+        border: 1px solid var(--point_color);
+        border-radius: 50%;
+        cursor: pointer;
+        height: var(--point_size);
+        width: var(--point_size);
+
+        &[_active] {
+            background: var(--point_color);
+        }
+    }
+
+    .points {
+        align-self: end;
+        display: grid;
+        grid-auto-flow: column;
+        grid-gap: var(--point_gap);
+        justify-self: center;
+        margin: var(--gap);
+
+        :host(:not([points])) & {
+            display: none;
+        }
+    }
+
+    .root {
+        display: grid;
+        grid-template: 100% / 100%;
+        height: inherit;
+        width: inherit;
+
+        & > * {
+            grid-area: 1 / 1 / -1 / -1;
+        }
+    }
+
+    .slot {
+        display: block;
+        grid-area: 1 / 1 / -1 / -1;
+
+        :host([_animation_dir='-1']) &:nth-of-type(1) {
+            animation-name: var(--animation_out_0_name);
+        }
+
+        :host([_animation_dir='-1']) &:nth-of-type(2) {
+            animation-name: var(--animation_in_0_name);
+        }
+
+        :host([_animation_dir='1']) &:nth-of-type(1) {
+            animation-name: var(--animation_out_1_name);
+        }
+
+        :host([_animation_dir='1']) &:nth-of-type(2) {
+            animation-name: var(--animation_in_1_name);
+        }
+
+        :host([_animation_dir]) & {
+            animation: var(--animation);
+        }
+    }
+
+
+    @keyframes in_left {
+        from {
+            left: -100%;
+        }
+        to {
+            left: 0;
+        }
+    }
+
+    @keyframes in_right {
+        from {
+            left: 100%;
+        }
+        to {
+            left: 0;
+        }
+    }
+
+    @keyframes out_left {
+        from {
+            left: 0;
+        }
+        to {
+            left: -100%;
+        }
+    }
+
+    @keyframes out_right {
+        from {
+            left: 0;
+        }
+        to {
+            left: 100%;
+        }
+    }
+}

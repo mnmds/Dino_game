@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta content='user-scalable=no, width=720' name='viewport'>
+        <title>Slider</title>
+
+        <style>
+            * {
+                &:not(:defined) {
+                    display: none;
+                }
+                &[_building] {
+                    display: none;
+                }
+            }
+        </style>
+
+        <script type='module'>
+            import {Slider} from '../../Slider/Slider.js';
+
+
+            await Slider._defined;
+        </script>
+    </head>
+
+    <body>
+        <x-slider delay='0' points arrows>
+            <img src='https://s1.1zoom.ru/big3/399/339975-svetik.jpg'>
+            <img src='https://s1.1zoom.me/big3/652/342768-sepik.jpg'>
+            <img src='https://s1.1zoom.ru/big3/273/353643-svetik.jpg'>
+        </x-slider>
+    </body>
+</html>
