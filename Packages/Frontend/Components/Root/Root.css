@@ -1,4 +1,9 @@
 @layer init {
+    :host {
+        position: relative;
+        z-index: 1;
+    }
+
     .leafable {
         &::part(item) {
             box-sizing: border-box;

@@ -1,6 +1,7 @@
 @layer init {
     :host {
         display: contents;
+        height: 400px;
     }
 
     .hero {
