@@ -41,7 +41,6 @@ export class Shop extends Components.Component {
         },
     };
 
-
     static Repeater_level_manager = class extends Components.Repeater.Manager {
         _level = null;
         _level_status = null;
@@ -83,7 +82,6 @@ export class Shop extends Components.Component {
             this.data__apply();
         }
     };
-
 
     static {
         this.init();

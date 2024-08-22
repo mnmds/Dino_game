@@ -40,23 +40,45 @@
     }
 
     body {
-        margin: 0;
         background: url('../../../Storage/Images/Background.png') center / cover;
+        margin: 0;
     }
 
     x-flickable {
-        --Flickable__puck__margin_inner: 32px;
-        /* position: relative; */
+        position: relative;
 
-        &[_scroll_y]:not([_scrollEdge_y_end])::after {
+        &::after {
+            background: linear-gradient(transparent, var(--Theme__shadow));
+            border-radius: var(--Theme__block_rounding) var(--Theme__block_rounding) 0 0;
+            content: '';
+            height: var(--Theme__edge__width);
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+            top: auto;
+            transition: var(--Theme__ghost_transition);
+            z-index: 1;
+        }
+        &[_scroll_height]:not([_scrollEdge_y_end])::after {
             opacity: 1;
         }
-        &[_scroll_y]:not([_scrollEdge_y_begin])::before {
-            opacity: 1;
-        }
 
-        &::part(puck) {
-            background: var(--Theme__block__background_accent);
+        &::before {
+            background: linear-gradient(var(--Theme__shadow), transparent);
+            border-radius: 0 0 var(--Theme__block_rounding) var(--Theme__block_rounding);
+            bottom: auto;
+            content: '';
+            height: var(--Theme__edge__width);
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+            transition: var(--Theme__ghost_transition);
+            z-index: 1;
+        }
+        &[_scroll_height]:not([_scrollEdge_y_begin])::before {
+            opacity: 1;
         }
     }
 
