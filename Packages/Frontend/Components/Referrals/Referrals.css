@@ -1,0 +1,51 @@
+@layer init;
+
+@import '../../Theme/Theme.css' layer(theme);
+
+@layer init {
+    .root {
+        /* display: grid; */
+        /* grid-template-rows: min-content auto min-content; */
+        height: 100dvh;
+        margin: 3%
+    }
+
+    .invite_user {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        white-space: nowrap;
+        font-size: 5dvw;
+        margin: 10px 0 10px 0;
+    }
+
+    .invite_button {
+        align-items: center;
+        background-color: Black;
+        display: flex;
+        /* justify-content: space-between; */
+        justify-content: center;
+        gap: 5%;
+        height: 7dvh;
+        width: 45dvw;
+        border-radius: 15px;
+        box-sizing: border-box;
+    }
+
+    .invite_income {
+        align-items: center;
+        background-color: Black;
+        display: flex;
+        /* justify-content: space-between; */
+        justify-content: center;
+        gap: 5%;
+        height: 7dvh;
+        width: 45dvw;
+        border-radius: 15px;
+        box-sizing: border-box;
+    }
+
+    .referral {
+
+    }
+}

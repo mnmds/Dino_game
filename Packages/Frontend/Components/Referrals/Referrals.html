@@ -1,0 +1,30 @@
+<div class='root'>
+    <x-buttonback></x-buttonback>
+    <div class='invite_user'>
+        <div class='invite_button'>Приведи друга
+            <!-- <x-svg url='./Storage/Images/Main.svg#crystal'></x-svg> -->
+        </div>
+        <div class='invite_income'>50000
+            <!-- <svg class='icon'> -->
+            <!--     <use href='{{resource: -}}'/> -->
+            <!-- </svg> -->
+        </div>
+    </div>
+
+    <x-flickable class='display' autoRefresh scrollBars='hidden'>
+        <div class='sort_button'>
+            <div class='referral_button'>Рефералы</div>
+            <div class='referral_button'>Доход</div>
+        </div>
+        <div class='sort_button'>
+            <div class='referral_button'>Текущая неделя</div>
+            <div class='referral_button'>Предыдущая неделя</div>
+            <div class='referral_button'>Всё время</div>
+        </div>
+        <x-repeater interpolation='repeater' class='repeater'>
+            <template Repeater__delegate>
+                <x-referral class='referral'></x-referral>
+            </template>
+        </x-repeater>
+    </x-flickable>
+</div>
