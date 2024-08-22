@@ -36,13 +36,17 @@
                 </x-repeater>
             </x-flickable>
         </div>
-        <div class='shop_page'>
-            <x-leafable animation_implicit class='slider' disabled loop></x-leafable>
+        <div class='shop_page page_hero'>
+            <div class='slider__container'>
+                <x-svg url='./Storage/Images/Main.svg#slider_arrow_prev' class='slider_arrow slider_arrow_prev'></x-svg>
+                <x-leafable animation_implicit class='slider' loop></x-leafable>
+                <x-svg url='./Storage/Images/Main.svg#slider_arrow_next' class='slider_arrow slider_arrow_next'></x-svg>
+            </div>
             <x-repeater interpolation='repeater' target='.slider' class='repeater_slider'>
                 <template Repeater__delegate>
                     <div class='hero_container'>
                         <div class='hero_name'></div>
-                        <img class='hero_image' src='{{repeater: hero_image}}'>
+                        <img class='hero_image' src=''>
                         <x-shopbutton class='hero_status'></x-shopbutton>
                     </div>
                 </template>

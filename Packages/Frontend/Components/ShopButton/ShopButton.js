@@ -2,7 +2,9 @@ import {Components} from '../../../Global/Frontend/Frontend.js';
 
 
 export class ShopButton extends Components.Component {
+    static _components = [Components.Svg];
     static _css_url = true;
+    static _dom_slot = true;
     static _url = import.meta.url;
 
     static _attributes = {
