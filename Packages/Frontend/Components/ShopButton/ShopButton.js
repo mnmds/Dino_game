@@ -49,18 +49,19 @@ export class ShopButton extends Components.Component {
 
 
     _init() {
-        this.props__sync('status');
+        // await this.props__sync('status');
     }
 
 
-    status_value__refresh() {
+    async status_value__refresh() {
         this.innerHTML = '';
 
         if (this.statuses_values[this.status]['icon_svg']) {
             let icon_svg = new Components.Svg();
+            this.append(icon_svg);
+            await icon_svg._built;
             icon_svg.url = this.statuses_values[this.status]['icon_svg'];
 
-            this.append(icon_svg)
         }
 
         if (this.statuses_values[this.status]['text']) {

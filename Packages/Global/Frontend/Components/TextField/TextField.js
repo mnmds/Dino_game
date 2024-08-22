@@ -185,8 +185,9 @@ export class TextField extends TextInput {
 
     _init() {
         this._element = this._elements.input;
-        this.props__sync('mask_char', 'regExp', 'template_char');
         super._init();
+
+        this.props__sync('mask_char', 'regExp', 'template_char');
     }
 
     _input__on_beforeInput(event) {

@@ -12,7 +12,7 @@ export class B extends A {
     static _styleSheets_descriptors = {
         ...super._styleSheets_descriptors,
 
-        dark: ['', false],
+        // dark: '',
     };
 
 

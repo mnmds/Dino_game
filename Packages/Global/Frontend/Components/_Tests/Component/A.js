@@ -16,15 +16,15 @@ export class A extends Component {
     }
 
 
-    _init() {
-        let observer = new MutationObserver((mutationRecords) => {
-            console.log(mutationRecords);
-        });
-        let observer_opts = {
-            childList: true,
-            subtree: true,
-        };
-        observer.observe(this, observer_opts);
-        observer.observe(this._shadow, observer_opts);
-    }
+    // _init() {
+    //     let observer = new MutationObserver((mutationRecords) => {
+    //         console.log(mutationRecords);
+    //     });
+    //     let observer_opts = {
+    //         childList: true,
+    //         subtree: true,
+    //     };
+    //     observer.observe(this, observer_opts);
+    //     observer.observe(this._shadow, observer_opts);
+    // }
 }

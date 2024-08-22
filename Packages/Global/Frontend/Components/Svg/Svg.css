@@ -11,14 +11,4 @@
         height: 100%;
         width: 100%;
     }
-
-
-    .resource {
-        height: 0;
-        width: 0;
-    }
-
-    .root {
-        display: contents;
-    }
 }

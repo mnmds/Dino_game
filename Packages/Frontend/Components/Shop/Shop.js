@@ -5,7 +5,14 @@ import {ShopButton} from '../ShopButton/ShopButton.js';
 
 
 export class Shop extends Components.Component {
-    static _components = [Components.Flickable, Components.Repeater, ShopButton];
+    static _components = [
+        ButtonBack,
+        Components.Flickable,
+        Components.Leafable,
+        Components.Repeater,
+        ShopButton,
+    ];
+
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;
@@ -38,6 +45,10 @@ export class Shop extends Components.Component {
             add: '_repeater_level__on_add',
             define: '_repeater_level__on_add',
             pointerdown: '_repeater_level__on_pointerDown',
+        },
+        repeater_slider: {
+            add: '_repeater_slider__on_add',
+            define: '_repeater_slider__on_add',
         },
     };
 
@@ -195,6 +206,10 @@ export class Shop extends Components.Component {
         if (!button.classList.contains('level_status')) return;
     }
 
+    _repeater_slider__on_add(event) {
+        this._elements.slider.index = 0;
+    }
+
     _slider__on_pointerDown(event) {
         if (!event.target.classList.contains('slider_arrow')) return;
 
@@ -202,10 +217,10 @@ export class Shop extends Components.Component {
     }
 
 
-    data__insert(level_shop, hero_shop) {
+    data__insert(levels_shop, heros_shop) {
         this._elements.repeater_level.model.clear();
         this._elements.repeater_slider.model.clear();
-        this._elements.repeater_level.model.add(level_shop);
-        this._elements.repeater_slider.model.add(hero_shop);
+        this._elements.repeater_level.model.add(levels_shop);
+        this._elements.repeater_slider.model.add(heros_shop);
     }
 }

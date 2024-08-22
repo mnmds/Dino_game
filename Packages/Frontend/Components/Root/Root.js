@@ -6,6 +6,13 @@ import {Game} from '../Game/Game.js';
 
 
 export class Root extends Components.Viewport {
+    static _components = [
+        Components.Leafable,
+        Game,
+        Settings,
+        Shop,
+    ];
+
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;

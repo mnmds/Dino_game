@@ -1,5 +1,5 @@
 @layer init {
-    /* :host(x-edit) { */
+    /* :host(x-textField) { */
     /*     background: #afa; */
 
         /* &::part(button_clear) { */
@@ -9,7 +9,7 @@
         /* } */
     /* } */
 
-    /* :host(x-edit)::part(button_clear) { */
+    /* :host(x-textField)::part(button_clear) { */
     /*     mask-image: url('./Edit.svg#cross'); */
 
     /*     background: blue; */
@@ -43,11 +43,6 @@
         }
     }
 
-    x-edit {
-        background: #afa;
-        text-overflow: ellipsis;
-    }
-
     x-flickable {
         box-sizing: border-box;
         padding: 8px;
@@ -75,6 +70,11 @@
                 background: red;
             }
         }
+    }
+
+    x-textField {
+        background: #afa;
+        text-overflow: ellipsis;
     }
 
     /* x-viewport { */

@@ -5,8 +5,23 @@ export class Http {
     static _responses = {};
 
 
+    static async fetch_json(url, opts = {}) {
+        let response = await fetch(url, opts);
+        let response_data = await response?.json() || null;
+
+        return response_data;
+    }
+
+    static async fetch_text(url, opts = {}) {
+        let response = await fetch(url, opts);
+        let response_data = await response?.text() || null;
+
+        return response_data;
+    }
+
+
     cache = false;
-    url = '';
+    url_base = undefined;
 
 
     constructor(opts = {}) {
@@ -16,10 +31,10 @@ export class Http {
     }
 
     async fetch(url, opts = {}) {
+        url = new URL(url, this.url_base);
         let response_promise = null;
 
         if (this.cache) {
-            url = new URL(url, this.url);
             response_promise = this.constructor._responses[url];
         }
 
@@ -52,9 +67,9 @@ export class Http {
 
     init({
         cache = this.cache,
-        url = this.url,
+        url_base = this.url_base,
     } = {}) {
         this.cache = cache;
-        this.url = url;
+        this.url_base = url_base;
     }
 }

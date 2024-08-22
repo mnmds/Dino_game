@@ -3,6 +3,7 @@ import {Component} from '../Component/Component.js';
 
 export class Viewport extends Component {
     static _css_url = true;
+    static _dom_slot = true;
     // static _html_url = true;
     static _url = import.meta.url;
 

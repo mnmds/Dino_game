@@ -15,6 +15,7 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
     static _css_url = '';
     static _defined = null;
     static _dom = null;
+    static _dom_slot = false;
     static _elements = {};
     static _elements_classes = {};
     static _eventListeners = {};
@@ -56,7 +57,7 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
         await Promise.all(promises);
     }
 
-    static async _dom__create() {
+    static async _dom__define() {
         let css = '';
         let html = '';
 
@@ -64,7 +65,7 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
             css = this._css;
         }
         else if (this._css_url) {
-            let css_url = this._css_url === true ? new URL(`${this.name}.css`, this._url) : this._css_url;
+            let css_url = this._css_url === true ? `${this.name}.css` : this._css_url;
             css = this._http.fetch_text(css_url);
         }
 
@@ -72,7 +73,7 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
             html = this._html;
         }
         else if (this._html_url) {
-            let html_url = this._html_url === true ? new URL(`${this.name}.html`, this._url) : this._html_url;
+            let html_url = this._html_url === true ? `${this.name}.html` : this._html_url;
             html = this._http.fetch_text(html_url);
         }
 
@@ -85,14 +86,17 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
         }
 
         if (html) {
-            let template = document.createElement('template');
-            template.innerHTML = this.interpolate(html, this._interpolations_key, this._interpolations);
-            this._dom = template.content;
+            html = this.interpolate(html, this._interpolations_key, this._interpolations);
+            this._dom = this.dom__create(html);
         }
         else if (css) {
             this._dom = new DocumentFragment();
-            let slot = document.createElement('slot');
-            this._dom.append(slot);
+
+            if (this._dom_slot) {
+                let slot = document.createElement('slot');
+                slot.className = 'root';
+                this._dom.append(slot);
+            }
         }
         else return;
 
@@ -232,6 +236,16 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
         return parseFloat(prop_value);
     }
 
+    static dom__create(html) {
+        if (!html) return null;
+
+        let template = document.createElement('template');
+        template.innerHTML = html;
+        let dom = template.content;
+
+        return dom;
+    }
+
     static elements__get(dom, elements_descriptors) {
         let elements = {};
 
@@ -309,6 +323,7 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
     static async init({
         css,
         css_url,
+        dom_slot,
         elements_classes,
         html,
         html_url,
@@ -326,6 +341,7 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
             {
                 _css: css,
                 _css_url: css_url,
+                _dom_slot: dom_slot,
                 _elements_classes: elements_classes,
                 _html: html,
                 _html_url: html_url,
@@ -346,13 +362,13 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
 
         this._http = new Http({
             cache: true,
-            url: this._url,
+            url_base: this._url,
         });
         this._tag = `${this._tag_prefix}-${this.name}`.toLowerCase();
         this._observedAttributes__define();
         await Promise.all([
             this._components__await(),
-            this._dom__create(),
+            this._dom__define(),
             this._styleSheets_descriptors__proc(),
         ]);
 
@@ -726,6 +742,12 @@ export class Component extends Class.mix(HTMLElement, EventManager) {
     attribute__set(attribute_name, attribute_value = null) {
         return this.constructor.attribute__set(this, attribute_name, attribute_value);
     }
+
+    // constructor() {
+    //     super();
+
+    //     this._build();
+    // }
 
     connectedCallback() {
         this._build();

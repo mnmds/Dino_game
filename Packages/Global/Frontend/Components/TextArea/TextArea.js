@@ -4,8 +4,6 @@
 import {Flickable} from '../Flickable/Flickable.js';
 import {TextInput} from '../TextInput/TextInput.js';
 
-import {Common} from '../../../Js/Common/Common.js';
-
 
 export class TextArea extends TextInput {
     static _components = [Flickable];
@@ -38,23 +36,6 @@ export class TextArea extends TextInput {
             input: '_input__on_input',
         },
     };
-
-    // static _eventListeners_external = [
-    //     [
-    //         window,
-    //         {
-    //             resize: '_window__on_resize',
-    //         },
-    //     ],
-    // ];
-
-    // static _eventListeners_special = {
-    //     ...super._eventListeners_special,
-
-    //     window: {
-    //         resize: '_window__on_resize',
-    //     },
-    // };
 
 
     static {
@@ -92,8 +73,10 @@ export class TextArea extends TextInput {
 
     _init() {
         this._element = this._elements.input;
-        this.props__sync('spellCheck');
         super._init();
+
+        this.props__sync('spellCheck');
+        this.constructor.eventListeners__apply(window, this._eventListeners.window);
         this.refresh(false);
     }
 

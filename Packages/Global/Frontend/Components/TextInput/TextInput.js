@@ -137,14 +137,14 @@ export class TextInput extends Component {
         this._element.setSelectionRange(0, 0);
     }
 
-    _element__set(element) {
-        if (this._element) {
-            this.constructor.eventListeners__apply(this._element, this._eventListeners.element, false);
-        }
+    // _element__set(element) {
+    //     if (this._element) {
+    //         this.constructor.eventListeners__apply(this._element, this._eventListeners.element, false);
+    //     }
 
-        this._element = element;
-        this.constructor.eventListeners__apply(this._element, this._eventListeners.element);
-    }
+    //     this._element = element;
+    //     this.constructor.eventListeners__apply(this._element, this._eventListeners.element);
+    // }
 
     _init() {
         this.props__sync('disabled', 'placeholder');
