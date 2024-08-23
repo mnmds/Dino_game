@@ -117,7 +117,7 @@ export class Shop extends Components.Component {
 
         let button_prev = this._elements.control_panel.children[2 - button.dataset.index];
         this._elements.leafable.index = button.dataset.index;
-        this._elements.slider.refresh();
+        this.refresh();
 
         button_prev.removeAttribute('active');
         button.setAttribute('active', true);
@@ -198,7 +198,7 @@ export class Shop extends Components.Component {
     }
 
     _repeater_level__on_add() {
-        this._elements.display.refresh();
+        this.refresh();
     }
 
     _repeater_level__on_pointerDown(event) {
@@ -209,7 +209,7 @@ export class Shop extends Components.Component {
 
     _repeater_slider__on_add(event) {
         this._elements.slider.index = 0;
-        this._elements.slider.refresh();
+        this.refresh();
     }
 
     _slider__on_pointerDown(event) {
@@ -224,5 +224,11 @@ export class Shop extends Components.Component {
         this._elements.repeater_slider.model.clear();
         this._elements.repeater_level.model.add(levels_shop);
         this._elements.repeater_slider.model.add(heros_shop);
+    }
+
+    refresh() {
+        this._elements.display.refresh();
+        this._elements.leafable.refresh();
+        this._elements.slider.refresh();
     }
 }
