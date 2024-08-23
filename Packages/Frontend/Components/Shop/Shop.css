@@ -60,7 +60,7 @@
         margin: auto;
 
         &[status='sale'] {
-            background: var(--Theme__block__background_accent);
+            background: var(--Theme__block__background_accent_light);
         }
 
         &[status='sold'] {
