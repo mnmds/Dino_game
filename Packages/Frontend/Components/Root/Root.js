@@ -1,14 +1,16 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 
+import {Game} from '../Game/Game.js';
+import {Referrals} from '../Referrals/Referrals.js';
 import {Settings} from '../Settings/Settings.js';
 import {Shop} from '../Shop/Shop.js';
-import {Game} from '../Game/Game.js';
 
 
 export class Root extends Components.Viewport {
     static _components = [
         Components.Leafable,
         Game,
+        Referrals,
         Settings,
         Shop,
     ];

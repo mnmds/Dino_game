@@ -27,9 +27,11 @@ export class Shop extends Components.Component {
         balance: '',
         control_panel: '',
         display: '',
+        label_checkBox: '',
         leafable: '',
         repeater_level: '',
         repeater_slider: '',
+        root: '',
         slider: '',
         slider__container: '',
     };
@@ -38,17 +40,24 @@ export class Shop extends Components.Component {
         control_panel: {
             pointerdown: '_control_panel__on_pointerDown',
         },
-        slider__container: {
-            pointerdown: '_slider__on_pointerDown',
+        label_checkBox: {
+            click: '_label_checkBox__on_click',
+            pointerdown: '_label_checkBox__on_pointerDown',
         },
         repeater_level: {
             add: '_repeater_level__on_add',
             define: '_repeater_level__on_add',
             pointerdown: '_repeater_level__on_pointerDown',
         },
+        slider__container: {
+            pointerdown: '_slider__on_pointerDown',
+        },
         repeater_slider: {
             add: '_repeater_slider__on_add',
             define: '_repeater_slider__on_add',
+        },
+        root: {
+            touchstart: '_root__on_touchStart',
         },
     };
 
@@ -127,6 +136,8 @@ export class Shop extends Components.Component {
         this.props__sync();
         this._elements.repeater_level.Manager = this.constructor.Repeater_level_manager;
         this._elements.repeater_slider.Manager = this.constructor.Repeater_slider_manager;
+        // this._elements.root.addEventListener('touchstart', (event) => event.preventDefault());
+
 
         this.data__insert(
             [
@@ -197,6 +208,15 @@ export class Shop extends Components.Component {
         );
     }
 
+    _label_checkBox__on_click(event) {
+        event.preventDefault();
+    }
+
+    _label_checkBox__on_pointerDown(event) {
+        event.preventDefault();
+        this._elements.label_checkBox.checked = !this._elements.label_checkBox.checked;
+    }
+
     _repeater_level__on_add() {
         this.refresh();
     }
@@ -210,6 +230,10 @@ export class Shop extends Components.Component {
     _repeater_slider__on_add(event) {
         this._elements.slider.index = 0;
         this.refresh();
+    }
+
+    _root__on_touchStart(event) {
+        event.preventDefault();
     }
 
     _slider__on_pointerDown(event) {

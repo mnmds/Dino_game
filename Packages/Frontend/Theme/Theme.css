@@ -45,6 +45,7 @@
     }
 
     x-flickable {
+        overflow: hidden;
         position: relative;
 
         &::after {
