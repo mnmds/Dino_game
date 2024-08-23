@@ -12,14 +12,33 @@ export class Referrals extends Components.Component {
 
     static _attributes = {
         ...super._attributes,
+
+        _score: {
+            default: 'referral',
+            persistent: true,
+        },
+        _date: {
+            default: 'all_time',
+            persistent: true,
+        },
     };
 
     static _elements = {
         repeater: '',
         display: '',
+        sort_buttons_referrals: '',
+        sort_buttons_date: '',
     };
 
-    static _eventListeners = {};
+    static _eventListeners_elements = {
+        sort_buttons_referrals: {
+            pointerdown: '_sort_buttons_referrals__on_pointerDown',
+        },
+
+        sort_buttons_date: {
+            pointerdown: '_sort_buttons_date__on_pointerDown',
+        },
+    };
 
     static Repeater_manager = class extends Components.Repeater.Manager {
         data__apply() {
@@ -27,6 +46,7 @@ export class Referrals extends Components.Component {
             this._item.image_url = this._model_item.image_url;
             this._item.index = this._model_item.user_index;
             this._item.score = this._model_item.user_score;
+            this._item.date = this._model_item.user_date;
         }
 
         init() {
@@ -40,10 +60,44 @@ export class Referrals extends Components.Component {
     }
 
 
+    get _score() {
+        return this._attributes._score;
+    }
+    set _score(score) {
+            this._attribute__set('_score', score);
+        }
+
+    get _date() {
+        return this._attributes._date;
+    }
+    set _date(date) {
+            this._attribute__set('_date', date);
+        }
+
+
     _init() {
         this._elements.repeater.Manager = this.constructor.Repeater_manager;
         this.data_insert();
+        this.props__sync();
     }
+
+    _sort_buttons_referrals__on_pointerDown(event) {
+        if (!event.target.dataset.type) return;
+
+        this._score = event.target.dataset.type;
+    }
+
+    _sort_buttons_date__on_pointerDown(event) {
+        if (!event.target.dataset.type) return;
+
+        this._date = event.target.dataset.type;
+    }
+
+    // _date_buttons_referrals__on_pointerDown(event) {
+    //     if (!event.target.dataset.type) return;
+
+    //     this._date = event.target.dataset.type;
+    // }
 
     data_insert() {
         this._elements.repeater.model.clear();

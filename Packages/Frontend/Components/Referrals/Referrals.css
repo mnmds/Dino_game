@@ -34,7 +34,7 @@
 
     .invite_income {
         align-items: center;
-        background-color: Black;
+        background: Black;
         display: flex;
         /* justify-content: space-between; */
         justify-content: center;
@@ -45,7 +45,54 @@
         box-sizing: border-box;
     }
 
-    .referral {
-
+    .sort_buttons {
+        display: flex;
+        justify-content: space-around;
     }
+
+    .progressBar {
+        height: 2px;
+        background: var(--Theme__block__background_accent_dark)
+    }
+
+    .progressBar_score {
+        :host([_score='referral']) & {
+            background: linear-gradient(to right, var(--Theme__block__background_accent) 0% 50%, var(--Theme__block__background_light) 50%);
+            height: 4px;
+        }
+
+        :host([_score='income']) & {
+            background: linear-gradient(to right, var(--Theme__block__background_light) 0% 50%, var(--Theme__block__background_accent) 50%);
+            height: 4px;
+        }
+    }
+
+    .progressBar_date {
+        :host([_date='this_week']) & {
+            background: linear-gradient(to right, var(--Theme__block__background_accent) 0% 33%, var(--Theme__block__background_light) 33%);
+            height: 4px;
+        }
+
+        :host([_date='last_week']) & {
+            background: linear-gradient(to right, var(--Theme__block__background_light) 33%, var(--Theme__block__background_accent) 33% 66%, var(--Theme__block__background_light) 66%);
+            height: 4px;
+        }
+
+        :host([_date='all_time']) & {
+            background: linear-gradient(to right, var(--Theme__block__background_light) 66%, var(--Theme__block__background_accent) 66%);
+            height: 4px;
+        }
+    }
+
+    .referral {
+        display: block;
+        margin: auto;
+        margin-top: 5px;
+    }
+
+    .repeater {
+        display: grid;
+        align-items: center;
+    }
+
 }

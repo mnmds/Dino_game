@@ -11,16 +11,21 @@
         </div>
     </div>
 
+    <div class='control_panel'>
+        <div class='sort_buttons sort_buttons_referrals'>
+            <div class='referral_button' data-type='referral'>Рефералы</div>
+            <div class='referral_button' data-type='income'>Доход</div>
+        </div>
+        <div class='progressBar_score progressBar' ></div>
+        <div class='sort_buttons sort_buttons_date'>
+            <div class='referral_button' data-type='this_week'>Текущая неделя</div>
+            <div class='referral_button' data-type='last_week'>Предыдущая неделя</div>
+            <div class='referral_button' data-type='all_time'>Всё время</div>
+        </div>
+        <div class='progressBar_date progressBar'></div>
+    </div>
+
     <x-flickable class='display' autoRefresh scrollBars='hidden'>
-        <div class='sort_button'>
-            <div class='referral_button'>Рефералы</div>
-            <div class='referral_button'>Доход</div>
-        </div>
-        <div class='sort_button'>
-            <div class='referral_button'>Текущая неделя</div>
-            <div class='referral_button'>Предыдущая неделя</div>
-            <div class='referral_button'>Всё время</div>
-        </div>
         <x-repeater interpolation='repeater' class='repeater'>
             <template Repeater__delegate>
                 <x-referral class='referral'></x-referral>
