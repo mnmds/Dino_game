@@ -5,6 +5,7 @@
 @layer init {
     .display {
         justify-self: center;
+        width: 100%;
     }
 
     .root {
@@ -23,20 +24,20 @@
         align-items: center;
         display: flex;
         justify-content: space-between;
-        white-space: nowrap;
-        font-size: 5dvw;
-        margin: 10px 0 10px 0;
+        /* white-space: nowrap; */
+        /* font-size: 5dvw; */
+        /* margin: 10px 0 10px 0; */
     }
 
     .invite_button {
         align-items: center;
-        background-color: Black;
+        background: Black;
         display: flex;
         /* justify-content: space-between; */
         justify-content: center;
-        gap: 5%;
+        gap: var(--Theme__block__gap);
         height: 7dvh;
-        width: 45dvw;
+        width: 50%;
         border-radius: 15px;
         box-sizing: border-box;
     }
@@ -47,9 +48,9 @@
         display: flex;
         /* justify-content: space-between; */
         justify-content: center;
-        gap: 5%;
+        gap: var(--Theme__block__gap);
         height: 7dvh;
-        width: 45dvw;
+        width: 50%;
         border-radius: 15px;
         box-sizing: border-box;
     }
@@ -93,15 +94,14 @@
         }
     }
 
-    .referral {
-        display: block;
-        margin: auto;
-        margin-top: 5px;
-    }
-
     .repeater {
         display: grid;
         align-items: center;
+        gap: var(--Theme__block__gap);
     }
 
+    .referral_button {
+        width: 50%;
+        text-align: center;
+    }
 }

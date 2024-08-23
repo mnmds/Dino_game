@@ -3,52 +3,55 @@
 @import '../../Theme/Theme.css' layer(theme);
 
 @layer init {
+    :host {
+        display: block;
+        width: 100%;
+    }
+
     .root {
         align-items: center;
-        background-color: Black;
+        background: Black;
         display: flex;
         justify-content: space-between;
-        gap: 5%;
+        /* gap: 5%; */
         height: 10dvh;
-        width: 90dvw;
+        /* width: 90dvw; */
         border-radius: 15px;
         box-sizing: border-box;
-        font-size: 5dvw;
+        padding: var(--Theme__block__padding);
+        /* font-size: 5dvw; */
 
-        max-width: 100%;
+        /* max-width: 100%; */
         overflow: hidden;
     }
 
     .user_image {
-    background-color: gray;
-    border-radius: 15px;
-    height: 80%;
-    }
-
-    .user_image img {
-        height: auto;
+        aspect-ratio: 1;
+        background: gray;
         border-radius: 15px;
+        object-fit: cover;
+        /* height: 80%; */
     }
 
-    .user_index{
-        margin: 10px;
+    .user_index, .user_score {
+        /* margin: 10px; */
         color: gray;
     }
 
-    .user_score{
-        margin: 10px;
-        color: gray;
+    /* .user_score { */
+        /* margin: 10px; */
+    /*     color: gray; */
 
-        font-size: calc(1vw + 1em);
-    }
+        /* font-size: calc(1vw + 1em); */
+    /* } */
 
-    .user_name{
-        display: inline-block;
-        max-width: 100%;
-        max-height: 100%;
-        white-space: nowrap;
-        overflow: hidden;
+    /* .user_name { */
+        /* display: inline-block; */
+        /* max-width: 100%; */
+        /* max-height: 100%; */
+        /* white-space: nowrap; */
+        /* overflow: hidden; */
         /* text-overflow: ellipsis; */
-    }
+    /* } */
 
 }
