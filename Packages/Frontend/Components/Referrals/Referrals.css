@@ -3,12 +3,17 @@
 @import '../../Theme/Theme.css' layer(theme);
 
 @layer init {
+    .display {
+        justify-self: center;
+    }
+
     .root {
         /* display: grid; */
         /* grid-template-rows: min-content auto min-content; */
         /* height: 100dvh; */
         /* margin: 3%; */
         display: grid;
+        gap: var(--Theme__block__gap);
         grid-template-rows: repeat(4, auto);
         height: 100%;
         overflow: hidden;
