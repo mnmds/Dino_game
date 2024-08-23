@@ -12,6 +12,7 @@ export {Popup} from './Popup/Popup.js';
 export {Repeater} from './Repeater/Repeater.js';
 export {Resizable} from './Resizable/Resizable.js';
 export {Select} from './Select/Select.js';
+export {Slider} from './Slider/Slider.js';
 export {Svg} from './Svg/Svg.js';
 export {Switch} from './Switch/Switch.js';
 export {TextArea} from './TextArea/TextArea.js';

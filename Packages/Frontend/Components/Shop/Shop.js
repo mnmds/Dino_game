@@ -117,6 +117,7 @@ export class Shop extends Components.Component {
 
         let button_prev = this._elements.control_panel.children[2 - button.dataset.index];
         this._elements.leafable.index = button.dataset.index;
+        this._elements.slider.refresh();
 
         button_prev.removeAttribute('active');
         button.setAttribute('active', true);
@@ -208,6 +209,7 @@ export class Shop extends Components.Component {
 
     _repeater_slider__on_add(event) {
         this._elements.slider.index = 0;
+        this._elements.slider.refresh();
     }
 
     _slider__on_pointerDown(event) {
