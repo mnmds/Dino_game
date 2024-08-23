@@ -23,6 +23,7 @@
     .invite_user {
         align-items: center;
         display: flex;
+        gap: var(--Theme__block__gap);
         justify-content: space-between;
         /* white-space: nowrap; */
         /* font-size: 5dvw; */
