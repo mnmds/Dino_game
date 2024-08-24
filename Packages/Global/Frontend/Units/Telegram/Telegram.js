@@ -5,7 +5,7 @@ import {ExternalPromise} from '../../../Js/ExternalPromise/ExternalPromise.js';
 
 
 export class Telegram {
-    static _result = null;
+    // static _result = null;
     static _telegram = window.Telegram;
     static _webApp = this._telegram.WebApp;
 
@@ -13,8 +13,8 @@ export class Telegram {
 
 
     static app__init() {
-       this._webApp.expand();
-       this._webApp.ready();
+        this._webApp.expand();
+        this._webApp.ready();
     }
 
     static async data__get(key) {
@@ -38,17 +38,17 @@ export class Telegram {
         return promise;
     }
 
-    static other_link__open(url) {
+    static link_outside__open(url) {
         this._webApp.openLink(url);
     }
 
-    static telegram_link__open(url) {
+    static link_telegram__open(url) {
         this._webApp.openTelegramLink(url);
     }
 
-    static user_id__get() {
-        return this._webApp.initDataUnsafe.user.id;
-    }
+    // static user_id__get() {
+    //     return this._webApp.initDataUnsafe.user.id;
+    // }
 
     static verticalSwipes__disable() {
         this._webApp.disableVerticalSwipes();

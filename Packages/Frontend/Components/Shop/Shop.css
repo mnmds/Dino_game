@@ -55,8 +55,9 @@
     }
 
     .hero_status {
-        width: 50%;
+        height: 25px;
         margin: auto;
+        width: 50%;
 
         &[status='sale'] {
             background: var(--Theme__block__background_accent_light);
@@ -65,6 +66,15 @@
         &[status='sold'] {
             background: #000d;
         }
+    }
+
+    .popup__button {
+        background: var(--Theme__block__background_accent);
+        border-radius: var(--Theme__block_rounding);
+        margin: auto;
+        margin-top: 20px;
+        padding: var(--Theme__block__gap);
+        width: fit-content;
     }
 
     .label {

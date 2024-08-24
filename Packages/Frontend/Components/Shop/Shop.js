@@ -1,5 +1,10 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
+import {Units} from '../../../Global/Frontend/Frontend.js' ;
+
 import {RestClient} from '../../../Global/Js/Js.js';
+
+import {User_messages_enums} from '../../Units/Units.js';
+import {Interface_names_replacement} from '../../Units/Units.js';
 
 import {ButtonBack} from '../ButtonBack/ButtonBack.js';
 import {ShopButton} from '../ShopButton/ShopButton.js';
@@ -21,7 +26,8 @@ export class Shop extends Components.Component {
     static _attributes = {
         ...super._attributes,
 
-        balance: 0,
+        balance: 10e10,
+        language: 'ru',
     };
 
     static _elements = {
@@ -30,6 +36,9 @@ export class Shop extends Components.Component {
         display: '',
         label_checkBox: '',
         leafable: '',
+        popup: '',
+        popup__button: '',
+        popup__content: '',
         repeater_level: '',
         repeater_slider: '',
         root: '',
@@ -53,6 +62,9 @@ export class Shop extends Components.Component {
         repeater_slider: {
             add: '_repeater_slider__on_add',
             define: '_repeater_slider__on_add',
+        },
+        popup__button: {
+            pointerdown: '_popup_button__on_pointerDown',
         },
         root: {
             touchstart: '_root__on_touchStart',
@@ -90,6 +102,7 @@ export class Shop extends Components.Component {
         data__apply() {
             this._hero_image.src = this._model_item.hero_image;
             this._hero_name.textContent = this._model_item.hero_name;
+            this._hero_status.meta_data = {product_name: this._model_item.hero_name};
             this._hero_status.statuses_values.sale.text = this._model_item.hero_price || 0;
             this._hero_status.statuses_values.sold.text = 'Выбрать';
             this._hero_status.status = this._model_item.hero_status;
@@ -110,6 +123,7 @@ export class Shop extends Components.Component {
 
 
     _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+    _translator = new Interface_names_replacement();
 
 
     get balance() {
@@ -120,28 +134,30 @@ export class Shop extends Components.Component {
         this._elements.balance.textContent = balance;
     }
 
+    get language() {
+        return this._attributes.language;
+    }
+    set language(language) {
+        this._attribute__set('language', language);
+    }
+
 
     _buy__commit(buy) {
         switch (buy.status) {
             case 'sale':
-                if (buy.statuses_values.sale.text > this.balance) return;
+                if (buy.statuses_values.sale.text > this.balance) {
+                    this._elements.popup__content.textContent = User_messages_enums[this.language].balance_deficit;
+                    this._elements.popup.open();
 
-                break;
-            case 'sold':
-                for (let child of this._elements.slider.children) {
-                    let hero_status = child.querySelector('.hero_status');
-
-                    if (hero_status.status != 'selected') continue;
-
-                    hero_status.status = 'sold';
+                    break;
                 }
 
-                buy.status = 'selected';
-
+                this._hero__buy(buy);
+                break;
+            case 'sold':
+                this._hero__replace(buy);
                 break;
         }
-
-        console.log(buy.status)
     }
 
     _control_panel__on_pointerDown(event) {
@@ -157,6 +173,32 @@ export class Shop extends Components.Component {
 
         button_prev.removeAttribute('active');
         button.setAttribute('active', true);
+    }
+
+    async _hero__buy(hero) {
+        let hero_name = hero.meta_data.product_name;
+        let result = await this._request__exec('hero__buy', hero_name)
+
+        if (!result) return;
+
+        this._hero__replace(hero, false);
+    }
+
+    async _hero__replace(hero, checked = true) {
+        if (checked) {
+            let hero_name = hero.meta_data.product_name;
+            let result = await this._request__exec('hero__replace', hero_name)
+
+            if (!result) return;
+        }
+
+        for (let child of this._elements.slider.children) {
+            let hero_status = child.querySelector('.hero_status');
+            if (hero_status.status != 'selected') continue;
+            hero_status.status = 'sold';
+        }
+
+        hero.status = 'selected';
     }
 
     _init() {
@@ -233,6 +275,9 @@ export class Shop extends Components.Component {
                 },
             ]
         );
+
+        this._translator.mapper_url = new URL('../../Units/Interface_names_replacement/Mappers/Interface_names_enums.json', import.meta.url)
+        this._translator.replace(this._elements.root);
     }
 
     _label_checkBox__on_click(event) {
@@ -242,6 +287,10 @@ export class Shop extends Components.Component {
     _label_checkBox__on_pointerDown(event) {
         event.preventDefault();
         this._elements.label_checkBox.checked = !this._elements.label_checkBox.checked;
+    }
+
+    _popup_button__on_pointerDown() {
+        this._elements.popup.close();
     }
 
     _repeater_level__on_add() {
@@ -259,13 +308,29 @@ export class Shop extends Components.Component {
         this.refresh();
     }
 
+    async _request__exec(method, ...args) {
+        let {error, exception, result} = await this._rest.call(method, Telegram.user?.id, ...args);
+
+        if (exception) {
+            this._elements.popup__content.textContent = User_messages_enums[this.language][exception];
+            this._elements.popup.open();
+
+            return;
+        }
+
+        return result;
+    }
+
     _root__on_touchStart(event) {
         event.preventDefault();
     }
 
     _slider__on_pointerDown(event) {
         if (event.target.classList.contains('slider_arrow')) {
-            this._elements.slider.index += event.target.classList.contains('slider_arrow_next') ? 1 : -1;
+            let increment = event.target.classList.contains('slider_arrow_next') ? 1 : -1;
+
+            this._elements.slider.animation_implicit_direction = -increment;
+            this._elements.slider.index += increment;
         }
         else if (event.target.classList.contains('hero_status')) {
             this._buy__commit(event.target);

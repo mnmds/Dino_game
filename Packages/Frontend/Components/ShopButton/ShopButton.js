@@ -23,6 +23,9 @@ export class ShopButton extends Components.Component {
     }
 
 
+    __meta_data = null;
+
+
     statuses_values = {
         sale: {
             icon_svg: './Storage/Images/Main.svg#crystal',
@@ -38,6 +41,13 @@ export class ShopButton extends Components.Component {
         },
     }
 
+
+    get meta_data() {
+        return this.__meta_data;
+    }
+    set meta_data(meta_data) {
+        this.__meta_data = meta_data;
+    }
 
     get status() {
         return this._attributes.status;

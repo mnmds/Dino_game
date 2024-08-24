@@ -82,6 +82,17 @@
         }
     }
 
+    x-popup {
+        --Popup__backdrop_color: #000d;
+        --Popup__backdrop_filter: blur(1px);
+
+        &::part(root) {
+            background: var(--Theme__block__background);
+            border-radius: var(--Theme__block_rounding);
+            padding: var(--Theme__block__padding);
+        }
+    }
+
     [_building] {
         visibility: hidden;
     }
