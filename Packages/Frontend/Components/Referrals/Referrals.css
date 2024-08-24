@@ -32,7 +32,7 @@
 
     .invite__item {
         align-items: center;
-        background: Black;
+        background: var(--Theme__block__background);
         border-radius: 15px;
         box-sizing: border-box;
         display: flex;
@@ -41,6 +41,7 @@
         justify-content: center;
         padding: var(--Theme__block__gap);
         width: 50%;
+        text-align: center;
     }
 
     /* .invite_button { */
@@ -76,32 +77,32 @@
     }
 
     .progressBar {
-        background: var(--Theme__block__background_accent_dark);
-        height: 4px;
+        /* background: var(--Theme__block__background); */
+        height: 5px;
     }
 
     .progressBar_score {
         :host([_score='referral']) & {
-            background: linear-gradient(to right, var(--Theme__block__background_accent) 0% 50%, var(--Theme__block__background_light) 50%);
+            background: linear-gradient(to right, var(--Theme__block__background) 0% 50%, var(--Theme__block__background_light) 50%);
             /* height: 4px; */
         }
         :host([_score='income']) & {
-            background: linear-gradient(to right, var(--Theme__block__background_light) 0% 50%, var(--Theme__block__background_accent) 50%);
+            background: linear-gradient(to right, var(--Theme__block__background_light) 0% 50%, var(--Theme__block__background) 50%);
             /* height: 4px; */
         }
     }
 
     .progressBar_date {
         :host([_date='this_week']) & {
-            background: linear-gradient(to right, var(--Theme__block__background_accent) 0% 33%, var(--Theme__block__background_light) 33%);
+            background: linear-gradient(to right, var(--Theme__block__background) 0% 33%, var(--Theme__block__background_light) 33%);
             /* height: 4px; */
         }
         :host([_date='last_week']) & {
-            background: linear-gradient(to right, var(--Theme__block__background_light) 33%, var(--Theme__block__background_accent) 33% 66%, var(--Theme__block__background_light) 66%);
+            background: linear-gradient(to right, var(--Theme__block__background_light) 33%, var(--Theme__block__background) 33% 66%, var(--Theme__block__background_light) 66%);
             /* height: 4px; */
         }
         :host([_date='all_time']) & {
-            background: linear-gradient(to right, var(--Theme__block__background_light) 66%, var(--Theme__block__background_accent) 66%);
+            background: linear-gradient(to right, var(--Theme__block__background_light) 66%, var(--Theme__block__background) 66%);
             /* height: 4px; */
         }
     }
