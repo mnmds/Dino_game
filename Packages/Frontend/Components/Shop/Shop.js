@@ -50,15 +50,15 @@ export class Shop extends Components.Component {
             define: '_repeater_level__on_add',
             pointerdown: '_repeater_level__on_pointerDown',
         },
-        slider__container: {
-            pointerdown: '_slider__on_pointerDown',
-        },
         repeater_slider: {
             add: '_repeater_slider__on_add',
             define: '_repeater_slider__on_add',
         },
         root: {
             touchstart: '_root__on_touchStart',
+        },
+        slider__container: {
+            pointerdown: '_slider__on_pointerDown',
         },
     };
 
@@ -107,6 +107,9 @@ export class Shop extends Components.Component {
     static {
         this.init();
     }
+
+
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
 
 
     get balance() {
