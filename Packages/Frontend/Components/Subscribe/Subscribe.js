@@ -1,25 +1,28 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
+
 import {ShopButton} from '../ShopButton/ShopButton.js';
 
 
 export class Subscribe extends Components.Component {
+    static _components = [ShopButton];
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;
 
     static _attributes = {
         ...super._attributes,
-        task: '',
-        image: '',
-        value: 0,
-        status: 'sale',
+
         link: '',
+        price: 0,
+        status: 'sale',
+        task: '',
+        type: '',
     };
 
     static _elements = {
-        task: '',
         image: '',
         reward: '',
+        task: '',
     };
 
     static _eventListeners = {};
@@ -37,20 +40,20 @@ export class Subscribe extends Components.Component {
         this._elements.task.textContent = task;
     }
 
-    get image() {
-        return this._attributes.image;
+    get type() {
+        return this._attributes.type;
     }
-    set image(image) {
-        this._attribute__set('image', image);
-        this._elements.image.src = `./Packages/Frontend/Components/Subscribe/${image}.png`;
+    set type(type) {
+        this._attribute__set('type', type);
+        this._elements.image.src = `./Storage/Images/Subscribe_${type}.png`;
     }
 
-    get value() {
-        return this._attributes.value;
+    get price() {
+        return this._attributes.price;
     }
-    set value(value) {
-        this._attribute__set('value', value);
-        this._elements.reward.statuses_values.sale.text = value;
+    set price(price) {
+        this._attribute__set('price', price);
+        this._elements.reward.statuses_values.sale.text = price;
         this._elements.reward.status_value__refresh();
     }
 

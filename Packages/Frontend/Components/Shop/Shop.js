@@ -1,4 +1,5 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
+import {RestClient} from '../../../Global/Js/Js.js';
 
 import {ButtonBack} from '../ButtonBack/ButtonBack.js';
 import {ShopButton} from '../ShopButton/ShopButton.js';

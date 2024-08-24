@@ -74,6 +74,8 @@ export class Game extends Components.Component {
 
     async _hero__load() {
         let hero_url = `./Storage/Videos/Game/${this.hero}/${this.level}.webm`;
+        let poster_url = `./Storage/Images/Game/Stop.png`;
+        this._elements.hero.poster = poster_url;
         this._elements.hero_source.src = hero_url;
 
         this._elements.hero.load();
