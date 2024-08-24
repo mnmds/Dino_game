@@ -10,7 +10,7 @@
 
     .root {
         align-items: center;
-        background: Black;
+        background: var(--Theme__block__background);
         display: flex;
         justify-content: space-between;
         /* gap: 5%; */
