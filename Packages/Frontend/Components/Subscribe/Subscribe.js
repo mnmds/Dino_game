@@ -32,22 +32,6 @@ export class Subscribe extends Components.Component {
         this.init();
     }
 
-    get task() {
-        return this._attributes.task;
-    }
-    set task(task) {
-        this._attribute__set('task', task);
-        this._elements.task.textContent = task;
-    }
-
-    get type() {
-        return this._attributes.type;
-    }
-    set type(type) {
-        this._attribute__set('type', type);
-        this._elements.image.src = `./Storage/Images/Subscribe_${type}.png`;
-    }
-
     get price() {
         return this._attributes.price;
     }
@@ -63,6 +47,22 @@ export class Subscribe extends Components.Component {
     set status(status) {
         this._attribute__set('status', status);
         this._elements.reward.status = status;
+    }
+
+    get task() {
+        return this._attributes.task;
+    }
+    set task(task) {
+        this._attribute__set('task', task);
+        this._elements.task.textContent = task;
+    }
+
+    get type() {
+        return this._attributes.type;
+    }
+    set type(type) {
+        this._attribute__set('type', type);
+        this._elements.image.src = `./Storage/Images/Subscribe_${type}.png`;
     }
 
 
