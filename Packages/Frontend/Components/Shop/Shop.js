@@ -4,7 +4,7 @@ import {Units} from '../../../Global/Frontend/Frontend.js' ;
 import {RestClient} from '../../../Global/Js/Js.js';
 
 import {User_messages_enums} from '../../Units/Units.js';
-import {Interface_names_replacement} from '../../Units/Units.js';
+import {Replacement} from '../../Units/Units.js';
 
 import {ButtonBack} from '../ButtonBack/ButtonBack.js';
 import {ShopButton} from '../ShopButton/ShopButton.js';
@@ -123,7 +123,7 @@ export class Shop extends Components.Component {
 
 
     _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
-    _translator = new Interface_names_replacement();
+    _translator = new Replacement();
 
 
     get balance() {
@@ -276,7 +276,6 @@ export class Shop extends Components.Component {
             ]
         );
 
-        this._translator.mapper_url = new URL('../../Units/Interface_names_replacement/Mappers/Interface_names_enums.json', import.meta.url)
         this._translator.replace(this._elements.root);
     }
 
