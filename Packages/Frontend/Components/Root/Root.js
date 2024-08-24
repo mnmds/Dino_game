@@ -25,6 +25,13 @@ export class Root extends Components.Viewport {
 
     static _elements = {
         leafable: '',
+        settings: '',
+    };
+
+    static _eventListeners_elements = {
+        settings: {
+            language__toggle: '_settings__on_languageToggle',
+        }
     };
 
     static _eventListeners_target = {
@@ -41,5 +48,11 @@ export class Root extends Components.Viewport {
 
     _on__back_click() {
         this._elements.leafable.index = 0;
+    }
+
+    _settings__on_languageToggle(event) {
+        for (let child of this._elements.leafable.children) {
+            child.language = event.detail.language;
+        }
     }
 }

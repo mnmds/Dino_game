@@ -26,8 +26,9 @@ export class Shop extends Components.Component {
     static _attributes = {
         ...super._attributes,
 
-        balance: 10e10,
+        balance: 0,
         language: 'ru',
+        level: 0,
     };
 
     static _elements = {
@@ -83,6 +84,7 @@ export class Shop extends Components.Component {
             this._level.innerHTML += this._model_item.level;
             this._level_status.statuses_values.sale.text = this._model_item.level_price || 0;
             this._level_status.status = this._model_item.level_status;
+            this._level_status.meta_data = {product_name: this._model_item.level.split(' ')[0]};
         }
 
         init() {
@@ -139,6 +141,15 @@ export class Shop extends Components.Component {
     }
     set language(language) {
         this._attribute__set('language', language);
+        this._translator.replace_object = language;
+        this._translator.replace(this._elements.root);
+    }
+
+    get level() {
+        return this._attributes.level;
+    }
+    set level(level) {
+        this._attribute__set('level', level);
     }
 
 
@@ -211,45 +222,45 @@ export class Shop extends Components.Component {
         this.data__insert(
             [
                 {
-                    level: 1,
+                    level: '1 уровень',
                     level_status: 'sold',
                 },
                 {
-                    level: 2,
+                    level: '2 уровень',
                     level_status: 'selected',
                 },
                 {
-                    level: 3,
+                    level: '3 уровень',
                     level_status: 'sale',
                     level_price: 100000
                 },
                 {
-                    level: 4,
+                    level: '4 уровень',
                     level_status: 'sale',
                     level_price: 100001
                 },
                 {
-                    level: 5,
+                    level: '5 уровень',
                     level_status: 'sale',
                     level_price: 100002
                 },
                 {
-                    level: 6,
+                    level: '6 уровень',
                     level_status: 'sale',
                     level_price: 100003
                 },
                 {
-                    level: 7,
+                    level: '7 уровень',
                     level_status: 'sale',
                     level_price: 100004
                 },
                 {
-                    level: 8,
+                    level: '8 уровень',
                     level_status: 'sale',
                     level_price: 100005
                 },
                 {
-                    level: 9,
+                    level: '9 уровень',
                     level_status: 'sale',
                     level_price: 100006
                 },
@@ -276,7 +287,8 @@ export class Shop extends Components.Component {
             ]
         );
 
-        this._translator.replace(this._elements.root);
+        // this._translator.replace_object = 'ru';
+        // this._translator.replace(this._elements.root);
     }
 
     _label_checkBox__on_click(event) {
@@ -299,7 +311,14 @@ export class Shop extends Components.Component {
     _repeater_level__on_pointerDown(event) {
         let button = event.target.classList.contains('level_status') ? event.target : event.target.parentElement;
 
-        if (!button.classList.contains('level_status')) return;
+        if (!button.classList.contains('level_status') || button.status != 'sale') return;
+
+        if (button.meta_data.product_name - this.level != 1) {
+            this._elements.popup__content.textContent = User_messages_enums[this.language].level_buy_failed;
+            this._elements.popup.open();
+
+            return;
+        }
     }
 
     _repeater_slider__on_add(event) {
