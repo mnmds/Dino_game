@@ -121,6 +121,29 @@ export class Shop extends Components.Component {
     }
 
 
+    _buy__commit(buy) {
+        switch (buy.status) {
+            case 'sale':
+                if (buy.statuses_values.sale.text > this.balance) return;
+
+                break;
+            case 'sold':
+                for (let child of this._elements.slider.children) {
+                    let hero_status = child.querySelector('.hero_status');
+
+                    if (hero_status.status != 'selected') continue;
+
+                    hero_status.status = 'sold';
+                }
+
+                buy.status = 'selected';
+
+                break;
+        }
+
+        console.log(buy.status)
+    }
+
     _control_panel__on_pointerDown(event) {
         if (!!this._elements.leafable._animation_end) return;
 
@@ -241,9 +264,15 @@ export class Shop extends Components.Component {
     }
 
     _slider__on_pointerDown(event) {
-        if (!event.target.classList.contains('slider_arrow')) return;
-
-        this._elements.slider.index += event.target.classList.contains('slider_arrow_next') ? 1 : -1;
+        if (event.target.classList.contains('slider_arrow')) {
+            this._elements.slider.index += event.target.classList.contains('slider_arrow_next') ? 1 : -1;
+        }
+        else if (event.target.classList.contains('hero_status')) {
+            this._buy__commit(event.target);
+        }
+        else if (event.target.parentElement.classList.contains('hero_status')) {
+            this._buy__commit(event.target.parentElement);
+        }
     }
 
 
