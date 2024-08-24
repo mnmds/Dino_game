@@ -2,16 +2,18 @@
 
 
 export class Replacement {
+    static _mappers = {};
+
+
     __mapper_url =  new URL('./Localisation_enums.json', import.meta.url);
 
 
     _mapper = null;
-    _mappers = {};
     _promise = null;
     _promise_resolve = null;
 
 
-    permutation = '[_interface_name]';
+    permutation = '_interface_name';
     replace_object = 'eng';
 
 
@@ -25,14 +27,14 @@ export class Replacement {
 
 
     async _mapper__load() {
-        if (!this._mappers[this.mapper_url]) {
+        if (!this.constructor._mappers[this.mapper_url]) {
             this._promise = new Promise((resolve) => this._promise_resolve = resolve);
             let mapper = await fetch(this.mapper_url);
-            this._mappers[this.mapper_url] = await mapper.json();
+            this.constructor._mappers[this.mapper_url] = await mapper.json();
             this._promise_resolve();
         }
 
-        this._mapper = this._mappers[this.mapper_url];
+        this._mapper = this.constructor._mappers[this.mapper_url];
     }
 
 
@@ -41,10 +43,10 @@ export class Replacement {
 
         if (!this._mapper) return;
 
-        let elems = root.querySelectorAll(this.permutation);
+        let elems = root.querySelectorAll(`[${this.permutation}]`);
 
         for (let elem of elems) {
-            elem.textContent = this._mapper[this.replace_object][elem.getAttribute('_interface_name')];
+            elem.textContent = this._mapper[this.replace_object][elem.getAttribute(this.permutation)];
         }
     }
 
