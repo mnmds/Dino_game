@@ -46,6 +46,7 @@ create table if not exists `Newsletter` (
 );
 
 create table if not exists `Quests` (
+    `description` text,
     `id` int auto_increment,
     `name` text not null,
     `url` text not null,

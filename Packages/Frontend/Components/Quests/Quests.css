@@ -1,1 +1,7 @@
-@layer init {}
+@layer init {
+    .repeater {
+        display: grid;
+        gap: 10px;
+    }
+
+}

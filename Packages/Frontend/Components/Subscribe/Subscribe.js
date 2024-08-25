@@ -1,45 +1,41 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
-
 import {ShopButton} from '../ShopButton/ShopButton.js';
 
 
 export class Subscribe extends Components.Component {
-    static _components = [ShopButton];
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;
+
+    static _components = [
+        ShopButton,
+    ];
 
     static _attributes = {
         ...super._attributes,
 
         link: '',
-        price: 0,
         status: 'sale',
         task: '',
-        type: '',
+        value: '',
     };
 
     static _elements = {
-        image: '',
-        reward: '',
         task: '',
+        reward: '',
     };
 
-    static _eventListeners = {};
+    static _eventListeners_elements = {
+        reward: {
+            pointerdown: '_reward__on_pointerDown',
+        }
+    };
 
 
     static {
         this.init();
     }
 
-    get price() {
-        return this._attributes.price;
-    }
-    set price(price) {
-        this._attribute__set('price', price);
-        this._elements.reward.statuses_values.sale.text = price;
-        this._elements.reward.status_value__refresh();
-    }
 
     get status() {
         return this._attributes.status;
@@ -57,16 +53,21 @@ export class Subscribe extends Components.Component {
         this._elements.task.textContent = task;
     }
 
-    get type() {
-        return this._attributes.type;
+    get value() {
+        return this._attributes.value;
     }
-    set type(type) {
-        this._attribute__set('type', type);
-        this._elements.image.src = `./Storage/Images/Subscribe_${type}.png`;
+    set value(value) {
+        this._attribute__set('value', value);
+        this._elements.reward.statuses_values.sale.text = value;
     }
 
+
+    _reward__on_pointerDown() {
+
+    }
 
     _init() {
-
+        this._elements.reward.statuses_values.selected.icon_svg = './Storage/Images/Main.svg#present';
+        this._elements.reward.statuses_values.selected.text = '';
     }
 }

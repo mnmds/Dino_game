@@ -1,7 +1,8 @@
-<x-repeater class='repeater' interpolation='repeater'>
-    <template Repeater__delegate>
-        <!-- <x-result class='pie Theme__ghost'></x-result> -->
-    </template>
-</x-repeater>
-
-
+<div class='root'>
+    <x-buttonback></x-buttonback>
+    <x-repeater class='repeater' interpolation='repeater'>
+        <template Repeater__delegate>
+            <x-subscribe class='subscribe'></x-subscribe>
+        </template>
+    </x-repeater>
+</div>

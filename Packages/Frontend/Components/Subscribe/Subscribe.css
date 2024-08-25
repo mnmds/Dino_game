@@ -1,24 +1,9 @@
 @layer init {
-    .reward {
-        border-radius: var(--Theme__block_rounding);
-        display: flex;
-        font-size: 17px;
-        align-items: center;
-        width: 42dvw;
-        height: 6dvh;
-        background: var(--Theme__button__foreground);
-        padding: 5px;
-        gap: 10px;
-        line-height: 1em;
-
-        &[disabled]{
-            background: var(--Theme__button__foreground);
-        }
-
-        &:active {
-            background: var(--Theme__block__background);
-        }
-    }
+    /* .reward { */
+    /*     &:active { */
+    /*         background: var(--Theme__block__background); */
+    /*     } */
+    /* } */
 
     .image {
         height: 6dvh;
@@ -27,5 +12,14 @@
     .root {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        gap: var( --Theme__block__gap);
+    }
+
+    .task {
+        border-radius: var(--Theme__block_rounding);
+        align-items: center;
+        background: var(--Theme__block__background);
+        padding: 5px;
+        text-align: center;
     }
 }

@@ -4,11 +4,13 @@ import {Game} from '../Game/Game.js';
 import {Referrals} from '../Referrals/Referrals.js';
 import {Settings} from '../Settings/Settings.js';
 import {Shop} from '../Shop/Shop.js';
+import {Quests} from '../Quests/Quests.js';
 
 
 export class Root extends Components.Viewport {
     static _components = [
         Components.Leafable,
+        Quests,
         Game,
         Referrals,
         Settings,
