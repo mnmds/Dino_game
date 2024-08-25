@@ -34,10 +34,11 @@ export class Referrals extends Components.Component {
     };
 
     static _elements = {
-        repeater: '',
         display: '',
-        sort_buttons_referrals: '',
+        repeater: '',
+        root: '',
         sort_buttons_date: '',
+        sort_buttons_referrals: '',
     };
 
     static _eventListeners_elements = {
