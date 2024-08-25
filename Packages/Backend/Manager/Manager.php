@@ -55,13 +55,18 @@ class Manager extends \Apache\RestServer {
     }
 
     public function hero__replace($tg_id, $hero_name) {
-        throw new \Exception('hero_select_failed');
+        $request_data = [
+            'tg_id' => $tg_id,
+            'hero_name' => $hero_name,
+        ];
 
-        // $request_data = [
-        //     'tg_id' => $tg_id,
-        // ];
+        $hero = $this->_db->fetch('hero_user__get', $request_data)[0];
 
-        // $user_date = $this->_db->fetch('user__get', $request_data)[0];
+        if (!$hero) {
+            throw new \Exception('hero_select_failed');
+        }
+
+        $this->_db->execute('user_hero__replace', $request_data);
 
         return true;
     }
