@@ -1,5 +1,7 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 
+import {Replacement} from '../../Units/Units.js';
+
 import {ButtonBack} from '../ButtonBack/ButtonBack.js';
 import {Referral} from '../Referral/Referral.js';
 
@@ -27,6 +29,8 @@ export class Referrals extends Components.Component {
             default: 'referral',
             persistent: true,
         },
+
+        language: 'ru',
     };
 
     static _elements = {
@@ -69,6 +73,9 @@ export class Referrals extends Components.Component {
     }
 
 
+    _translator = new Replacement();
+
+
     get _date() {
         return this._attributes._date;
     }
@@ -81,6 +88,16 @@ export class Referrals extends Components.Component {
     }
     set _score(score) {
         this._attribute__set('_score', score);
+    }
+
+
+    get language() {
+        return this._attributes.language;
+    }
+    set language(language) {
+        this._attribute__set('language', language);
+        this._translator.replace_object = language;
+        this._translator.replace(this._elements.root);
     }
 
 
