@@ -46,7 +46,11 @@ export class Replacement {
         let elems = root.querySelectorAll(`[${this.permutation}]`);
 
         for (let elem of elems) {
-            elem.textContent = this._mapper[this.replace_object][elem.getAttribute(this.permutation)];
+            let replace_content = this._mapper[this.replace_object][elem.getAttribute(this.permutation)];
+
+            if (!replace_content) continue;
+
+            elem.textContent = replace_content;
         }
     }
 

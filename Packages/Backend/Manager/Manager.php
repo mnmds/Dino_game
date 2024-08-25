@@ -42,8 +42,8 @@ class Manager extends \Apache\RestServer {
         return true;
     }
 
-    public function hero__replace($tg_id, $hero_name) {
-        throw new \Exception('hero_select_failed');
+    public function hero__buy($tg_id, $hero_name) {
+        throw new \Exception('buy_failed');
 
         // $request_data = [
         //     'tg_id' => $tg_id,
@@ -54,8 +54,8 @@ class Manager extends \Apache\RestServer {
         return true;
     }
 
-    public function hero__buy($tg_id, $hero_name) {
-        throw new \Exception('buy_failed');
+    public function hero__replace($tg_id, $hero_name) {
+        throw new \Exception('hero_select_failed');
 
         // $request_data = [
         //     'tg_id' => $tg_id,

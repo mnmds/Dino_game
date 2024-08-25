@@ -107,6 +107,7 @@ export class Shop extends Components.Component {
             this._hero_status.meta_data = {product_name: this._model_item.hero_name};
             this._hero_status.statuses_values.sale.text = this._model_item.hero_price || 0;
             this._hero_status.statuses_values.sold.text = 'Выбрать';
+            this._hero_status.statuses_values.sold.interface_name = 'shopButton__choice';
             this._hero_status.status = this._model_item.hero_status;
         }
 
