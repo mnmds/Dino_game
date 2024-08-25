@@ -1,13 +1,18 @@
 import time
 import asyncio
 import logging
+from random import randint
 
-from aiogram import Bot, Dispatcher, types, F
+from aiogram import Bot, Dispatcher, types, F, Router
+from aiogram.dispatcher import router
 from aiogram.filters.command import Command
 from aiogram.utils.chat_action import ChatActionSender
 
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 from db import DataBase
-from config import TG_BOT_TOKEN
+from config import TG_BOT_TOKEN, ADMINS
+from admin import IsAdmin, Admin
 
 bot = Bot(token=TG_BOT_TOKEN)
 db = DataBase()
@@ -15,6 +20,9 @@ db = DataBase()
 db.init()
 dp = Dispatcher()
 logging.basicConfig(level=logging.INFO)
+
+last_message_id = None
+admin = Admin()
 
 
 @dp.message(Command('ref'))
@@ -79,6 +87,41 @@ async def cmd_start(message: types.Message):
 @dp.message(Command('help'))
 async def cmd_help(message: types.Message):
     await message.answer('Можешь воспользоваться мини приложением, нажав на кнопку')
+
+
+@dp.message(IsAdmin(ADMINS), Command("admin"))
+async def cmd_admin(message: types.Message):
+    await message.answer("Админ панель", reply_markup=admin.get_keyboard())
+
+
+@dp.callback_query(F.data.startswith("admin__"))
+async def callbacks_num(callback: types.CallbackQuery):
+    action = callback.data.split("__")[1]
+
+    if action == "quests":
+        await admin.quests(callback.message)
+    if action == "heroes":
+        await admin.heroes(callback.message)
+    if action == "newsletter":
+        await admin.newsletter(callback.message)
+    if action == "promocodes":
+        await admin.promocodes(callback.message)
+    if action == "statistics":
+        await admin.statistics(callback.message)
+    if action == "back":
+        await admin.panel(callback.message)
+
+    await callback.answer()
+
+
+@dp.message(Command("test"))
+async def send_welcome(message: types.Message):
+    global last_message_id
+    if last_message_id:
+        await bot.delete_message(chat_id=message.chat.id, message_id=last_message_id)
+
+    new_message = await message.answer("Привет! Это новое сообщение.")
+    last_message_id = new_message.message_id
 
 
 @dp.message(F.text)
