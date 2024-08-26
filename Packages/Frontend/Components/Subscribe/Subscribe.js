@@ -1,7 +1,7 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
+import {Units} from '../../../Global/Frontend/Frontend.js';
 import {ShopButton} from '../ShopButton/ShopButton.js';
-import {Telegram} from '../../Api/Units/Telegram/Telegram.js';
-import {Rest} from '../../Api/Units/Rest/Rest.js';
+import {RestClient} from '../../../Global/Js/Js.js';
 
 
 export class Subscribe extends Components.Component {
@@ -27,7 +27,7 @@ export class Subscribe extends Components.Component {
         reward: '',
     };
 
-    _rest = new Rest('https://localhost/Work/Dino_game/Packages/Backend/Manager/Manager.php');
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
 
     static _eventListeners_elements = {
         reward: {
@@ -66,14 +66,15 @@ export class Subscribe extends Components.Component {
     }
 
 
-    _reward__on_pointerDown() {
-        if (this._attributes.link.substr(8, 16) == 'telegram') {
-            Telegram.telegram_link__open(this._attributes.link);
-            await this._rest.call('tg_subscribe__check', this._attributes.link, Telegram.user.id);
+    async _reward__on_pointerDown() {
+        if (this.link.substr(8, 16) == 'telegram') {
+            Units.Telegram.link_telegram__open(this.link);
+            await this._rest.call('tg_subscribe__check', this.link, Units.Telegram.user.id);
         }
         else {
-            Telegram.other_link__open(this._attributes.link);
-            await this._rest.call('bonus_check', this._attributes.link, Telegram.user.id);
+            // console.log(this.link);
+            Units.Telegram.link_outside__open(this.link);
+            await this._rest.call('bonus_check', this.link, Units.Telegram.user.id);
         }
     }
 

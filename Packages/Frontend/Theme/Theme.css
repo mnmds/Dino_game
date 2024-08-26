@@ -25,6 +25,7 @@
         --Theme__foreground: #fff;
         --Theme__ghost_transition: opacity 0.6s ease-out;
         --Theme__hue: 15;
+        --Theme_button_back: #000d;
         --Theme__shadow: #0004;
 
         background: var(--Theme__background);

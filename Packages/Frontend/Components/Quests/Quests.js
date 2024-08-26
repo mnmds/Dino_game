@@ -1,6 +1,9 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 import {Subscribe} from '../Subscribe/Subscribe.js';
 import {ButtonBack} from '../ButtonBack/ButtonBack.js';
+import {Timer} from '../Timer/Timer.js';
+import {RestClient} from '../../../Global/Js/Js.js';
+import {Units} from '../../../Global/Frontend/Frontend.js';
 
 
 export class Quests extends Components.Component {
@@ -12,6 +15,7 @@ export class Quests extends Components.Component {
         ButtonBack,
         Components.Repeater,
         Subscribe,
+        Timer,
     ];
 
     static _attributes = {
@@ -20,6 +24,8 @@ export class Quests extends Components.Component {
 
     static _elements = {
         repeater: '',
+        timer: '',
+        timer_button: '',
     };
 
     static _eventListeners = {};
@@ -38,15 +44,32 @@ export class Quests extends Components.Component {
         }
     };
 
+    static _eventListeners_elements = {
+        timer_button: {
+            pointerdown: '_reward__on_pointerDown',
+        }
+    };
+
 
     static {
         this.init();
     }
 
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+
+    async _reward__on_pointerDown() {
+        let time = await this._rest.call('time_distribution');
+        // time = 0;
+
+        if (!time) {
+            Units.Telegram.link_outside__open('https://www.youtube.com/watch?v=dk1xiiDpJ2M');
+        }
+    }
 
     _init() {
         this._elements.repeater.Manager = this.constructor.Repeater_manager;
         this.data_insert();
+        this.refresh();
     }
 
     data_insert() {
@@ -65,5 +88,14 @@ export class Quests extends Components.Component {
                 url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             },
         ]);
+    }
+
+    async refresh() {
+        let time = await this._rest.call('time_distribution');
+        time = 1e3;
+
+        this._elements.timer.duration = time;
+
+        this._elements.timer.start();
     }
 }

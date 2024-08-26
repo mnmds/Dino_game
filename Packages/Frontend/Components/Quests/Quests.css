@@ -4,4 +4,36 @@
         gap: 10px;
     }
 
+    .task {
+        border-radius: var(--Theme__block_rounding);
+        align-items: center;
+        background: var(--Theme__block__background);
+        padding: 5px;
+        text-align: center;
+    }
+
+    .timer_button {
+        border-radius: var(--Theme__block_rounding);
+        align-items: center;
+        background: var(--Theme_button_back);
+        padding: 5px;
+        text-align: center;
+    }
+
+    .timer_task {
+        margin-top: var( --Theme__block__gap);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var( --Theme__block__gap);
+    }
+
+    .task {
+        display: flex;
+        border-radius: var(--Theme__block_rounding);
+        align-items: center;
+        background: var(--Theme__block__background);
+        padding: 5px;
+        text-align: center;
+        justify-align: center;
+    }
 }

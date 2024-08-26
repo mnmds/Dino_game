@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+
+<html>
+    <head>
+        <meta charset='utf-8' content='user-scalable=no, width=device-width' name='viewport'>
+        <title>Timer_test</title>
+        <script src='./Timer.js' type='module'></script>
+
+        <script type='module'>
+            let {Timer} = await import('./Timer.js');
+            await Timer._defined;
+
+            let timer = document.querySelector('x-timer');
+            await timer._built;
+            // timer.start();
+        </script>
+    </head>
+
+    <body>
+        <x-timer duration='6e4'></x-timer>
+    </body>
+</html>

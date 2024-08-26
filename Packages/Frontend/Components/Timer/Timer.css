@@ -1,0 +1,64 @@
+@layer init;
+
+@import '../../Theme/Theme.css' layer(theme);
+
+@layer init {
+    :host {
+        --background: #eee;
+        --border-thickness: 20px;
+        --diameter: 150px;
+        --main-color: #afa;
+
+        display: inline-block;
+        margin: 5px;
+    }
+
+
+    .root {
+        --_progress: 100;
+
+        aspect-ratio: 1;
+        display: inline-grid;
+        justify-items: center;
+        line-height: 1.2em;
+        place-content: center;
+        position: relative;
+
+        /* &::after, &::before { */
+        /*     content: ""; */
+        /*     position: absolute; */
+        /*     border-radius: 50%; */
+        /* } */
+
+        /* &::after { */
+        /*     background: var(--main-color); */
+        /*     inset: calc(50% - var(--border-thickness) / 2); */
+        /*     transform: rotate(calc(360deg * var(--_progress))) translateY(calc(50% - var(--diameter) / 2)); */
+
+        /*     :host([_progress='0']) & { */
+        /*         display: none; */
+        /*     } */
+        /* } */
+
+        /* &::before { */
+        /*     background: radial-gradient(farthest-side, var(--main-color) 98%, #0000) */
+        /*         top / var(--border-thickness) var(--border-thickness) no-repeat, */
+        /*         conic-gradient(var(--main-color) calc(var(--_progress) * 100%), var(--background) 0); */
+        /*     inset: 0; */
+        /*     mask: radial-gradient(farthest-side, #0000 calc(99% - var(--border-thickness)), #000 calc(100% - var(--border-thickness))); */
+        /* } */
+
+        /* :host([_progress='0']) &::after { */
+        /*     display: none; */
+        /* } */
+
+        /* :host([_progress='0']) &::before { */
+        /*     display: none; */
+        /* } */
+    }
+
+    .text {
+        font-size: 12px;
+    }
+}
+
