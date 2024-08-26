@@ -55,6 +55,7 @@ create table if not exists `Quests` (
 );
 
 create table if not exists `Referrals` (
+    `active` boolean default false,
     `date_invite` dateTime default current_timeStamp,
     `host_tg_id` int not null,
     `id` int auto_increment,
