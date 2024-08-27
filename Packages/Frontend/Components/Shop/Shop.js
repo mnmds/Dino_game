@@ -3,22 +3,14 @@ import {Units} from '../../../Global/Frontend/Frontend.js' ;
 
 import {RestClient} from '../../../Global/Js/Js.js';
 
-import {User_messages_enums} from '../../Units/Units.js';
 import {Replacement} from '../../Units/Units.js';
+import {User_messages_enums} from '../../Units/Units.js';
 
 import {ButtonBack} from '../ButtonBack/ButtonBack.js';
 import {ShopButton} from '../ShopButton/ShopButton.js';
 
 
 export class Shop extends Components.Component {
-    static _components = [
-        ButtonBack,
-        Components.Flickable,
-        Components.Leafable,
-        Components.Repeater,
-        ShopButton,
-    ];
-
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;
@@ -34,6 +26,14 @@ export class Shop extends Components.Component {
         level: 3,
         offline_delivery: false,
     };
+
+    static _components = [
+        ButtonBack,
+        Components.Flickable,
+        Components.Leafable,
+        Components.Repeater,
+        ShopButton,
+    ];
 
     static _elements = {
         balance: '',
@@ -231,8 +231,8 @@ export class Shop extends Components.Component {
         this._elements.repeater_slider.Manager = this.constructor.Repeater_slider_manager;
         // this._elements.root.addEventListener('touchstart', (event) => event.preventDefault());
 
-        let {result} = await this._rest.call('products__get', 509815216)
-        this.data__insert(result);
+        // let {result} = await this._rest.call('products__get')
+        // this.data__insert(result);
 
         // this._translator.replace_object = 'ru';
         // this._translator.replace(this._elements.root);
@@ -303,7 +303,7 @@ export class Shop extends Components.Component {
     }
 
     async _request__exec(method, ...args) {
-        let {error, exception, result} = await this._rest.call(method, Units.Telegram.user?.id ?? 509815216, ...args);
+        let {error, exception, result} = await this._rest.call(method, Units.Telegram.user?.id, ...args);
 
         if (exception) {
             this._elements.popup__content.textContent = User_messages_enums[this.language][exception];
@@ -335,7 +335,9 @@ export class Shop extends Components.Component {
     }
 
 
-    data__insert(products) {
+    data__insert(products = []) {
+        if (!products.length) return;
+
         let heros_shop = [];
         let levels_shop = [];
 
