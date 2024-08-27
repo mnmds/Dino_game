@@ -4,6 +4,7 @@ drop table if exists `User_buy`;
 drop table if exists `User_newsletter`;
 drop table if exists `User_quests`;
 drop table if exists `Newsletter`;
+drop table if exists `Game`;
 drop table if exists `Quests`;
 drop table if exists `Users`;
 drop table if exists `Products`;
@@ -32,6 +33,17 @@ create table if not exists `Users` (
     `week_prev_balance` int default 0,
 
     foreign key (`hero_name`) references Products(`name`),
+    primary key (`id`),
+    unique key (`tg_id`)
+);
+
+create table if not exists `Game` (
+    `id` int auto_increment,
+    `energy` int default 1000,
+    `energy_date_collect` real default -1,
+    `tg_id` int not null,
+
+    foreign key (`tg_id`) references Users(`tg_id`),
     primary key (`id`),
     unique key (`tg_id`)
 );
