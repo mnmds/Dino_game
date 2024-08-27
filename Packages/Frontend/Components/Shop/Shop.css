@@ -132,6 +132,13 @@
         gap: 15px;
         justify-content: center;
         padding: var(--Theme__block__gap);
+
+        :host([language='eng']) &::after {
+            content: 'level';
+        }
+        :host([language='ru']) &::after {
+            content: 'уровень';
+        }
     }
 
     .level_container {

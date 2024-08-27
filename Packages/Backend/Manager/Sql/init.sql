@@ -83,8 +83,7 @@ create table if not exists `User_buy` (
 
     foreign key (`product_name`) references Products(`name`),
     foreign key (`tg_id`) references Users(`tg_id`),
-    primary key (`id`),
-    unique key (`tg_id`)
+    primary key (`id`)
 );
 
 create table if not exists `User_newsletter` (

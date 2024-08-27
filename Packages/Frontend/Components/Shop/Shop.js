@@ -27,7 +27,10 @@ export class Shop extends Components.Component {
         ...super._attributes,
 
         balance: 0,
-        language: 'ru',
+        language: {
+            default: 'ru',
+            persistent: true,
+        },
         level: 0,
     };
 
@@ -223,45 +226,45 @@ export class Shop extends Components.Component {
         this.data__insert(
             [
                 {
-                    level: '1 уровень',
+                    level: '1',
                     level_status: 'sold',
                 },
                 {
-                    level: '2 уровень',
+                    level: '2',
                     level_status: 'selected',
                 },
                 {
-                    level: '3 уровень',
+                    level: '3',
                     level_status: 'sale',
                     level_price: 100000
                 },
                 {
-                    level: '4 уровень',
+                    level: '4',
                     level_status: 'sale',
                     level_price: 100001
                 },
                 {
-                    level: '5 уровень',
+                    level: '5',
                     level_status: 'sale',
                     level_price: 100002
                 },
                 {
-                    level: '6 уровень',
+                    level: '6',
                     level_status: 'sale',
                     level_price: 100003
                 },
                 {
-                    level: '7 уровень',
+                    level: '7',
                     level_status: 'sale',
                     level_price: 100004
                 },
                 {
-                    level: '8 уровень',
+                    level: '8',
                     level_status: 'sale',
                     level_price: 100005
                 },
                 {
-                    level: '9 уровень',
+                    level: '9',
                     level_status: 'sale',
                     level_price: 100006
                 },
@@ -328,7 +331,7 @@ export class Shop extends Components.Component {
     }
 
     async _request__exec(method, ...args) {
-        let {error, exception, result} = await this._rest.call(method, Telegram.user?.id, ...args);
+        let {error, exception, result} = await this._rest.call(method, Units.Telegram.user?.id, ...args);
 
         if (exception) {
             this._elements.popup__content.textContent = User_messages_enums[this.language][exception];

@@ -42,14 +42,21 @@ class Manager extends \Apache\RestServer {
         return true;
     }
 
-    public function hero__buy($tg_id, $hero_name) {
-        throw new \Exception('buy_failed');
+    public function buy($tg_id, $hero_name) {
+        $request_data = [
+            'tg_id' => $tg_id,
+            'product_name' => $hero_name,
+        ];
 
-        // $request_data = [
-        //     'tg_id' => $tg_id,
-        // ];
+        // $hero = $this->_db->fetch('product__get', $request_data)[0];
 
-        // $user_date = $this->_db->fetch('user__get', $request_data)[0];
+        if ($hero) {
+            throw new \Exception('buy_failed');
+        }
+
+        // [$balance, $price] = $this->_db->fetch('user_balance__get', $request_data)[0];
+
+        $this->_db->execute('product__buy', $request_data);
 
         return true;
     }
