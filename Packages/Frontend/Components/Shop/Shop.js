@@ -84,10 +84,10 @@ export class Shop extends Components.Component {
 
 
         data__apply() {
-            this._level.innerHTML += this._model_item.level;
-            this._level_status.statuses_values.sale.text = this._model_item.level_price || 0;
-            this._level_status.status = this._model_item.level_status;
-            this._level_status.meta_data = {product_name: this._model_item.level.split(' ')[0]};
+            this._level.innerHTML += this._model_item.name;
+            this._level_status.statuses_values.sale.text = this._model_item.price || 0;
+            this._level_status.status = this._model_item.status;
+            this._level_status.meta_data = {product_name: this._model_item.name};
         }
 
         init() {
@@ -105,13 +105,13 @@ export class Shop extends Components.Component {
 
 
         data__apply() {
-            this._hero_image.src = this._model_item.hero_image;
-            this._hero_name.textContent = this._model_item.hero_name;
-            this._hero_status.meta_data = {product_name: this._model_item.hero_name};
-            this._hero_status.statuses_values.sale.text = this._model_item.hero_price || 0;
+            this._hero_image.src = this._model_item.resource_url;
+            this._hero_name.textContent = this._model_item.name;
+            this._hero_status.meta_data = {product_name: this._model_item.name};
+            this._hero_status.statuses_values.sale.text = this._model_item.price || 0;
             this._hero_status.statuses_values.sold.text = 'Выбрать';
             this._hero_status.statuses_values.sold.interface_name = 'shopButton__choice';
-            this._hero_status.status = this._model_item.hero_status;
+            this._hero_status.status = this._model_item.status;
         }
 
         init() {
@@ -216,80 +216,14 @@ export class Shop extends Components.Component {
         hero.status = 'selected';
     }
 
-    _init() {
+    async _init() {
         this.props__sync();
         this._elements.repeater_level.Manager = this.constructor.Repeater_level_manager;
         this._elements.repeater_slider.Manager = this.constructor.Repeater_slider_manager;
         // this._elements.root.addEventListener('touchstart', (event) => event.preventDefault());
 
-
-        this.data__insert(
-            [
-                {
-                    level: '1',
-                    level_status: 'sold',
-                },
-                {
-                    level: '2',
-                    level_status: 'selected',
-                },
-                {
-                    level: '3',
-                    level_status: 'sale',
-                    level_price: 100000
-                },
-                {
-                    level: '4',
-                    level_status: 'sale',
-                    level_price: 100001
-                },
-                {
-                    level: '5',
-                    level_status: 'sale',
-                    level_price: 100002
-                },
-                {
-                    level: '6',
-                    level_status: 'sale',
-                    level_price: 100003
-                },
-                {
-                    level: '7',
-                    level_status: 'sale',
-                    level_price: 100004
-                },
-                {
-                    level: '8',
-                    level_status: 'sale',
-                    level_price: 100005
-                },
-                {
-                    level: '9',
-                    level_status: 'sale',
-                    level_price: 100006
-                },
-            ],
-            [
-                {
-                    hero_image: './Storage/Images/Shop_heroes/Dino.png',
-                    hero_name: 'ГДЗаврик',
-                    hero_status: 'sale',
-                    hero_price: 10000,
-                },
-                {
-                    hero_image: './Storage/Images/Shop_heroes/Dino.png',
-                    hero_name: 'q',
-                    hero_status: 'selected',
-                    hero_price: 10000,
-                },
-                {
-                    hero_image: './Storage/Images/Shop_heroes/Dino.png',
-                    hero_name: 'fee',
-                    hero_status: 'sold',
-                    hero_price: 10000,
-                },
-            ]
-        );
+        let {result} = await this._rest.call('products__get', 509815216)
+        this.data__insert(result);
 
         // this._translator.replace_object = 'ru';
         // this._translator.replace(this._elements.root);
@@ -363,7 +297,18 @@ export class Shop extends Components.Component {
     }
 
 
-    data__insert(levels_shop, heros_shop) {
+    data__insert(products) {
+        let heros_shop = [];
+        let levels_shop = [];
+
+        for (let i = 0; i < products.length; i++) {
+            if (!isNaN(products[i].name)) continue;
+
+            heros_shop = products.slice(i);
+            levels_shop = products.slice(0, i);
+            break;
+        }
+
         this._elements.repeater_level.model.clear();
         this._elements.repeater_slider.model.clear();
         this._elements.repeater_level.model.add(levels_shop);

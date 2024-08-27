@@ -19,6 +19,21 @@ class Manager extends \Apache\RestServer {
     public $_db = null;
 
 
+    public function _buy($tg_id, $product) {
+        $request_data = [
+            'tg_id' => $tg_id,
+            'product' => $product,
+        ];
+        $buy = $this->_db->fetch('is_buy', $request_data)[0];
+
+        if (!$buy) {
+            throw new \Exception('buy_failed');
+        }
+        $this->_db->execute('buy', $request_data);
+
+        return true;
+    }
+
     public function _init() {
         static::$sql_dsn =
             'mysql:host=' . static::$sql_host .';' .
@@ -42,24 +57,6 @@ class Manager extends \Apache\RestServer {
         return true;
     }
 
-    public function buy($tg_id, $hero_name) {
-        $request_data = [
-            'tg_id' => $tg_id,
-            'product_name' => $hero_name,
-        ];
-
-        // $hero = $this->_db->fetch('product__get', $request_data)[0];
-
-        if ($hero) {
-            throw new \Exception('buy_failed');
-        }
-
-        // [$balance, $price] = $this->_db->fetch('user_balance__get', $request_data)[0];
-
-        $this->_db->execute('product__buy', $request_data);
-
-        return true;
-    }
 
     public function hero__replace($tg_id, $hero_name) {
         $request_data = [
@@ -76,6 +73,15 @@ class Manager extends \Apache\RestServer {
         $this->_db->execute('user_hero__replace', $request_data);
 
         return true;
+    }
+
+    public function products__get($tg_id) {
+        $request_data = [
+            'tg_id' => $tg_id
+        ];
+        $products = $this->_db->fetch('products__get', $request_data);
+
+        return $products;
     }
 }
 

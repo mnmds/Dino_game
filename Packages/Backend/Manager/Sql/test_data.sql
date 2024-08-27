@@ -1,16 +1,16 @@
 insert into `Products`
-    (`price`, `name`)
+    (`price`, `name`, `resource_url`)
 values
-    (1000, 'Dino'),
-    (1001, '1'),
-    (1002, '2'),
-    (1003, '3'),
-    (1004, '4'),
-    (1005, '5'),
-    (1006, '6'),
-    (1007, '7'),
-    (1008, '8'),
-    (1009, '9');
+    (1000, 'Dino', './Storage/Images/Heroes/Dino.png'),
+    (1001, '1', null),
+    (1002, '2', null),
+    (1003, '3', null),
+    (1004, '4', null),
+    (1005, '5', null),
+    (1006, '6', null),
+    (1007, '7', null),
+    (1008, '8', null),
+    (1009, '9', null);
 
 insert into `Users`
     (`balance`, `hero_name`, `tg_id`, `level`)

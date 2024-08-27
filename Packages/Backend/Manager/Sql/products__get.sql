@@ -26,4 +26,6 @@ left join
     `Users` as `Users` on
         (Users.hero_name = Products.name
         or Users.level = Products.name)
-        AND Users.tg_id = User_buy.tg_id;
+        AND Users.tg_id = User_buy.tg_id
+order by
+    Products.name asc;
