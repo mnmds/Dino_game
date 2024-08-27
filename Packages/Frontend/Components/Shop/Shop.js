@@ -26,12 +26,12 @@ export class Shop extends Components.Component {
     static _attributes = {
         ...super._attributes,
 
-        balance: 0,
+        balance: 10000,
         language: {
             default: 'ru',
             persistent: true,
         },
-        level: 0,
+        level: 3,
     };
 
     static _elements = {
@@ -246,17 +246,32 @@ export class Shop extends Components.Component {
         this.refresh();
     }
 
-    _repeater_level__on_pointerDown(event) {
+    async _repeater_level__on_pointerDown(event) {
         let button = event.target.classList.contains('level_status') ? event.target : event.target.parentElement;
 
         if (!button.classList.contains('level_status') || button.status != 'sale') return;
 
-        if (button.meta_data.product_name - this.level != 1) {
+        let level = button.meta_data.product_name;
+
+        if (level - this.level != 1) {
             this._elements.popup__content.textContent = User_messages_enums[this.language].level_buy_failed;
             this._elements.popup.open();
 
             return;
         }
+        else if (button.statuses_values.sale.text > this.balance) {
+            this._elements.popup__content.textContent = User_messages_enums[this.language].balance_deficit;
+            this._elements.popup.open();
+
+            return;
+        }
+
+        let result = await this._request__exec('level__buy', level);
+
+        if (!result) return;
+
+        this._elements.repeater_level.children[level - 2].querySelector('.level_status').status = 'sold';
+        this._elements.repeater_level.children[level - 1].querySelector('.level_status').status = 'selected';
     }
 
     _repeater_slider__on_add(event) {
@@ -265,7 +280,7 @@ export class Shop extends Components.Component {
     }
 
     async _request__exec(method, ...args) {
-        let {error, exception, result} = await this._rest.call(method, Units.Telegram.user?.id, ...args);
+        let {error, exception, result} = await this._rest.call(method, Units.Telegram.user?.id ?? 509815216, ...args);
 
         if (exception) {
             this._elements.popup__content.textContent = User_messages_enums[this.language][exception];

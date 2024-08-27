@@ -16,7 +16,7 @@ select
         else 'sold'
     end as `status`
 
-FROM
+from
     `Products` as `Products`
 left join
     `User_buy` as `User_buy` on

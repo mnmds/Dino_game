@@ -24,14 +24,15 @@ class Manager extends \Apache\RestServer {
             'tg_id' => $tg_id,
             'product' => $product,
         ];
-        $buy = $this->_db->fetch('is_buy', $request_data)[0];
+
+        $buy = $this->_db->fetch('is_buy', $request_data)[0]['result'];
 
         if (!$buy) {
             throw new \Exception('buy_failed');
         }
-        $this->_db->execute('buy', $request_data);
 
-        return true;
+        $statement = $this->_db->execute('buy', $request_data);
+        $statement->closeCursor();
     }
 
     public function _init() {
@@ -58,18 +59,53 @@ class Manager extends \Apache\RestServer {
     }
 
 
+    public function hero__buy($tg_id, $hero_name) {
+        try {
+            $this->_buy($tg_id, $hero_name);
+
+            $request_data = [
+                'hero_name' => $hero_name,
+                'tg_id' => $tg_id,
+            ];
+            $this->_db->execute('user_hero__replace', $request_data);
+        }
+        catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
+        }
+
+        return true;
+    }
+
+    public function level__buy($tg_id, $level) {
+        try {
+            $user_level = $this->_db->fetch('user_level__get', ['tg_id' => $tg_id])[0]['level'];
+
+            if ($level - $user_level != 1) {
+                throw new \Exception('level_buy_failed');
+            }
+
+            $a = $this->_buy($tg_id, $level);
+            // return $a;
+            $this->_db->execute('user_level__replace', ['tg_id' => $tg_id]);
+        }
+        catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
+        }
+
+        return true;
+    }
+
+
     public function hero__replace($tg_id, $hero_name) {
         $request_data = [
-            'tg_id' => $tg_id,
             'hero_name' => $hero_name,
+            'tg_id' => $tg_id,
         ];
-
-        $hero = $this->_db->fetch('hero_user__get', $request_data)[0];
+        $hero = $this->_db->fetch('user_hero__get', $request_data)[0];
 
         if (!$hero) {
             throw new \Exception('hero_select_failed');
         }
-
         $this->_db->execute('user_hero__replace', $request_data);
 
         return true;
