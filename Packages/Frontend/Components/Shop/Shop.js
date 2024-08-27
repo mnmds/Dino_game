@@ -32,6 +32,7 @@ export class Shop extends Components.Component {
             persistent: true,
         },
         level: 3,
+        offline_delivery: false,
     };
 
     static _elements = {
@@ -156,6 +157,14 @@ export class Shop extends Components.Component {
         this._attribute__set('level', level);
     }
 
+    get offline_delivery() {
+        return this._attributes.offline_delivery;
+    }
+    set offline_delivery(offline_delivery) {
+        this._attribute__set('offline_delivery', offline_delivery);
+        this._elements.label_checkBox.checked = offline_delivery;
+    }
+
 
     _buy__commit(buy) {
         switch (buy.status) {
@@ -217,7 +226,7 @@ export class Shop extends Components.Component {
     }
 
     async _init() {
-        this.props__sync();
+        this.props__sync('balance', 'language');
         this._elements.repeater_level.Manager = this.constructor.Repeater_level_manager;
         this._elements.repeater_slider.Manager = this.constructor.Repeater_slider_manager;
         // this._elements.root.addEventListener('touchstart', (event) => event.preventDefault());
@@ -233,9 +242,23 @@ export class Shop extends Components.Component {
         event.preventDefault();
     }
 
-    _label_checkBox__on_pointerDown(event) {
+    async _label_checkBox__on_pointerDown(event) {
         event.preventDefault();
-        this._elements.label_checkBox.checked = !this._elements.label_checkBox.checked;
+
+        if (this._elements.label_checkBox.checked) return;
+
+        if (this.balance < 5e4) {
+            this._elements.popup__content.textContent = User_messages_enums[this.language].balance_deficit;
+            this._elements.popup.open();
+
+            return;
+        }
+
+        let result = await this._request__exec('offline_delivery__buy');
+
+        if (!result) return;
+
+        this._elements.label_checkBox.checked = true;
     }
 
     _popup_button__on_pointerDown() {

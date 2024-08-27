@@ -46,18 +46,6 @@ class Manager extends \Apache\RestServer {
         $this->_db->statements_dir = static::$sql_dir;
     }
 
-    public function init($password, $test_data = false) {
-        if ($password != 'AdminBigBog124') return;
-
-        $this->_db->execute_raw('init');
-
-        if ($test_data) {
-            $this->_db->execute_raw('test_data');
-        }
-
-        return true;
-    }
-
 
     public function hero__buy($tg_id, $hero_name) {
         try {
@@ -76,26 +64,6 @@ class Manager extends \Apache\RestServer {
         return true;
     }
 
-    public function level__buy($tg_id, $level) {
-        try {
-            $user_level = $this->_db->fetch('user_level__get', ['tg_id' => $tg_id])[0]['level'];
-
-            if ($level - $user_level != 1) {
-                throw new \Exception('level_buy_failed');
-            }
-
-            $a = $this->_buy($tg_id, $level);
-            // return $a;
-            $this->_db->execute('user_level__replace', ['tg_id' => $tg_id]);
-        }
-        catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
-
-        return true;
-    }
-
-
     public function hero__replace($tg_id, $hero_name) {
         $request_data = [
             'hero_name' => $hero_name,
@@ -107,6 +75,47 @@ class Manager extends \Apache\RestServer {
             throw new \Exception('hero_select_failed');
         }
         $this->_db->execute('user_hero__replace', $request_data);
+
+        return true;
+    }
+
+    public function init($password, $test_data = false) {
+        if ($password != 'AdminBigBog124') return;
+
+        $this->_db->execute_raw('init');
+
+        if ($test_data) {
+            $this->_db->execute_raw('test_data');
+        }
+
+        return true;
+    }
+
+    public function level__buy($tg_id, $level) {
+        try {
+            $user_level = $this->_db->fetch('user_level__get', ['tg_id' => $tg_id])[0]['level'];
+
+            if ($level - $user_level != 1) {
+                throw new \Exception('level_buy_failed');
+            }
+
+            $this->_buy($tg_id, $level);
+            $this->_db->execute('user_level__replace', ['tg_id' => $tg_id]);
+        }
+        catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
+        }
+
+        return true;
+    }
+
+    public function offline_delivery__buy($tg_id) {
+        $offline_delivery = $this->_db->fetch('is__offline_delivery', ['tg_id' => $tg_id])[0]['result'];
+
+        if (!$offline_delivery) {
+            throw new \Exception('buy_failed');
+        }
+        $this->_db->fetch('offline_delivery__buy', ['tg_id' => $tg_id]);
 
         return true;
     }
