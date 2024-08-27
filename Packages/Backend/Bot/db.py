@@ -61,6 +61,37 @@ class DataBase:
 
             return user
 
+    def users__get_col_for_date(self, interval=0):
+        with self.connection.cursor() as cursor:
+            if interval:
+                select_all_rows = f'''
+                    select count(*) as `col` 
+                    from `Users` 
+                    where `date_registration` >= now() - interval {interval} day; 
+                '''
+            else:
+                select_all_rows = f'''
+                    select count(*) as `col` 
+                    from `Users`; 
+                '''
+            cursor.execute(select_all_rows)
+            user = cursor.fetchone()
+
+            return user
+
+    def users__get_col_for_level(self, level):
+        with self.connection.cursor() as cursor:
+            select_all_rows = f'''
+                select count(*) as `col` 
+                from `Users` 
+                where `level` = {level}; 
+            '''
+
+            cursor.execute(select_all_rows)
+            user = cursor.fetchone()
+
+            return user
+
     def referral__get(self, tg_id):
         with self.connection.cursor() as cursor:
             select_all_rows = f'''
@@ -96,6 +127,27 @@ class DataBase:
             # cursor.execute(update_query_referal)
 
             self.connection.commit()
+
+    def quests__get(self):
+        with self.connection.cursor() as cursor:
+            select_all_rows = f'''
+                select *
+                from `Quests`;
+            '''
+            cursor.execute(select_all_rows)
+            quests = cursor.fetchall()
+
+            return quests
+
+    def quests__remove(self, name):
+        with self.connection.cursor() as cursor:
+            select_all_rows = f'''
+                delete from `Quests` where `name` = {name};
+            '''
+            cursor.execute(select_all_rows)
+            quests = cursor.fetchall()
+
+            return quests
 
     def __del__(self):
         self.connection__cose()
