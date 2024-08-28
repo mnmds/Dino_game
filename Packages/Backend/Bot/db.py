@@ -20,7 +20,8 @@ class DataBase:
 
     def db__clear(self):
         with self.connection.cursor() as cursor:
-            tables = ['Referrals', 'Server', 'User_heroes', 'User_newsletter', 'User_quests', 'Newsletter', 'Quests', 'Users', 'Products']
+            tables = ['Referrals', 'Server', 'User_heroes', 'User_newsletter', 'User_quests', 'Newsletter', 'Quests',
+                      'Users', 'Products']
 
             for table in tables:
                 print('--' + table)
@@ -60,18 +61,41 @@ class DataBase:
 
             return user
 
+    def user__get_info(self, tg_id):
+        with self.connection.cursor() as cursor:
+            select_all_rows = f'''
+                select balance, date_registration,  level, hero_name
+                from `Users`
+                where `tg_id` = {tg_id};
+            '''
+            cursor.execute(select_all_rows)
+            user_info = cursor.fetchone()
+
+            return user_info
+
+    def users__get_all(self):
+        with self.connection.cursor() as cursor:
+            select_all_rows = f'''
+                select `tg_id`
+                from `Users`;
+            '''
+            cursor.execute(select_all_rows)
+            users = cursor.fetchall()
+
+            return users
+
     def users__get_col_for_date(self, interval=0):
         with self.connection.cursor() as cursor:
             if interval:
                 select_all_rows = f'''
-                    select count(*) as `col`
-                    from `Users`
-                    where `date_registration` >= now() - interval {interval} day;
+                    select count(*) as `col` 
+                    from `Users` 
+                    where `date_registration` >= now() - interval {interval} day; 
                 '''
             else:
                 select_all_rows = f'''
-                    select count(*) as `col`
-                    from `Users`;
+                    select count(*) as `col` 
+                    from `Users`; 
                 '''
             cursor.execute(select_all_rows)
             user = cursor.fetchone()
@@ -81,9 +105,9 @@ class DataBase:
     def users__get_col_for_level(self, level):
         with self.connection.cursor() as cursor:
             select_all_rows = f'''
-                select count(*) as `col`
-                from `Users`
-                where `level` = {level};
+                select count(*) as `col` 
+                from `Users` 
+                where `level` = {level}; 
             '''
 
             cursor.execute(select_all_rows)
@@ -106,8 +130,8 @@ class DataBase:
     def referral__add(self, host_tg_id, referral_tg_id):
         with self.connection.cursor() as cursor:
             insert_query = """
-                INSERT INTO Referrals (host_tg_id, referral_tg_id)
-                VALUES (%s, %s)
+            INSERT INTO Referrals (host_tg_id, referral_tg_id)
+            VALUES (%s, %s)
             """
             cursor.execute(insert_query, (host_tg_id, referral_tg_id))
 
@@ -127,26 +151,131 @@ class DataBase:
 
             self.connection.commit()
 
+    def quests__add_quest(self, name, description, url):
+        with self.connection.cursor() as cursor:
+            insert_query = f'''
+                insert into `Quests` (
+                    `name`,
+                    `description`,
+                    `url`
+                )
+                values (
+                    '{name}',
+                    '{description}',
+                    '{url}'
+                );
+            '''
+            cursor.execute(insert_query)
+
+            self.connection.commit()
+
     def quests__get(self):
         with self.connection.cursor() as cursor:
             select_all_rows = f'''
-                select *
+                select name, description, url
                 from `Quests`;
             '''
             cursor.execute(select_all_rows)
-            quests = cursor.fetchall()
+            return cursor.fetchall()
 
-            return quests
+    def promocodes__add_promocode(self, name):
+        with self.connection.cursor() as cursor:
+            insert_query = f'''
+                insert into `PromoCodes` (
+                    `name`
+                )
+                values (
+                    '{name}'
+                );
+            '''
+            cursor.execute(insert_query)
 
-    def quests__remove(self, name):
+            self.connection.commit()
+
+    def promocodes__get(self):
         with self.connection.cursor() as cursor:
             select_all_rows = f'''
-                delete from `Quests` where `name` = {name};
+                select name
+                from `PromoCodes`;
             '''
             cursor.execute(select_all_rows)
-            quests = cursor.fetchall()
+            return cursor.fetchall()
 
-            return quests
+    def products__add_product(self, price, description, name, resource_url):
+        with self.connection.cursor() as cursor:
+            insert_query = f'''
+                insert into `Products` (
+                    `name`,
+                    `description`,
+                    `price`,
+                    `resource_url`
+                )
+                values (
+                    '{price}',
+                    '{description}',
+                    '{name}',
+                    '{resource_url}'
+                );
+            '''
+            cursor.execute(insert_query)
+
+            self.connection.commit()
+
+    def products__get(self):
+        with self.connection.cursor() as cursor:
+            select_all_rows = f'''
+                select price, description, name, resource_url
+                from `Products`;
+            '''
+            cursor.execute(select_all_rows)
+            return cursor.fetchall()
+
+    def newsletters__add_newsletter(self, description, name, url):
+        with self.connection.cursor() as cursor:
+            insert_query = f'''
+                insert into `Newsletter` (
+                    `name`,
+                    `description`,
+                    `url`
+                )
+                values (
+                    '{name}',
+                    '{description}',
+                    '{url}'
+                );
+            '''
+            cursor.execute(insert_query)
+
+            self.connection.commit()
+
+    def newsletters__get(self):
+        with self.connection.cursor() as cursor:
+            select_all_rows = f'''
+                select description, name, url
+                from `Newsletter`;
+            '''
+            cursor.execute(select_all_rows)
+            return cursor.fetchall()
+
+    # def table__get_for_name(self, table):
+    #     with self.connection.cursor() as cursor:
+    #         select_all_rows = f'''
+    #             select *
+    #             from `{table}`;
+    #         '''
+    #         cursor.execute(select_all_rows)
+    #         quests = cursor.fetchall()
+    #
+    #         return quests
+
+    def table__remove_for_name(self, table, name):
+        with self.connection.cursor() as cursor:
+            insert_query = f'''
+                delete from `{table}` where `name` = '{name}';
+            '''
+            cursor.execute(insert_query)
+
+            self.connection.commit()
 
     def __del__(self):
         self.connection__cose()

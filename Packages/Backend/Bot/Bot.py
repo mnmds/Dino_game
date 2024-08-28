@@ -1,26 +1,31 @@
 import asyncio
 import logging
+import os
 
 from aiogram import Bot, Dispatcher, types, F, Router
 from aiogram.enums import ParseMode
+from aiogram.filters import StateFilter
 from aiogram.filters.command import Command
+from aiogram.fsm.context import FSMContext
 from aiogram.types import FSInputFile
 
 from db import DataBase
 from config import TG_BOT_TOKEN, ADMINS
-from admin import IsAdmin, Admin
+from admin import IsAdmin, Admin, AdminStates
 
 bot = Bot(token=TG_BOT_TOKEN)
 db = DataBase()
 # db.db__clear()
 db.init()
 dp = Dispatcher()
+router = Router()
 logging.basicConfig(level=logging.INFO)
 
 last_message_id = None
 admin = Admin()
 
 max_level = 9
+link_newsletters = ''
 
 
 def start__get_keyboard():
@@ -34,12 +39,16 @@ def start__get_keyboard():
     return types.InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-# @dp.message(Command('ref'))
-# async def cmd_ref(message: types.Message):
-#     async with ChatActionSender.typing(bot=bot, chat_id=message.from_user.id):
-#         text = (f'🚀 Вот твоя персональная ссылка на приглашение: '
-#                 f'https://t.me/testmmn_bot?start={message.from_user.id}')
-#     await message.answer(text)
+@dp.message(Command('Photo'))
+async def handle_photo(message: types.Message):
+    # Получаем файл изображения
+    photo = message.photo[-1]  # Берем самое большое изображение
+    file_id = photo.file_id
+    file = await bot.get_file(file_id)
+
+    # Скачиваем файл
+    await bot.download_file(file.file_path, f'./images/{file.file_path.split("/")[-1]}')
+    await message.reply("Изображение успешно скачано!")
 
 
 @dp.message(Command('start'))
@@ -70,7 +79,7 @@ async def process_start_command(message: types.Message, bot: Bot):
 
     if not user:
         db.user__add(tg_id)
-        # await message.answer(f'Вы зарегестрировались')
+        await message.answer(f'Вы зарегестрировались')
 
     if len(message.text.split()) != 2:
         # await message.answer(f'Вы уже авторизованы')
@@ -103,26 +112,125 @@ async def cmd_admin(message: types.Message):
     await message.answer("Админ панель", reply_markup=admin.get_keyboard())
 
 
+@dp.callback_query(F.data.startswith("cancel"))
+async def cancel(callback: types.CallbackQuery, state: FSMContext):
+    await admin.panel(callback.message)
+    await state.clear()
+
+
+@dp.callback_query(StateFilter(None), F.data.startswith("admin___"))
+async def admin___commands(callback: types.CallbackQuery, state: FSMContext):
+    await state.clear()
+
+    action = callback.data.split("___")[1]
+
+    if action == 'quest_remove':
+        await admin.quests_remove(callback.message)
+        await state.set_state(AdminStates.waiting__quest_remove)
+    elif action == 'quest_add':
+        await admin.quests_add(callback.message)
+        await state.set_state(AdminStates.waiting__quest_add)
+    elif action == 'product_remove':
+        await admin.products_remove(callback.message)
+        await state.set_state(AdminStates.waiting__product_remove)
+    elif action == 'product_add':
+        await admin.products_add(callback.message)
+        await state.set_state(AdminStates.waiting__product_add)
+    elif action == 'newsletters':
+        await admin.newsletters_state_link(callback.message)
+        await state.set_state(AdminStates.waiting__newsletters)
+    elif action == 'promocode_remove':
+        await admin.promocodes_remove(callback.message)
+        await state.set_state(AdminStates.waiting__promocode_remove)
+    elif action == 'promocode_add':
+        await admin.promocodes_add(callback.message)
+        await state.set_state(AdminStates.waiting__promocode_add)
+    elif action == "users":
+        await admin.users(callback.message)
+        await state.set_state(AdminStates.waiting__users)
+
+
+@dp.message(AdminStates.waiting__quest_remove)
+async def quests_remove_state(message: types.Message, state: FSMContext):
+    await admin.quests_remove_state(message)
+    await state.clear()
+    await message.answer("Админ панель", reply_markup=admin.get_keyboard())
+
+
+@dp.message(AdminStates.waiting__quest_add)
+async def quests_add_state(message: types.Message, state: FSMContext):
+    await admin.quests_add_state(message)
+    await state.clear()
+    await message.answer("Админ панель", reply_markup=admin.get_keyboard())
+
+
+@dp.message(AdminStates.waiting__product_remove)
+async def products_remove_state(message: types.Message, state: FSMContext):
+    await admin.products_remove_state(message)
+    await state.clear()
+    await message.answer("Админ панель", reply_markup=admin.get_keyboard())
+
+
+@dp.message(AdminStates.waiting__product_add)
+async def products_add_state(message: types.Message, state: FSMContext):
+    await admin.products_add_state(message)
+    await state.clear()
+    await message.answer("Админ панель", reply_markup=admin.get_keyboard())
+
+
+@dp.message(AdminStates.waiting__newsletters)
+async def newsletters_state(message: types.Message, state: FSMContext):
+    global link_newsletters
+    link_newsletters = message.text
+    await admin.newsletters_state_message(message)
+    await state.set_state(AdminStates.waiting__newsletters_link)
+
+
+@dp.message(AdminStates.waiting__newsletters_link)
+async def newsletters_state(message: types.Message, state: FSMContext):
+    global link_newsletters
+    await admin.newsletters_state(message, link_newsletters)
+    link_newsletters = ''
+    await state.clear()
+    await message.answer("Админ панель", reply_markup=admin.get_keyboard())
+
+
+@dp.message(AdminStates.waiting__promocode_remove)
+async def quests_remove_state(message: types.Message, state: FSMContext):
+    await admin.promocodes_remove_state(message)
+    await state.clear()
+    await message.answer("Админ панель", reply_markup=admin.get_keyboard())
+
+
+@dp.message(AdminStates.waiting__promocode_add)
+async def quests_add_state(message: types.Message, state: FSMContext):
+    await admin.promocodes_add_state(message)
+    await state.clear()
+    await message.answer("Админ панель", reply_markup=admin.get_keyboard())
+
+
+@dp.message(AdminStates.waiting__users)
+async def quests_add_state(message: types.Message, state: FSMContext):
+    await admin.users_get(message)
+    await state.clear()
+    await message.answer("Админ панель", reply_markup=admin.get_keyboard())
+
+
 @dp.callback_query(F.data.startswith("admin__"))
-async def callbacks_num(callback: types.CallbackQuery):
+async def admin__commands(callback: types.CallbackQuery):
     action = callback.data.split("__")[1]
 
     if action == "quests":
         await admin.quests(callback.message)
-    if action == "quest_add":
-        await admin.quests_add(callback.message)
-    if action == "quest_remove":
-        await admin.quests_remove(callback.message)
-
-    if action == "heroes":
-        await admin.heroes(callback.message)
-    if action == "newsletter":
-        await admin.newsletter(callback.message)
-    if action == "promocodes":
+    elif action == "products":
+        await admin.products(callback.message)
+    elif action == "newsletters":
+        await admin.newsletters(callback.message)
+    elif action == "promocodes":
         await admin.promocodes(callback.message)
-    if action == "statistics":
+    elif action == "statistics":
         await admin.statistics(callback.message, max_level)
-    if action == "back":
+    elif action == "back":
         await admin.panel(callback.message)
 
     await callback.answer()
