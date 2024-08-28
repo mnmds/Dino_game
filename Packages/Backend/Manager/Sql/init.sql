@@ -3,8 +3,9 @@ drop table if exists `Server`;
 drop table if exists `User_buy`;
 drop table if exists `User_newsletter`;
 drop table if exists `User_quests`;
-drop table if exists `Newsletter`;
 drop table if exists `Game`;
+drop table if exists `Newsletter`;
+drop table if exists `PromoCodes`;
 drop table if exists `Quests`;
 drop table if exists `Users`;
 drop table if exists `Products`;
@@ -52,19 +53,32 @@ create table if not exists `Game` (
 create table if not exists `Newsletter` (
     `description` text,
     `id` int auto_increment,
-    `name` text not null,
+    `name` varchar(255) not null,
     `url` text,
 
-    primary key (`id`)
+    primary key (`id`),
+    unique key (`name`)
+);
+
+create table if not exists `PromoCodes` (
+    `description` text,
+    `id` int auto_increment,
+    `name` varchar(255) not null,
+    `url` text,
+    `used` boolean default false,
+
+    primary key (`id`),
+    unique key (`name`)
 );
 
 create table if not exists `Quests` (
     `description` text,
     `id` int auto_increment,
-    `name` text not null,
+    `name` varchar(255) not null,
     `url` text not null,
 
-    primary key (`id`)
+    primary key (`id`),
+    unique key (`name`)
 );
 
 create table if not exists `Referrals` (
@@ -102,10 +116,10 @@ create table if not exists `User_buy` (
 create table if not exists `User_newsletter` (
     `date_newsletter` dateTime default current_timeStamp,
     `id` int auto_increment,
-    `newsletter_id` int not null,
+    `newsletter_name` varchar(255) not null,
     `tg_id` int not null,
 
-    foreign key (`newsletter_id`) references Newsletter(`id`),
+    foreign key (`newsletter_name`) references Newsletter(`name`),
     foreign key (`tg_id`) references Users(`tg_id`),
     primary key (`id`)
 );
@@ -113,10 +127,10 @@ create table if not exists `User_newsletter` (
 create table if not exists `User_quests` (
     `date_quest` dateTime default current_timeStamp,
     `id` int auto_increment,
-    `quest_id` int not null,
+    `quest_name` varchar(255) not null,
     `tg_id` int not null,
 
-    foreign key (`quest_id`) references Quests(`id`),
+    foreign key (`quest_name`) references Quests(`name`),
     foreign key (`tg_id`) references Users(`tg_id`),
     primary key (`id`)
 );
