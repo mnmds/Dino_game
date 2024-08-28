@@ -20,8 +20,7 @@ class DataBase:
 
     def db__clear(self):
         with self.connection.cursor() as cursor:
-            tables = ['Referrals', 'Server', 'User_heroes', 'User_newsletter', 'User_quests', 'Newsletter', 'Quests',
-                      'Users', 'Products']
+            tables = ['Referrals', 'Server', 'User_heroes', 'User_newsletter', 'User_quests', 'Newsletter', 'Quests', 'Users', 'Products']
 
             for table in tables:
                 print('--' + table)
@@ -65,14 +64,14 @@ class DataBase:
         with self.connection.cursor() as cursor:
             if interval:
                 select_all_rows = f'''
-                    select count(*) as `col` 
-                    from `Users` 
-                    where `date_registration` >= now() - interval {interval} day; 
+                    select count(*) as `col`
+                    from `Users`
+                    where `date_registration` >= now() - interval {interval} day;
                 '''
             else:
                 select_all_rows = f'''
-                    select count(*) as `col` 
-                    from `Users`; 
+                    select count(*) as `col`
+                    from `Users`;
                 '''
             cursor.execute(select_all_rows)
             user = cursor.fetchone()
@@ -82,9 +81,9 @@ class DataBase:
     def users__get_col_for_level(self, level):
         with self.connection.cursor() as cursor:
             select_all_rows = f'''
-                select count(*) as `col` 
-                from `Users` 
-                where `level` = {level}; 
+                select count(*) as `col`
+                from `Users`
+                where `level` = {level};
             '''
 
             cursor.execute(select_all_rows)
@@ -107,8 +106,8 @@ class DataBase:
     def referral__add(self, host_tg_id, referral_tg_id):
         with self.connection.cursor() as cursor:
             insert_query = """
-            INSERT INTO Referrals (host_tg_id, referral_tg_id)
-            VALUES (%s, %s)
+                INSERT INTO Referrals (host_tg_id, referral_tg_id)
+                VALUES (%s, %s)
             """
             cursor.execute(insert_query, (host_tg_id, referral_tg_id))
 

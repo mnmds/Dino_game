@@ -1,6 +1,7 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
-import {RestClient} from '../../../Global/Js/Js.js';
 import {Units} from '../../../Global/Frontend/Frontend.js';
+
+import {RestClient} from '../../../Global/Js/Js.js';
 
 import {Point} from '../Point/Point.js';
 
@@ -17,7 +18,6 @@ export class Game extends Components.Component {
         disabled: false,
         hero: {
             default: 'Dino',
-            enum: ['Dino', 'Dack'],
             persistent: true,
         },
         level: {
