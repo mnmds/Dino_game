@@ -1,0 +1,65 @@
+@layer init {
+    .root {
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .top {
+        display: grid;
+        grid-template-columns: 2fr 2fr 1fr;
+        font-size: 14px;
+        grid-gap: 5px;
+        height: 5dvh;
+    }
+
+    .income {
+        display: grid;
+        text-align: center;
+        border-radius: 16px;
+        background: var(--Theme__block__background);
+    }
+
+    .image {
+        height: 6dvh;
+    }
+
+    .info {
+        display: flex;
+        margin: auto;
+        font-size: 14px;
+        align-items: center;
+    }
+
+    .level {
+        display: grid;
+        text-align: center;
+        border-radius: 16px;
+        background: var(--Theme__block__background);
+    }
+
+    .settings {
+        display: grid;
+        text-align: center;
+        border-radius: 16px;
+        background: var(--Theme__block__background);
+        place-items: center;
+    }
+
+    .crystals {
+        font-size:25px;
+    }
+
+    .energy {
+        font-size:25px;
+    }
+
+    .energy_crystals_info {
+        display:grid;
+    }
+
+    .user_info {
+        display: flex;
+    }
+}

@@ -1,5 +1,6 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 
+import {Main} from '../Main/Main.js';
 import {Game} from '../Game/Game.js';
 import {Referrals} from '../Referrals/Referrals.js';
 import {Settings} from '../Settings/Settings.js';
@@ -15,6 +16,7 @@ export class Root extends Components.Viewport {
         Referrals,
         Settings,
         Shop,
+        Main,
     ];
 
     static _css_url = true;

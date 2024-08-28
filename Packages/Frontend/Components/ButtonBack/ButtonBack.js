@@ -22,6 +22,6 @@ export class ButtonBack extends Components.Component {
 
 
     _on__pointerDown() {
-        this.event__dispatch('back_click', {}, {composed: true});
+        this.event__dispatch('back_click', {/*Параметр key: value*/}, {composed: true});
     }
 }
