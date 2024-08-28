@@ -7,18 +7,18 @@ from Python import WebSocketServer, Db
 class Game_manager(WebSocketServer):
     _clients__data = {}
     _db = None
-    _save_interval = 10
+    _refresh_interval = 10
+    _save_interval = 30
 
 
     def _energy__refresh(self, tg_id):
         recovery_factor = (100 * self._clients__data[tg_id]['level']) / 60
-        time_profit = (time.time() - self._clients__data[tg_id]['energy_date_refresh']) * recovery_factor
+        time_profit = (self._timeStamp - self._clients__data[tg_id]['energy_date_refresh']) * recovery_factor
         energy = self._clients__data[tg_id]['energy'] + time_profit
         energy_max = 1000 * self._clients__data[tg_id]['level']
 
         self._clients__data[tg_id]['energy'] = energy if energy < energy_max else energy_max
-        self._clients__data[tg_id]['energy_date_refresh'] = time.time()
-
+        self._clients__data[tg_id]['energy_date_refresh'] = self._timeStamp
 
     def _user__get(self, tg_id):
         self._clients__data[tg_id] = self._db.fetch('user__get', {'tg_id': tg_id})[0]
@@ -32,7 +32,7 @@ class Game_manager(WebSocketServer):
         }
         self._db.execute('user__save', request_data)
 
-        self._clients__data[tg_id]['date_save'] = time.time()
+        self._clients__data[tg_id]['date_save'] = self._timeStamp
         self._clients__data[tg_id]['tap'] = 0
 
 
@@ -43,19 +43,25 @@ class Game_manager(WebSocketServer):
         if not tg_id in self._clients__data:
             self._user__get(tg_id)
             self._clients__data[tg_id]['tap'] = 0
-            self._clients__data[tg_id]['date_save'] = time.time()
-            self._clients__data[tg_id]['energy_date_refresh'] = time.time()
+            self._clients__data[tg_id]['date_save'] = self._timeStamp
+            self._clients__data[tg_id]['energy_date_refresh'] = self._timeStamp
 
         if self._clients__data[tg_id]['energy'] - 1 >= 0:
             self._clients__data[tg_id]['energy'] -= 1
             self._clients__data[tg_id]['tap'] += self._clients__data[tg_id]['level']
 
-        self._energy__refresh(tg_id)
+        if (self._timeStamp - self._clients__data[tg_id]['energy_date_refresh']) >= self._refresh_interval:
+            self._energy__refresh(tg_id)
 
-        if (time.time() - self._clients__data[tg_id]['date_save']) >= self._save_interval:
+        if (self._timeStamp - self._clients__data[tg_id]['date_save']) >= self._save_interval:
             self._user__save(tg_id)
 
-        return self._clients__data[tg_id]
+        response = {
+            'energy': self._clients__data[tg_id]['energy'],
+            'profit': self._clients__data[tg_id]['tap'],
+        }
+
+        return response
 
 
     def __init__(self):

@@ -7,6 +7,7 @@ import base64
 import hashlib
 import socket
 import threading
+import time
 
 from Json.Json import Json
 
@@ -22,10 +23,11 @@ class WebSocketServer:
         self._method_args = []
         self._port = port
         self._server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._timeStamp = 0
 
 
     def _handshaking__close(self, client_socket):
-        print('Client requested to close the connection.')
+        # print('Client requested to close the connection.')
 
         close_frame = bytearray([0x88, 0x00])
         client_socket.send(close_frame)
@@ -94,6 +96,7 @@ class WebSocketServer:
                 request_data = Json.parse(request_data)
                 self._method = request_data.get('method', '')
                 self._method_args = request_data.get('method_args', [])
+                self._timeStamp = time.time()
 
                 # print(f'method: {self._method}', f'method_args: {self._method_args}')
                 method = getattr(self, self._method, None)
@@ -142,7 +145,6 @@ class WebSocketServer:
 
         while (True):
             client_socket, client_address = self._server_socket.accept()
-            print(f'New connection from {client_address}')
-
             self._handshaking__open(client_socket)
             threading.Thread(target=self._message__get, args=(client_socket,)).start()
+            # print(f'New connection from {client_address}')
