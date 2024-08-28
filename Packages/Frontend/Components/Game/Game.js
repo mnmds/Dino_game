@@ -44,6 +44,9 @@ export class Game extends Components.Component {
         this.init();
     }
 
+    _handshaking = null;
+    _promise = null;
+    _promise_resolve = null;
     _renderer = new Units.Renderer({render: this._render.bind(this)});
 
 
@@ -72,6 +75,29 @@ export class Game extends Components.Component {
     }
 
 
+    _handshaking__open() {
+        if (this._handshaking?.readyState == 1) return;
+
+        // this._promise_resolve = null;
+        this._promise = new Promise((resolve) => this._promise_resolve = resolve);
+        this._handshaking = new WebSocket('ws://127.0.0.1:8000');
+        this._handshaking.addEventListener('close', this._handshaking__on_close.bind(this));
+        this._handshaking.addEventListener('message', this._handshaking__on_message.bind(this));
+        this._handshaking.addEventListener('open', this._handshaking__on_open.bind(this));
+    }
+
+    _handshaking__on_close() {
+        // this._handshaking__open();
+    }
+
+    _handshaking__on_message() {
+        this._refresh()
+    }
+
+    _handshaking__on_open() {
+        this._promise_resolve();
+    }
+
     async _hero__load() {
         let hero_url = `./Storage/Videos/Game/${this.hero}/${this.level}.webm`;
         let poster_url = `./Storage/Images/Game/Stop.png`;
@@ -91,6 +117,11 @@ export class Game extends Components.Component {
 
     _init() {
         this.props__sync();
+        this._handshaking__open();
+    }
+
+    _refresh() {
+
     }
 
     async _points__create(x, y) {
@@ -112,9 +143,21 @@ export class Game extends Components.Component {
         this._points__ping();
     }
 
-    _points__ping() {
-        let tg_id = 0;
+    async _points__ping() {
+        let tg_id = 1571127511;
 
+        await this._promise;
+
+        if (this._handshaking.readyState != 1) {
+            this._handshaking__open();
+        }
+
+        let data = {
+            method: 'points__ping',
+            method_args: [tg_id]
+        }
+
+        this._handshaking.send(JSON.stringify(data));
         this.event__dispatch('tap');
     }
 

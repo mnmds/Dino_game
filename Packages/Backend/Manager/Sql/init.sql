@@ -38,9 +38,10 @@ create table if not exists `Users` (
 );
 
 create table if not exists `Game` (
-    `id` int auto_increment,
-    `energy` int default 1000,
     `energy_date_collect` real default -1,
+    `energy_date_refresh` real default -1,
+    `energy` real default 1000,
+    `id` int auto_increment,
     `tg_id` int not null,
 
     foreign key (`tg_id`) references Users(`tg_id`),

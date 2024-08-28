@@ -2,7 +2,6 @@
 
 import json
 
-
 class Json:
     @staticmethod
     def parse(string):
