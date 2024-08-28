@@ -19,6 +19,27 @@ class Manager extends \Apache\RestServer {
     public $_db = null;
 
 
+    public function _auto_profit__sync($tg_id) {
+        $request_data = [
+            'tg_id' => $tg_id,
+        ];
+        $energy_data = $this->_db->fetch('auto_profit__get', $request_data)[0];
+
+        if (!$energy_data['offline_delivery'] || $energy_data['energy'] <= 0) return;
+
+        $recovery_factor = 1000 / (3600 * 3) * $energy_data['level'];
+        $time_profit = ($this->_timeStamp - $energy_data['energy_date_collect']) * $recovery_factor;
+
+        $request_data += [
+            'balance' => intval($time_profit),
+            'energy_date_collect' => $this->_timeStamp,
+        ];
+        $statement = $this->_db->execute('auto_profit__set', $request_data);
+        $statement->closeCursor();
+
+        return true;
+    }
+
     public function _buy($tg_id, $product) {
         $request_data = [
             'tg_id' => $tg_id,
@@ -35,19 +56,7 @@ class Manager extends \Apache\RestServer {
         $statement->closeCursor();
     }
 
-    public function _init() {
-        static::$sql_dsn =
-            'mysql:host=' . static::$sql_host .';' .
-            'dbname=' . static::$sql_db_name .';' .
-            'charset=' . static::$sql_charset.';'
-        ;
-
-        $this->_db = new \Apache\Db(static::$sql_dsn, static::$sql_user_name, static::$sql_user_password);
-        $this->_db->statements_dir = static::$sql_dir;
-    }
-
-
-    public function energy__sync($tg_id) {
+    public function _energy__sync($tg_id) {
         $request_data = [
             'tg_id' => $tg_id,
         ];
@@ -62,7 +71,27 @@ class Manager extends \Apache\RestServer {
             'energy' => $energy < $energy_max ? $energy : $energy_max,
             'energy_date_refresh' => $this->_timeStamp,
         ];
-        $this->_db->execute('energy_data__set', $request_data);
+        $statement = $this->_db->execute('energy_data__set', $request_data);
+        $statement->closeCursor();
+
+        return true;
+    }
+
+    public function _init() {
+        static::$sql_dsn =
+            'mysql:host=' . static::$sql_host .';' .
+            'dbname=' . static::$sql_db_name .';' .
+            'charset=' . static::$sql_charset.';'
+        ;
+
+        $this->_db = new \Apache\Db(static::$sql_dsn, static::$sql_user_name, static::$sql_user_password);
+        $this->_db->statements_dir = static::$sql_dir;
+    }
+
+
+    public function game__sync($tg_id) {
+        $this->_auto_profit__sync($tg_id);
+        $this->_energy__sync($tg_id);
 
         return true;
     }
