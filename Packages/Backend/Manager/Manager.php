@@ -47,6 +47,26 @@ class Manager extends \Apache\RestServer {
     }
 
 
+    public function energy__sync($tg_id) {
+        $request_data = [
+            'tg_id' => $tg_id,
+        ];
+        $energy_data = $this->_db->fetch('energy_data__get', $request_data)[0];
+
+        $recovery_factor = (100 * $energy_data['level']) / 60;
+        $time_profit = ($this->_timeStamp - $energy_data['energy_date_refresh']) * $recovery_factor;
+        $energy = $energy_data['energy'] + $time_profit;
+        $energy_max = 1000 * $energy_data['level'];
+
+        $request_data += [
+            'energy' => $energy < $energy_max ? $energy : $energy_max,
+            'energy_date_refresh' => $this->_timeStamp,
+        ];
+        $this->_db->execute('energy_data__set', $request_data);
+
+        return true;
+    }
+
     public function hero__buy($tg_id, $hero_name) {
         try {
             $this->_buy($tg_id, $hero_name);
@@ -69,7 +89,7 @@ class Manager extends \Apache\RestServer {
             'hero_name' => $hero_name,
             'tg_id' => $tg_id,
         ];
-        $hero = $this->_db->fetch('user_hero__get', $request_data)[0];
+        $hero = $this->_db->fetch('user_hero__get', $request_data)[0]['id'];
 
         if (!$hero) {
             throw new \Exception('hero_select_failed');
