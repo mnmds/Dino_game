@@ -1,24 +1,14 @@
 @layer init {
-    .root {
-        display: grid;
-        justify-items: center;
-        align-items: center;
-        height: 100%;
+    .crystals {
+        font-size: 25px;
     }
 
-    .top {
-        display: grid;
-        grid-template-columns: 2fr 2fr 1fr;
-        font-size: 14px;
-        grid-gap: 5px;
-        height: 5dvh;
+    .energy {
+        font-size: 25px;
     }
 
-    .income {
+    .energy_crystals_info {
         display: grid;
-        text-align: center;
-        border-radius: 16px;
-        background: var(--Theme__block__background);
     }
 
     .image {
@@ -27,36 +17,35 @@
 
     .info {
         display: flex;
-        margin: auto;
         font-size: 14px;
-        align-items: center;
-    }
-
-    .level {
-        display: grid;
-        text-align: center;
-        border-radius: 16px;
-        background: var(--Theme__block__background);
-    }
-
-    .settings {
-        display: grid;
-        text-align: center;
-        border-radius: 16px;
-        background: var(--Theme__block__background);
+        justify-content: center;
         place-items: center;
     }
 
-    .crystals {
-        font-size:25px;
+    .menu_top__item {
+        background: var(--Theme__block__background);
+        border-radius: 16px;
+        box-sizing: border-box;
+        display: grid;
+        padding: var(--Theme__block__gap);
+        place-items: center;
+        text-align: center;
     }
 
-    .energy {
-        font-size:25px;
+    .root {
+        display: grid;
+        grid-auto-columns: 100%;
+        /* grid-template: repeat(4, auto) / 100%; */
+        height: 100%;
+        place-items: center;
     }
 
-    .energy_crystals_info {
-        display:grid;
+    .top {
+        display: grid;
+        font-size: 14px;
+        grid-gap: var(--Theme__block__gap);
+        grid-template-columns: 2fr 2fr 1fr;
+        width: 100%;
     }
 
     .user_info {
