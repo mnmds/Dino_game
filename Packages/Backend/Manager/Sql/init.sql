@@ -29,6 +29,7 @@ create table if not exists `Users` (
     `id` int auto_increment,
     `level` int default 1,
     `offline_delivery` boolean default false,
+    `taps` int default 0,
     `tg_id` int not null,
     `week_balance` int default 0,
     `week_prev_balance` int default 0,

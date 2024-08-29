@@ -4,6 +4,7 @@ set
     `Game`.`energy_date_collect` = %(energy_date_collect)s,
     `Game`.`energy_date_refresh` = %(energy_date_refresh)s,
     `Game`.`energy` = %(energy)s,
-    `Users`.`balance` = `Users`.`balance` + %(profit)s
+    `Users`.`balance` = `Users`.`balance` + %(profit)s,
+    `Users`.`taps` = `Users`.`taps` + %(taps)s
 where
     `Users`.`tg_id` = %(tg_id)s;

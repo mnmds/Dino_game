@@ -34,21 +34,23 @@ class Game_manager(WebSocketServer):
         time_profit = (self._timeStamp - self._clients__data[tg_id]['energy_date_collect']) * recovery_factor
 
         self._clients__data[tg_id]['energy_date_collect'] = self._timeStamp
-        self._clients__data[tg_id]['tap'] += int(time_profit)
+        self._clients__data[tg_id]['profit'] += int(time_profit)
 
     def _user__get(self, tg_id):
         self._clients__data[tg_id] = self._db.fetch('user__get', {'tg_id': tg_id})[0]
         self._clients__data[tg_id]['date_refresh'] = self._timeStamp
         self._clients__data[tg_id]['energy_date_collect'] = self._timeStamp
         self._clients__data[tg_id]['energy_date_refresh'] = self._timeStamp
-        self._clients__data[tg_id]['tap'] = 0
+        self._clients__data[tg_id]['profit'] = 0
+        self._clients__data[tg_id]['taps'] = 0
 
     def _user__save(self, tg_id):
         request_data = {
             'energy': self._clients__data[tg_id]['energy'],
             'energy_date_refresh': self._clients__data[tg_id]['energy_date_refresh'],
             'energy_date_collect': self._clients__data[tg_id]['energy_date_collect'],
-            'profit': self._clients__data[tg_id]['tap'],
+            'profit': self._clients__data[tg_id]['profit'],
+            'taps': self._clients__data[tg_id]['taps'],
             'tg_id': tg_id,
         }
         self._db.execute('user__save', request_data)
@@ -60,21 +62,25 @@ class Game_manager(WebSocketServer):
 
         if self._clients__data[tg_id]['energy'] - 1 >= 0:
             self._clients__data[tg_id]['energy'] -= 1
-            self._clients__data[tg_id]['tap'] += self._clients__data[tg_id]['level']
+            self._clients__data[tg_id]['profit'] += self._clients__data[tg_id]['level']
+            self._clients__data[tg_id]['taps'] += 1
 
         if (self._timeStamp - self._clients__data[tg_id]['energy_date_refresh']) >= self._energy_refresh__interval:
+            # pass
             self._energy__refresh(tg_id)
 
         if self._clients__data[tg_id]['offline_delivery'] and ((self._timeStamp - self._clients__data[tg_id]['energy_date_collect']) >= self._auto_profit__interval):
+            # pass
             self._energy_auto__refresh(tg_id)
 
         if (self._timeStamp - self._clients__data[tg_id]['date_refresh']) >= self._user_refresh__interval:
+            # pass
             self._user__save(tg_id)
             self._user__get(tg_id)
 
         response = {
             'energy': self._clients__data[tg_id]['energy'],
-            'profit': self._clients__data[tg_id]['tap'],
+            'profit': self._clients__data[tg_id]['profit'],
         }
 
         return response
