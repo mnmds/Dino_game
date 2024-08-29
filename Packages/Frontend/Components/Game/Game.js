@@ -90,8 +90,9 @@ export class Game extends Components.Component {
         // this._handshaking__open();
     }
 
-    _handshaking__on_message() {
-        this._refresh()
+    _handshaking__on_message(event) {
+        let {result} = event.data;
+        this._refresh(result);
     }
 
     _handshaking__on_open() {
@@ -120,8 +121,8 @@ export class Game extends Components.Component {
         this._handshaking__open();
     }
 
-    _refresh() {
-
+    _refresh(detail) {
+        this.event__dispatch('data__ping', detail)
     }
 
     async _points__create(x, y) {
@@ -144,7 +145,7 @@ export class Game extends Components.Component {
     }
 
     async _points__ping() {
-        let tg_id = 1571127511;
+        let tg_id = Units.Telegram.user?.id;
 
         await this._promise;
 
