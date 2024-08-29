@@ -1,23 +1,14 @@
 @layer init {
-    .crystals {
-        font-size: 25px;
-    }
-
-    .energy {
-        font-size: 25px;
-    }
-
-    .energy_crystals_info {
-        display: grid;
-    }
-
     .image {
         height: 6dvh;
     }
 
+    .image_info {
+        width: 10dvh;
+    }
+
     .info {
         display: flex;
-        font-size: 14px;
         justify-content: center;
         place-items: center;
     }
@@ -35,7 +26,7 @@
     .root {
         display: grid;
         grid-auto-columns: 100%;
-        /* grid-template: repeat(4, auto) / 100%; */
+        grid-template-rows: 15% 55% 15% 15%;
         height: 100%;
         place-items: center;
     }
@@ -44,11 +35,51 @@
         display: grid;
         font-size: 14px;
         grid-gap: var(--Theme__block__gap);
-        grid-template-columns: 2fr 2fr 1fr;
+        grid-template-columns: 2fr 3fr 1fr;
         width: 100%;
     }
 
     .user_info {
-        display: flex;
+        display: grid;
+        width: 100%;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 1fr 1fr;
+        font-size: 20px;
+        align-self: start;
+    }
+
+    .crystals {
+        justify-content: start;
+    }
+
+    .energy {
+        justify-content: start;
+    }
+
+    .timer_crystals {
+        justify-content: start;
+    }
+
+    .menu {
+        display: grid;
+        font-size: 20px;
+        grid-gap: var(--Theme__block__gap);
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 100%;
+    }
+
+    .menu_footer__item {
+        background: var(--Theme__block__background);
+        border-radius: 16px;
+        box-sizing: border-box;
+        display: grid;
+        padding: var(--Theme__block__gap);
+        place-items: center;
+        text-align: center;
+    }
+
+    .menu_image {
+        height: 10dvh;
+        width: 10dvh;
     }
 }
