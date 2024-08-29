@@ -19,7 +19,15 @@ export class Main extends Components.Component {
     };
 
     static _elements = {
-
+        income_value: '',
+        level_value: '',
+        settings: '',
+        income: '',
+        income: '',
+        income: '',
+        income: '',
+        income: '',
+        income: '',
     };
 
     _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
