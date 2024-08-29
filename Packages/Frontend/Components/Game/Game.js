@@ -136,10 +136,10 @@ export class Game extends Components.Component {
     }
 
     _points__on_pointerUp(event) {
-        if (this.disabled) return;
+        if (this.disabled || (window.innerWidth - event.x < 80)) return;
 
         this._renderer.start();
-        this._points__create(event.offsetX, event.offsetY);
+        this._points__create((event.x - 25), (event.y - 25));
         this._points__ping();
     }
 
