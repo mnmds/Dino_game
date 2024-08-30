@@ -1,18 +1,15 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 import {RestClient} from '../../../Global/Js/Js.js';
+
 import {Game} from '../Game/Game.js';
 import {Timer} from '../Timer/Timer.js';
 
 
 export class Main extends Components.Component {
+    static _components = [Game, Timer];
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;
-
-    static _components = [
-        Game,
-        Timer,
-    ];
 
     static _attributes = {
         ...super._attributes,
@@ -26,8 +23,6 @@ export class Main extends Components.Component {
         quests: '',
         shop: '',
     };
-
-    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager.php', location));
 
     static _eventListeners_elements = {
         settings: {
@@ -44,27 +39,30 @@ export class Main extends Components.Component {
         },
     };
 
-    async _settings__on_pointerDown() {
-        this.event__dispatch('menu_click', {page: 4}, {composed: true});
-    }
-
-    async _referrals__on_pointerDown() {
-        this.event__dispatch('menu_click', {page: 3}, {composed: true});
-    }
-
-    async _quests__on_pointerDown() {
-        this.event__dispatch('menu_click', {page: 2}, {composed: true});
-    }
-
-    async _shop__on_pointerDown() {
-        this.event__dispatch('menu_click', {page: 1}, {composed: true});
-    }
-
 
     static {
         this.init();
     }
 
-    _init() {
+
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager.php', location));
+
+
+    _init() {}
+
+    _quests__on_pointerDown() {
+        this.event__dispatch('menu_click', {page: 2});
+    }
+
+    _referrals__on_pointerDown() {
+        this.event__dispatch('menu_click', {page: 3});
+    }
+
+    _settings__on_pointerDown() {
+        this.event__dispatch('menu_click', {page: 4});
+    }
+
+    _shop__on_pointerDown() {
+        this.event__dispatch('menu_click', {page: 1});
     }
 }

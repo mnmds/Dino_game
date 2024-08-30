@@ -30,17 +30,20 @@ export class Root extends Components.Viewport {
     static _elements = {
         leafable: '',
         settings: '',
+        main: '',
     };
 
     static _eventListeners_elements = {
+        main: {
+            menu_click: '_on__menu_click',
+        },
         settings: {
             language__toggle: '_settings__on_languageToggle',
-        }
+        },
     };
 
     static _eventListeners_target = {
         back_click: '_on__back_click',
-        menu_click: '_on__menu_click',
     };
 
 
@@ -56,8 +59,9 @@ export class Root extends Components.Viewport {
     }
 
     _on__menu_click(event) {
-        console.log(event.detail.page);
+        // console.log(event.detail.page);
         this._elements.leafable.index = event.detail.page;
+        this._elements.leafable.children[event.detail.page].refresh?.();
     }
 
     _settings__on_languageToggle(event) {

@@ -93,9 +93,7 @@ export class Quests extends Components.Component {
     async refresh() {
         let time = await this._rest.call('time_distribution');
         time = 1e3;
-
         this._elements.timer.duration = time;
-
         this._elements.timer.start();
     }
 }
