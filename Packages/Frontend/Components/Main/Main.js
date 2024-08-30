@@ -13,15 +13,24 @@ export class Main extends Components.Component {
 
     static _attributes = {
         ...super._attributes,
+        income_value: 1,
+        level_value: 1,
+        balance: 0,
+        energy: 0,
+        time: 0,
     };
 
     static _elements = {
-        income_value: '',
-        level_value: '',
         settings: '',
         referrals: '',
         quests: '',
         shop: '',
+        income_value: '',
+        level_value: '',
+        balance: '',
+        energy: '',
+        max_energy: '',
+        timer: '',
     };
 
     static _eventListeners_elements = {
@@ -44,11 +53,54 @@ export class Main extends Components.Component {
         this.init();
     }
 
+    get income_value() {
+        return this._attributes.income_value;
+    }
+    set income_value(income_value) {
+        this._attribute__set('income_value', income_value);
+        this._elements.income_value.textContent = income_value;
+    }
 
-    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager.php', location));
+    get level_value() {
+        return this._attributes.level_value;
+    }
+    set level_value(level_value) {
+        this._attribute__set('level_value', level_value);
+        this._elements.level_value.textContent = `${level_value} уровень`;
+        this._elements.max_energy.textContent = level_value * 1000;
+    }
+
+    get balance() {
+        return this._attributes.balance;
+    }
+    set balance(balance) {
+        this._attribute__set('balance', balance);
+        this._elements.balance.textContent = balance;
+    }
+
+    get energy() {
+        return this._attributes.energy;
+    }
+    set energy(energy) {
+        this._attribute__set('energy', energy);
+        this._elements.energy.textContent = energy;
+    }
+
+    get time() {
+        return this._attributes.time;
+    }
+    set time(time) {
+        this._elements.timer.duration = time;
+        this._elements.timer.start();
+    }
 
 
-    _init() {}
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+
+
+    _init() {
+        this.props__sync();
+    }
 
     _quests__on_pointerDown() {
         this.event__dispatch('menu_click', {page: 2});

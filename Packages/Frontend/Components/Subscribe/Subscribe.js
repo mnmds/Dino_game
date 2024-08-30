@@ -27,7 +27,7 @@ export class Subscribe extends Components.Component {
         reward: '',
     };
 
-    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager.php', location));
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
 
     static _eventListeners_elements = {
         reward: {
