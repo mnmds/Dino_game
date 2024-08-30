@@ -206,6 +206,15 @@ class Manager extends \Apache\RestServer {
 
         return true;
     }
+
+    public function referrals__get($tg_id) {
+        $request_data = [
+            'tg_id' => $tg_id,
+        ];
+        $products = $this->_db->fetch('referrals__get', $request_data);
+
+        return $products;
+    }
 }
 
 

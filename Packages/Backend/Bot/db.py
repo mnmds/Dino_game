@@ -15,8 +15,8 @@ class DataBase:
             cursorclass=pymysql.cursors.DictCursor
         )
 
-        print('Успешное подключение...')
-        print('#' * 20)
+        # print('Успешное подключение...')
+        # print('#' * 20)
 
     def db__clear(self):
         with self.connection.cursor() as cursor:
@@ -24,7 +24,7 @@ class DataBase:
                       'Users', 'Products']
 
             for table in tables:
-                print('--' + table)
+                # print('--' + table)
                 cursor.execute(f'delete from `{table}`')
 
             self.connection.commit()
@@ -201,20 +201,16 @@ class DataBase:
             cursor.execute(select_all_rows)
             return cursor.fetchall()
 
-    def products__add_product(self, price, description, name, resource_url):
+    def products__add_product(self, name, price):
         with self.connection.cursor() as cursor:
             insert_query = f'''
                 insert into `Products` (
                     `name`,
-                    `description`,
-                    `price`,
-                    `resource_url`
+                    `price`
                 )
                 values (
-                    '{price}',
-                    '{description}',
                     '{name}',
-                    '{resource_url}'
+                    '{price}'
                 );
             '''
             cursor.execute(insert_query)

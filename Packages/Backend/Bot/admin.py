@@ -1,10 +1,23 @@
+import os
+import shutil
+import zipfile
+import re
+import sys
+
+
 from aiogram.filters import BaseFilter
-from aiogram import types
+from aiogram import types, Bot
 from aiogram.fsm.state import StatesGroup, State
 
+from config import TG_BOT_TOKEN
 from db import DataBase
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname('admin.py'), '../Game_manager/')))
+from Game_manager import Game_manager
+
+
 db = DataBase()
+bot = Bot(token=TG_BOT_TOKEN)
 
 
 class IsAdmin(BaseFilter):
@@ -21,6 +34,7 @@ class AdminStates(StatesGroup):
     waiting__quest_add = State()
     waiting__product_remove = State()
     waiting__product_add = State()
+    waiting__product_info = State()
     waiting__newsletters = State()
     waiting__newsletters_link = State()
     waiting__promocode_remove = State()
@@ -31,6 +45,27 @@ class AdminStates(StatesGroup):
 class Admin:
     def __init__(self):
         pass
+
+    def is_valid_url(self, url):
+        pattern = re.compile(
+            r'^(?:http|ftp)s?://'  # http:// или https://
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # доменное имя
+            r'localhost|'  # локальный хост
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|'  # IP-адрес
+            r'\[?[A-F0-9]*:[A-F0-9:]+\]?)'  # IPv6
+            r'(?::\d+)?'  # порт
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+        return re.match(pattern, url) is not None
+
+    def is_digit(self, string):
+        if string.isdigit():
+            return True
+        else:
+            try:
+                float(string)
+                return True
+            except ValueError:
+                return False
 
     @staticmethod
     def get_keyboard():
@@ -133,9 +168,7 @@ class Admin:
         return types.InlineKeyboardMarkup(inline_keyboard=buttons)
 
     async def quests(self, message: types.Message):
-        db.connection__open()
         quests = db.quests__get()
-        db.connection__cose()
 
         output = []
         for quest in quests:
@@ -143,35 +176,52 @@ class Admin:
         text = "\n".join(output)
 
         await message.edit_text(
-            f"Квесты (имя, цена, ссылка):\n"
+            f"Квесты (имя, награда, ссылка):\n"
             f"{text}",
             reply_markup=self.quests_get_keyboard()
         )
 
     async def quests_add(self, message: types.Message):
         await message.edit_text(
-            f"Напишите новое задание в формате: имя, цена, ссылка",
+            f"Напишите новое задание в формате: имя|награда|ссылка",
             reply_markup=self.cancel_keybord()
         )
 
     async def quests_add_state(self, message: types.Message):
-        db.connection__open()
-        text = message.text.split(', ')
-        exists = any(quest['name'] == text[0] for quest in db.quests__get())
+        try:
+            if '|' in message.text:
+                text = message.text.split('|')
+                exists = any(quest['name'] == text[0] for quest in db.quests__get())
 
-        if not exists:
-            if len(text) == 3:
-                db.quests__add_quest(text[0], text[1], text[2])
-                await message.answer(
-                    text=f"Задание '{text[0]}' добавлено"
-                )
+                if not exists:
+                    if len(text) == 3 and self.isdigit(text[1]) and self.is_valid_url(text[2]):
+                        db.quests__add_quest(text[0], text[1], text[2])
+                        await message.answer(
+                            text=f"Задание '{text[0]}' добавлено"
+                        )
+                    elif not self.isdigit(text[1]):
+                        await message.answer(
+                            text=f'Цена должна быть числом'
+                        )
+                    elif not self.is_valid_url(text[2]):
+                        await message.answer(
+                            text=f'Некорректная ссылка'
+                        )
+                    else:
+                        await message.answer(
+                            text=f'Неправельный формат ввода'
+                        )
+                else:
+                    await message.answer(
+                        text=f"Задание с именем '{text[0]}' уже есть"
+                    )
             else:
                 await message.answer(
-                    text=f'Неправельный формат ввода'
+                    text=f"Неправельный формат ввода"
                 )
-        else:
+        except TypeError:
             await message.answer(
-                text=f"Задание с именем '{text[0]}' уже есть"
+                text=f"Неправельный формат ввода"
             )
 
     async def quests_remove(self, message: types.Message):
@@ -181,7 +231,6 @@ class Admin:
         )
 
     async def quests_remove_state(self, message: types.Message):
-        db.connection__open()
         name = message.text
         exists = any(quest['name'] == name for quest in db.quests__get())
 
@@ -196,45 +245,108 @@ class Admin:
             )
 
     async def products(self, message: types.Message):
-        db.connection__open()
         products = db.products__get()
-        db.connection__cose()
 
         output = []
         for product in products:
-            output.append(f"{product['name']}, {product['description']}, {product['price']}, {product['resource_url']}")
+            output.append(f"{product['name']}, {product['price']}")
         text = "\n".join(output)
 
         await message.edit_text(
-            f"Герои (имя, цена, описание, изображение):\n"
+            f"Герои (имя, цена):\n"
             f"{text}",
             reply_markup=self.products_get_keyboard()
         )
 
+    async def products_remove_files(self, file_name):
+        # video_path = os.path.join('video', file_name)
+        # images_path = os.path.join('images', f'{file_name}.png')
+
+        # Удаление папки
+        if os.path.exists(f'../../../Storage/Videos/Game/{file_name}'):
+            shutil.rmtree(f'../../../Storage/Videos/Game/{file_name}')
+            # await message.answer(f"Папка {file_name} удалена")
+
+        # Удаление файла
+        if os.path.exists(f'../../../Storage/Images/Heroes/{file_name}.png'):
+            os.remove(f'../../../Storage/Images/Heroes/{file_name}.png')
+            # await message.answer(f"Файл {file_name} удален")
+
+    async def archive_remove_files(self):
+        archive_path = os.path.join('extracted_files')
+
+        # Удаление папки
+        if os.path.exists(archive_path):
+            shutil.rmtree(archive_path)
+
     async def products_add(self, message: types.Message):
         await message.edit_text(
-            f"Создайте персонажа в формате: имя, описание, цена, фото",
+            f"Отправьте zip архив с файлами персонажа",
             reply_markup=self.cancel_keybord()
         )
 
-    async def products_add_state(self, message: types.Message):
-        db.connection__open()
-        text = message.text.split(', ')
-        exists = any(quest['name'] == text[0] for quest in db.products__get())
+    async def products_add_file(self, message: types.Message):
+        file_id = message.document.file_id
+        file_name = message.document.file_name
+        file = await bot.get_file(file_id)
+        hero_name = file_name.replace('.zip', '')
+
+        # Скачиваем архив
+        os.makedirs('archives', exist_ok=True)
+        await bot.download_file(file.file_path, f'./archives/{file_name}')
+
+        try:
+            # Разархивируем
+            with zipfile.ZipFile(f"./archives/{file_name}", 'r') as zip_ref:
+                zip_ref.extractall('extracted_files')
+                await self.archive_remove_files()
+
+            # Проверяем файлы
+            for file in os.listdir('extracted_files'):
+                if file.endswith('.png'):
+                    # image_name = file.replace('.png', '')
+                    # os.makedirs(f'../../../Storage/Images/Heroes/{file_name}.png', exist_ok=True)
+                    os.rename(f'extracted_files/{file}', f'../../../Storage/Images/Heroes/{file_name}.png')
+                elif file.endswith('.gif'):
+                    # image_name = file.replace('.webm', '.png')
+                    os.makedirs(f'../../../Storage/Videos/Game/{hero_name}', exist_ok=True)
+                    os.rename(f'extracted_files/{file}', f'../../../Storage/Videos/Game/{hero_name}/{file}')
+                else:
+                    await message.answer(f"Некорректый формат файла {file}")
+                    await self.products_remove_files(hero_name)
+                    return
+
+            await message.reply("Файлы успешно обработаны!")
+
+            await message.answer(
+                f"Теперь отправьте стоимость персонажа",
+                reply_markup=self.cancel_keybord()
+            )
+
+            return hero_name
+        except FileExistsError:
+            await message.reply(f"Файл {file} уже есть")
+            await self.archive_remove_files()
+            return
+
+    async def products_add_state(self, message: types.Message, hero_name):
+        text = message.text
+        exists = any(quest['name'] == hero_name for quest in db.products__get())
 
         if not exists:
-            if len(text) == 4:
-                db.products__add_product(text[0], text[1], text[2], text[3])
+            if text.isdigit():
+                db.products__add_product(hero_name, text)
                 await message.answer(
-                    text=f"Продукт '{text[0]}' добавлено"
+                    text=f"Продукт '{hero_name}' добавлено"
                 )
             else:
                 await message.answer(
                     text=f'Неправельный формат ввода'
                 )
+                await self.products_remove_files(hero_name, message)
         else:
             await message.answer(
-                text=f"Продукт с именем '{text[0]}' уже есть"
+                text=f"Продукт с именем '{hero_name}' уже есть"
             )
 
     async def products_remove(self, message: types.Message):
@@ -244,9 +356,10 @@ class Admin:
         )
 
     async def products_remove_state(self, message: types.Message):
-        db.connection__open()
         name = message.text
         exists = any(quest['name'] == name for quest in db.products__get())
+
+        await self.products_remove_files(name, message)
 
         if exists:
             db.table__remove_for_name('Products', name)
@@ -263,26 +376,6 @@ class Admin:
             f"Перешлите сообщение для рассылки",
             reply_markup=self.cancel_keybord()
         )
-        # db.connection__open()
-        # newsletters = db.newsletters__get()
-        # db.connection__cose()
-        #
-        # output = []
-        # for newsletter in newsletters:
-        #     output.append(f"{newsletter['name']}, {newsletter['description']}, {newsletter['url']}")
-        # text = "\n".join(output)
-        #
-        # await message.edit_text(
-        #     f"Рассылка (имя, описание, ссылка):\n"
-        #     f"{text}",
-        #     reply_markup=self.newsletters_get_keyboard()
-        # )
-
-    # async def newsletters_add(self, message: types.Message):
-    #     await message.edit_text(
-    #         f"Создайте рассылку в формате: имя, описание, ссылка",
-    #         reply_markup=self.cancel_keybord()
-    #     )
 
     async def newsletters_state_link(self, message: types.Message):
         await message.edit_text(
@@ -297,7 +390,6 @@ class Admin:
         )
 
     async def newsletters_state(self, message: types.Message, link_newsletters):
-        db.connection__open()
         users = db.users__get_all()
         buttons = [
             [
@@ -310,48 +402,9 @@ class Admin:
                 chat_id=user['tg_id'],
                 reply_markup=types.InlineKeyboardMarkup(inline_keyboard=buttons)
             )
-        # exists = any(quest['name'] == text[0] for quest in db.newsletters__get())
-        #
-        # if not exists:
-        #     if len(text) == 3:
-        #         db.newsletters__add_newsletter(text[0], text[1], text[2])
-        #         await message.answer(
-        #             text=f"Рассылка '{text[0]}' добавлена"
-        #         )
-        #     else:
-        #         await message.answer(
-        #             text=f'Неправельный формат ввода'
-        #         )
-        # else:
-        #     await message.answer(
-        #         text=f"Рассылка с именем '{text[0]}' уже есть"
-        #     )
-
-    # async def newsletters_remove(self, message: types.Message):
-    #     await message.edit_text(
-    #         f"Напишите имя рассылки, который нужно убрать",
-    #         reply_markup=self.cancel_keybord()
-    #     )
-
-    # async def newsletters_remove_state(self, message: types.Message):
-    #     db.connection__open()
-    #     name = message.text
-    #     exists = any(quest['name'] == name for quest in db.newsletters__get())
-    #
-    #     if exists:
-    #         db.table__remove_for_name('Newsletter', name)
-    #         await message.answer(
-    #             text=f"Рассылка удалёна"
-    #         )
-    #     else:
-    #         await message.answer(
-    #             text=f"Имя '{name}' не найдено в списке"
-    #         )
 
     async def promocodes(self, message: types.Message):
-        db.connection__open()
         products = db.promocodes__get()
-        db.connection__cose()
 
         output = []
         for product in products:
@@ -371,22 +424,26 @@ class Admin:
         )
 
     async def promocodes_add_state(self, message: types.Message):
-        db.connection__open()
-        text = message.text
-        exists = any(quest['name'] == text[0] for quest in db.promocodes__get())
+        try:
+            text = message.text
+            exists = any(quest['name'] == text[0] for quest in db.promocodes__get())
 
-        if not exists:
-            db.promocodes__add_promocode(text)
+            if not exists:
+                db.promocodes__add_promocode(text)
+                await message.answer(
+                    text=f"Промокод '{text}' добавлен"
+                )
+                # else:
+                #     await message.answer(
+                #         text=f'Неправельный формат ввода'
+                #     )
+            else:
+                await message.answer(
+                    text=f"Промокод с именем '{text[0]}' уже есть"
+                )
+        except TypeError:
             await message.answer(
-                text=f"Промокод '{text}' добавлен"
-            )
-            # else:
-            #     await message.answer(
-            #         text=f'Неправельный формат ввода'
-            #     )
-        else:
-            await message.answer(
-                text=f"Промокод с именем '{text[0]}' уже есть"
+                text=f'Неправельный формат ввода'
             )
 
     async def promocodes_remove(self, message: types.Message):
@@ -396,18 +453,22 @@ class Admin:
         )
 
     async def promocodes_remove_state(self, message: types.Message):
-        db.connection__open()
-        name = message.text
-        exists = any(quest['name'] == name for quest in db.promocodes__get())
+        try:
+            name = message.text
+            exists = any(quest['name'] == name for quest in db.promocodes__get())
 
-        if exists:
-            db.table__remove_for_name('PromoCodes', name)
+            if exists:
+                db.table__remove_for_name('PromoCodes', name)
+                await message.answer(
+                    text=f"Промокод удалён"
+                )
+            else:
+                await message.answer(
+                    text=f"Имя '{name}' не найдено в списке"
+                )
+        except TypeError:
             await message.answer(
-                text=f"Промокод удалён"
-            )
-        else:
-            await message.answer(
-                text=f"Имя '{name}' не найдено в списке"
+                text=f'Неправельный формат ввода'
             )
 
     async def users(self, message: types.Message):
@@ -420,7 +481,6 @@ class Admin:
         if message.text.isdigit():
             info = db.user__get_info(message.text)
             if info:
-                print(info)
                 await message.answer(
 
                     f"Баланс: {info['balance']}\n"
@@ -442,7 +502,7 @@ class Admin:
         result = []
         users_for_date = {'0': db.users__get_col_for_date()['col'], '1': db.users__get_col_for_date(1)['col'],
                           '7': db.users__get_col_for_date(7)['col']}
-        online = 0
+        online = Game_manager.clients_count__get()
         users_for_level = dict()
 
         for i in range(1, max_level + 1):
