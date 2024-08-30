@@ -99,21 +99,13 @@ export class Game extends Components.Component {
         this._promise_resolve();
     }
 
-    async _hero__load() {
-        let hero_url = `./Storage/Videos/Game/${this.hero}/${this.level}.webm`;
-        let poster_url = `./Storage/Images/Game/Stop.png`;
-        this._elements.hero.poster = poster_url;
-        this._elements.hero_source.src = hero_url;
+    _hero__refresh() {
+        let hero_url = `./Storage/Videos/Game/${this.hero}/${this.level}.gif`;
 
-        this._elements.hero.load();
-    }
-
-    async _hero__refresh() {
-        await this._hero__load();
-
-        if (!this.disabled) {
-            this._elements.hero.play();
+        if (this.disabled) {
+            hero_url = './Storage/Images/Game/Stop.png';
         }
+        this._elements.hero.setAttribute('src', hero_url);
     }
 
     _init() {
