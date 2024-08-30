@@ -1,9 +1,10 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 
 import {Replacement} from '../../Units/Units.js';
-
+import {Units} from '../../../Global/Frontend/Frontend.js';
 import {ButtonBack} from '../ButtonBack/ButtonBack.js';
 import {Referral} from '../Referral/Referral.js';
+import {RestClient} from '../../../Global/Js/Js.js';
 
 
 export class Referrals extends Components.Component {
@@ -39,6 +40,7 @@ export class Referrals extends Components.Component {
         root: '',
         sort_buttons_date: '',
         sort_buttons_referrals: '',
+        referral_button: '',
     };
 
     static _eventListeners_elements = {
@@ -51,6 +53,9 @@ export class Referrals extends Components.Component {
         },
         sort_buttons_referrals: {
             pointerdown: '_sort_buttons_referrals__on_pointerDown',
+        },
+        referral_button: {
+            pointerdown: '_referral_button__on_pointerDown'
         },
     };
 
@@ -112,6 +117,8 @@ export class Referrals extends Components.Component {
         this.refresh();
     }
 
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+
     _sort_buttons_date__on_pointerDown(event) {
         if (!event.target.dataset.type) return;
 
@@ -124,11 +131,17 @@ export class Referrals extends Components.Component {
         this._score = event.target.dataset.type;
     }
 
+
+
     // _date_buttons_referrals__on_pointerDown(event) {
     //     if (!event.target.dataset.type) return;
 
     //     this._date = event.target.dataset.type;
     // }
+
+    async _referral_button__on_pointerDown() {
+        await this._rest.call('referrals__get', Units.Telegram.user.id);
+    }
 
 
     data_insert() {
