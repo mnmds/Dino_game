@@ -55,8 +55,9 @@ export class Root extends Components.Viewport {
         this._elements.leafable.index = 0;
     }
 
-    _on__menu_click(page) {
-        this._elements.leafable.index = page;
+    _on__menu_click(event) {
+        console.log(event.detail.page);
+        this._elements.leafable.index = event.detail.page;
     }
 
     _settings__on_languageToggle(event) {
