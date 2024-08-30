@@ -40,6 +40,7 @@ export class Root extends Components.Viewport {
 
     static _eventListeners_target = {
         back_click: '_on__back_click',
+        menu_click: '_on__menu_click',
     };
 
 
@@ -52,6 +53,10 @@ export class Root extends Components.Viewport {
 
     _on__back_click() {
         this._elements.leafable.index = 0;
+    }
+
+    _on__menu_click(page) {
+        this._elements.leafable.index = page;
     }
 
     _settings__on_languageToggle(event) {

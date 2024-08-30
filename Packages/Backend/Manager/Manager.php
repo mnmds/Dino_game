@@ -177,6 +177,35 @@ class Manager extends \Apache\RestServer {
 
         return $products;
     }
+
+    public function tg_subscribe__check($chanall_url, $tg_id) {
+        $parsedUrl = parse_url($chanall_url);
+        $path = $parsedUrl['path'];
+        $chanall_url = ltrim($path, '/');
+
+        $url = 'https://api.telegram.org/bot' . static::$bot_token . "/getChatMember?chat_id=@$chanall_url&user_id=$tg_id";
+        $response = file_get_contents($url);
+        $data = \Json::parse($response);
+
+        if (!$data) return;
+
+        $status = $data['result']['status'];
+
+        if ($status != 'member' || $status != 'administrator' || $status != 'creator') return;
+
+        // $request_data = [
+        //     'tg_id' => $tg_id,
+        // ];
+        // $user_quests = $this->_db->fetch('user_quests__get', $request_data);
+
+        // if (!$user_quests) {
+        //     $this->_db->execute('user_quests__add', $request_data);
+        // }
+
+        // $this->_db->execute('quest_tg__solve', $request_data);
+
+        return true;
+    }
 }
 
 

@@ -27,7 +27,7 @@ export class Subscribe extends Components.Component {
         reward: '',
     };
 
-    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager.php', location));
 
     static _eventListeners_elements = {
         reward: {
@@ -67,7 +67,7 @@ export class Subscribe extends Components.Component {
 
 
     async _reward__on_pointerDown() {
-        if (this.link.substr(8, 16) == 'telegram') {
+        if (this.link.substr(12, 20) == 'telegram') {
             Units.Telegram.link_telegram__open(this.link);
             await this._rest.call('tg_subscribe__check', this.link, Units.Telegram.user.id);
         }

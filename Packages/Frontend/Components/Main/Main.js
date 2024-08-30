@@ -22,19 +22,19 @@ export class Main extends Components.Component {
         income_value: '',
         level_value: '',
         settings: '',
-        income: '',
-        income: '',
-        income: '',
-        income: '',
-        income: '',
-        income: '',
     };
 
-    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager.php', location));
 
     static _eventListeners_elements = {
-
+        settings: {
+            pointerdown: '_settings__on_pointerDown',
+        }
     };
+
+    async _settings__on_pointerDown() {
+        this.event__dispatch('menu_click', {page: 4}, {composed: true});
+    }
 
 
     static {
