@@ -3,12 +3,12 @@
         <x-buttonback class='button_back'></x-buttonback>
         <div active class='panel_button' data-index='0'>
             <x-svg url='./Storage/Images/Main.svg#level'></x-svg>
-            <span>Улучшения</span>
+            <span _interface_name='Shop__improvement'>Улучшения</span>
             <!-- <span _interface_name='key_1'>Улучшения</span> -->
         </div>
         <div class='panel_button' data-index='1'>
             <x-svg url='./Storage/Images/Main.svg#mini_dino'></x-svg>
-            <span>Скины</span>
+            <span _interface_name='Shop__skins'>Скины</span>
         </div>
         <div class='balance_container'>
             <x-svg url='./Storage/Images/Main.svg#crystal'></x-svg>
@@ -20,7 +20,7 @@
         <div class='shop_page'>
             <x-flickable class='display' autoRefresh scrollBars='hidden'>
                 <div class='label'>
-                    <div class='label_title'>Оффлайн-доставка</div>
+                    <div class='label_title' _interface_name='Shop__offline_delivery'>Оффлайн-доставка</div>
                     <x-svg class='label_icon' url='./Storage/Images/Main.svg#crystals'></x-svg>
                     <div class='label_price'>50 000</div>
                     <input class='label_checkBox' type='checkbox'>
@@ -57,6 +57,6 @@
 
     <x-popup mode='modal' class='popup'>
         <div class='popup__content'></div>
-        <div class='popup__button'>Закрыть</div>
+        <div class='popup__button' _interface_name='Shop__close'>Закрыть</div>
     </x-popup>
 </div>

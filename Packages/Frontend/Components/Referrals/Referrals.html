@@ -1,9 +1,9 @@
 <div class='root'>
     <x-buttonback></x-buttonback>
     <div class='invite_user'>
-        <div class='invite_button invite__item'>
+        <div class='invite_button invite__item' >
             <x-svg url='./Storage/Images/Main.svg#people'></x-svg>
-            Приведи друга
+            <span _interface_name='Referrals__refer_a_friend'>Приведи друга</span>
         </div>
         <div class='invite_income invite__item'>
             <x-svg url='./Storage/Images/Main.svg#crystal'></x-svg>
@@ -13,14 +13,14 @@
 
     <div class='control_panel'>
         <div class='sort_buttons sort_buttons_referrals'>
-            <div class='referral_button' data-type='referral'>Рефералы</div>
-            <div class='referral_button' data-type='income'>Доход</div>
+            <div class='referral_button' data-type='referral' _interface_name='Referrals__referrals'>Рефералы</div>
+            <div class='referral_button' data-type='income' _interface_name='Referrals__income'>Доход</div>
         </div>
         <div class='progressBar_score progressBar' ></div>
         <div class='sort_buttons sort_buttons_date'>
-            <div class='referral_button' data-type='this_week'>Текущая неделя</div>
-            <div class='referral_button' data-type='last_week'>Предыдущая неделя</div>
-            <div class='referral_button' data-type='all_time'>Всё время</div>
+            <div class='referral_button' data-type='this_week' _interface_name='Referrals__current_week'>Текущая неделя</div>
+            <div class='referral_button' data-type='last_week' _interface_name='Referrals__previous_week'>Предыдущая неделя</div>
+            <div class='referral_button' data-type='all_time' _interface_name='Referrals__all_time'>Всё время</div>
         </div>
         <div class='progressBar_date progressBar'></div>
     </div>

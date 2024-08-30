@@ -29,6 +29,12 @@
         justify-content: space-between;
     }
 
+    .sort_buttons {
+        color: var(--Theme__block__background);
+        /* background: var(--Theme__block__background); */
+        padding: var(--Theme__block__gap);
+    }
+
     .progressBar {
         height: 5px;
     }

@@ -10,6 +10,12 @@
 
     }
 
+    .setting_alert_text {
+        padding-left: 5%;
+        background: var(--Theme__block__background);
+        border-radius: 16px;
+    }
+
     .setting_alert {
         display: grid;
         grid-template-columns: auto 70px;

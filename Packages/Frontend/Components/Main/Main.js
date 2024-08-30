@@ -1,6 +1,6 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
 import {RestClient} from '../../../Global/Js/Js.js';
-
+import {Replacement} from '../../Units/Units.js';
 import {Game} from '../Game/Game.js';
 import {Timer} from '../Timer/Timer.js';
 
@@ -13,6 +13,8 @@ export class Main extends Components.Component {
 
     static _attributes = {
         ...super._attributes,
+
+        language: 'ru',
         income_value: 1,
         level_value: 1,
         balance: 0,
@@ -21,9 +23,10 @@ export class Main extends Components.Component {
     };
 
     static _elements = {
-        settings: '',
-        referrals: '',
         quests: '',
+        referrals: '',
+        root: '',
+        settings: '',
         shop: '',
         income_value: '',
         level_value: '',
@@ -94,8 +97,18 @@ export class Main extends Components.Component {
         this._elements.timer.start();
     }
 
+    get language() {
+        return this._attributes.language;
+    }
+    set language(language) {
+        this._attribute__set('language', language);
+        this._translator.replace_object = language;
+        this._translator.replace(this._elements.root);
+    }
 
-    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager.php', location));
+    _translator = new Replacement();
 
 
     _init() {
