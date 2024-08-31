@@ -35,7 +35,7 @@ export class Quests extends Components.Component {
             this._item.task = this._model_item.name;
             // this._item.image = this._model_item.image;
             this._item.value = this._model_item.description;
-            this._item.status = this._model_item.status;
+            // this._item.status = this._model_item.status;
             this._item.link = this._model_item.url;
         }
 
@@ -72,7 +72,7 @@ export class Quests extends Components.Component {
         this.refresh();
     }
 
-    data_insert() {
+    data_insert(data) {
         this._elements.repeater.model.clear();
         this._elements.repeater.model.add([
             {

@@ -56,14 +56,6 @@ export class Main extends Components.Component {
         this.init();
     }
 
-    get income_value() {
-        return this._attributes.income_value;
-    }
-    set income_value(income_value) {
-        this._attribute__set('income_value', income_value);
-        this._elements.income_value.textContent = income_value;
-    }
-
     get level_value() {
         return this._attributes.level_value;
     }

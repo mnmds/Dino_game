@@ -1,4 +1,5 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
+import {RestClient} from '../../../Global/Js/Js.js';
 
 import {Main} from '../Main/Main.js';
 import {Game} from '../Game/Game.js';
@@ -31,6 +32,7 @@ export class Root extends Components.Viewport {
         leafable: '',
         settings: '',
         main: '',
+        quests: '',
     };
 
     static _eventListeners_elements = {
@@ -51,8 +53,12 @@ export class Root extends Components.Viewport {
         this.init();
     }
 
+    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
 
-    _init() {}
+
+    _init() {
+        this.user_get();
+    }
 
     _on__back_click() {
         this._elements.leafable.index = 0;
@@ -60,6 +66,7 @@ export class Root extends Components.Viewport {
 
     _on__menu_click(event) {
         // console.log(event.detail.page);
+        this.user_get();
         this._elements.leafable.index = event.detail.page;
         this._elements.leafable.children[event.detail.page].refresh?.();
     }
@@ -68,5 +75,22 @@ export class Root extends Components.Viewport {
         for (let child of this._elements.leafable.children) {
             child.language = event.detail.language;
         }
+    }
+
+    async user_get() {
+        if (!Units.Telegram.user?.id) return;
+
+        let {result} = await this._rest.call('user_get', Units.Telegram.user.id);
+
+        if (!result) return;
+
+        this._elements.main.level_value = result.level;
+        this._elements.main.balance = result.balance;
+        this._elements.main.energy = result.energy;
+
+        this._elements.quests.data_insert(result.quests);
+        this._elements.quests._elements.timer.start();
+
+        this._elements.shop.data__insert(result.shop);
     }
 }

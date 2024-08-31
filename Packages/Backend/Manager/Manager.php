@@ -215,6 +215,24 @@ class Manager extends \Apache\RestServer {
 
         return $products;
     }
+
+    public function user_get($tg_id) {
+        $this->game__sync($tg_id);
+
+        $request_data = [
+            'tg_id' => $tg_id,
+        ];
+
+        $result = $this->_db->fetch('user_get', $request_data);
+        $quests_get = $this->_db->fetch('quests_get');
+
+        $result += [
+            'quests' => $quests_get,
+            'shop' => $this->products__get($tg_id),
+        ];
+
+        return $result;
+    }
 }
 
 
