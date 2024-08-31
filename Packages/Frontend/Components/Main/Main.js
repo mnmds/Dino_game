@@ -13,12 +13,7 @@ export class Main extends Components.Component {
 
     static _attributes = {
         ...super._attributes,
-<<<<<<< Updated upstream
-
         language: 'ru',
-        income_value: 1,
-=======
->>>>>>> Stashed changes
         level_value: 1,
         balance: 0,
         energy: 0,
