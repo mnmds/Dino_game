@@ -100,12 +100,11 @@ export class Timer extends Components.Component {
 
     _time_formatted__get(time) {
         time = new Date(time);
-        let milliseconds = Math.trunc(time.getMilliseconds() / 10);
         let minutes = time.getMinutes() > 9 ? time.getMinutes() : `0${time.getMinutes()}`;
         let seconds = time.getSeconds() > 9 ? time.getSeconds() : `0${time.getSeconds()}`;
-        milliseconds = milliseconds > 9 ? milliseconds : `0${milliseconds}`;
+        let hours = time.getHours() > 9 ? time.getHours() : `0${time.getHours()}`;
 
-        return `${minutes}:${seconds}:${milliseconds}`;
+        return `${hours}:${minutes}:${seconds}`;
     }
 
 

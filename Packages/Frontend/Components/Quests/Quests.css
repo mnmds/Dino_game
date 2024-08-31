@@ -36,4 +36,8 @@
         text-align: center;
         justify-align: center;
     }
+
+    .timer {
+        height: 6dvh;
+    }
 }

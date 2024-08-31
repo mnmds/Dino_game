@@ -35,7 +35,7 @@ export class Quests extends Components.Component {
             this._item.task = this._model_item.name;
             // this._item.image = this._model_item.image;
             this._item.value = this._model_item.description;
-            // this._item.status = this._model_item.status;
+            this._item.status = 'sale';
             this._item.link = this._model_item.url;
         }
 
@@ -83,17 +83,34 @@ export class Quests extends Components.Component {
             },
             {
                 name: 'Перейти к отметкам на сайте',
-                description: '',
+                description: '1000',
                 status: 'selected',
                 url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             },
         ]);
     }
 
+    millisSinceStartOfDay() {
+      let now = new Date();
+      let startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      return now.getTime() - startOfDay.getTime();
+    }
+
     async refresh() {
-        let time = await this._rest.call('time_distribution');
-        time = 1e3;
-        this._elements.timer.duration = time;
-        this._elements.timer.start();
+        let time = this.millisSinceStartOfDay();
+        let current_time = new Date();
+
+        if (current_time.getHours() == 22) {
+            this._elements.timer.style.display = 'none';
+            this._elements.timer_button.style.background = 'var(--Theme__block__background_accent)';
+        }
+        // else if (current_time.getHours() < 17) {
+        //     this._elements.timer.duration = 14 * 60 * 60 * 1000 - time;
+        //     this._elements.timer.start();
+        // }
+        // else if (current_time.getHours() > 17) {
+        //     this._elements.timer.duration = 38 * 60 * 60 * 1000 - time;
+        //     this._elements.timer.start();
+        // }
     }
 }

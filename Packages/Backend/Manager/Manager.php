@@ -193,16 +193,16 @@ class Manager extends \Apache\RestServer {
 
         if ($status != 'member' || $status != 'administrator' || $status != 'creator') return;
 
-        // $request_data = [
-        //     'tg_id' => $tg_id,
-        // ];
-        // $user_quests = $this->_db->fetch('user_quests__get', $request_data);
+        $request_data = [
+            'tg_id' => $tg_id,
+        ];
+        $user_quests = $this->_db->fetch('user_quests__get', $request_data);
 
-        // if (!$user_quests) {
-        //     $this->_db->execute('user_quests__add', $request_data);
-        // }
+        if (!$user_quests) {
+            $this->_db->execute('user_quests__add', $request_data);
+        }
 
-        // $this->_db->execute('quest_tg__solve', $request_data);
+        $this->_db->execute('quest_tg__solve', $request_data);
 
         return true;
     }
