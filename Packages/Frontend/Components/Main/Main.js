@@ -62,6 +62,7 @@ export class Main extends Components.Component {
     set level_value(level_value) {
         this._attribute__set('level_value', level_value);
         this._elements.level_value.textContent = `${level_value} уровень`;
+        this._elements.income_value.textContent = level_value;
         this._elements.max_energy.textContent = level_value * 1000;
     }
 
