@@ -125,10 +125,11 @@ export class Referrals extends Components.Component {
         this._date = event.target.dataset.type;
     }
 
-    _sort_buttons_referrals__on_pointerDown(event) {
+    async _sort_buttons_referrals__on_pointerDown(event) {
         if (!event.target.dataset.type) return;
 
         this._score = event.target.dataset.type;
+        let {result} = await this._rest.call('referrals__get', Units.Telegram.user?.id, this._date, this._score)
     }
 
 
@@ -139,9 +140,9 @@ export class Referrals extends Components.Component {
     //     this._date = event.target.dataset.type;
     // }
 
-    async _referral_button__on_pointerDown() {
-        await this._rest.call('referrals__get', Units.Telegram.user.id);
-    }
+    // async _referral_button__on_pointerDown() {
+    //     await this._rest.call('referrals__get', Units.Telegram.user.id);
+    // }
 
 
     data_insert() {

@@ -207,13 +207,29 @@ class Manager extends \Apache\RestServer {
         return true;
     }
 
-    public function referrals__get($tg_id) {
+    public function referrals__get($tg_id, $interval, $type) {
         $request_data = [
             'tg_id' => $tg_id,
         ];
-        $products = $this->_db->fetch('referrals__get', $request_data);
+        $result = [];
 
-        return $products;
+        if ($type == 'referral') {
+            if ($interval == 'this_week') {
+                $result = $this->_db->fetch('referrals__get_this_week', $request_data);
+            }
+            else if ($interval == 'last_week') {
+                $result = $this->_db->fetch('referrals__get_prew_week', $request_data);
+            }
+            else if ($interval == 'this_week') {
+                $result = $this->_db->fetch('referrals__get_all_time', $request_data);
+            }
+
+        }
+        else {
+            $result = $this->_db->fetch('income__get', $request_data);
+        }
+
+        return $result;
     }
 
     public function user_get($tg_id) {
