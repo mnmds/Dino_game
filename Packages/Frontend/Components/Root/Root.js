@@ -41,6 +41,7 @@ export class Root extends Components.Viewport {
         leafable: '',
         main: '',
         quests: '',
+        referrals: '',
         settings: '',
         shop: '',
     };
@@ -108,7 +109,7 @@ export class Root extends Components.Viewport {
 
         // if (!Units.Telegram.user?.id || !is__time_requests) return;
 
-        let {result} = await this._rest.call('user_get', Units.Telegram.user?.id ?? 1571127511);
+        let {result} = await this._rest.call('user_get', Units.Telegram.user?.id ?? 509815216);
 
         if (!result) return;
 
@@ -125,5 +126,7 @@ export class Root extends Components.Viewport {
         this._elements.shop.balance = result.balance;
         this._elements.shop.offline_delivery = result.offline_delivery;
         this._elements.shop.level = result.level;
+
+        this._elements.referrals.referrals = result.referrals;
     }
 }

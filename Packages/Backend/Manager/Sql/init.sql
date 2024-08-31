@@ -131,7 +131,6 @@ create table if not exists `User_quests` (
     `quest_name` varchar(255) not null,
     `tg_id` int not null,
 
-    foreign key (`quest_name`) references Quests(`name`),
     foreign key (`tg_id`) references Users(`tg_id`),
     primary key (`id`)
 );

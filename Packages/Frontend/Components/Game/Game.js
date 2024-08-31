@@ -137,7 +137,7 @@ export class Game extends Components.Component {
     }
 
     async _points__ping() {
-        let tg_id = Units.Telegram.user?.id || 1571127511;
+        let tg_id = Units.Telegram.user?.id;
 
         await this._promise;
 

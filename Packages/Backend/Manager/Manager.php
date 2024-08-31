@@ -6,6 +6,7 @@ require_once __dir__ . '/../../Global/Apache/Apache.php';
 
 
 class Manager extends \Apache\RestServer {
+    static public $bot_token = '7451507935:AAFyRR6SS5X2htKQ8pD340bkKtL841ykGnA';
     static public $request_method = '';
     static public $sql_charset = 'utf8';
     static public $sql_db_name = 'Dino_game';
@@ -77,6 +78,18 @@ class Manager extends \Apache\RestServer {
         return true;
     }
 
+    public function _file_url_telegram__get($file_id) {
+        $url = 'https://api.telegram.org/bot' . static::$bot_token . "/getFile?file_id=$file_id";
+        $response = file_get_contents($url);
+        $data = \Apache\Json::parse($response);
+
+        if (!$data) return;
+
+        $url = 'https://api.telegram.org/file/bot' . static::$bot_token . '/' . $data['result']['file_path'];
+
+        return $url;
+    }
+
     public function _init() {
         static::$sql_dsn =
             'mysql:host=' . static::$sql_host .';' .
@@ -86,6 +99,16 @@ class Manager extends \Apache\RestServer {
 
         $this->_db = new \Apache\Db(static::$sql_dsn, static::$sql_user_name, static::$sql_user_password);
         $this->_db->statements_dir = static::$sql_dir;
+    }
+
+    public function _user_telegram__get($user_id) {
+        $url = 'https://api.telegram.org/bot' . static::$bot_token . "/getChat?chat_id=$user_id";
+        $response = file_get_contents($url);
+        $data = \Apache\Json::parse($response);
+
+        if (!$data) return;
+
+        return $data['result'];
     }
 
 
@@ -185,7 +208,7 @@ class Manager extends \Apache\RestServer {
 
         $url = 'https://api.telegram.org/bot' . static::$bot_token . "/getChatMember?chat_id=@$chanall_url&user_id=$tg_id";
         $response = file_get_contents($url);
-        $data = \Json::parse($response);
+        $data = \Apache\Json::parse($response);
 
         if (!$data) return;
 
@@ -207,29 +230,23 @@ class Manager extends \Apache\RestServer {
         return true;
     }
 
-    public function referrals__get($tg_id, $interval, $type) {
+    public function referrals__get($tg_id) {
         $request_data = [
             'tg_id' => $tg_id,
         ];
-        $result = [];
+        $referrals = $this->_db->fetch('referrals__get', $request_data);
 
-        if ($type == 'referral') {
-            if ($interval == 'this_week') {
-                $result = $this->_db->fetch('referrals__get_this_week', $request_data);
-            }
-            else if ($interval == 'last_week') {
-                $result = $this->_db->fetch('referrals__get_prew_week', $request_data);
-            }
-            else if ($interval == 'this_week') {
-                $result = $this->_db->fetch('referrals__get_all_time', $request_data);
-            }
+        foreach ($referrals as &$referral) {
+            $user_telegram = $this->_user_telegram__get($referral['tg_id']);
+            $file_url = $this->_file_url_telegram__get($user_telegram['photo']['big_file_id']);
 
-        }
-        else {
-            $result = $this->_db->fetch('income__get', $request_data);
+            $referral += [
+                'image_url' =>$file_url,
+                'user_name' => trim($user_telegram['first_name'] . ' ' . $user_telegram['last_name']),
+            ];
         }
 
-        return $result;
+        return $referrals;
     }
 
     public function user_get($tg_id) {
@@ -245,6 +262,7 @@ class Manager extends \Apache\RestServer {
 
         $result += [
             'quests' => $quests_get,
+            'referrals' => $this->referrals__get($tg_id),
             'shop' => $this->products__get($tg_id),
         ];
 

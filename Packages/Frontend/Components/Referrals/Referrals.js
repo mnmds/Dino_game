@@ -82,6 +82,9 @@ export class Referrals extends Components.Component {
     _translator = new Replacement();
 
 
+    referrals = [];
+
+
     get _date() {
         return this._attributes._date;
     }

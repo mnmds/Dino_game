@@ -106,7 +106,7 @@ export class Shop extends Components.Component {
 
 
         data__apply() {
-            this._hero_image.src = this._model_item.resource_url;
+            this._hero_image.src = `./Storage/Images/Heroes/${this._model_item.name}.png`;
             this._hero_name.textContent = this._model_item.name;
             this._hero_status.meta_data = {product_name: this._model_item.name};
             this._hero_status.statuses_values.sale.text = this._model_item.price || 0;
