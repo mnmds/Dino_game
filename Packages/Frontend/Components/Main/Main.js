@@ -16,6 +16,7 @@ export class Main extends Components.Component {
 
         balance: 0,
         energy: 0,
+        hero: 'Dino',
         language: 'ru',
         level_value: 1,
         time: 0,
@@ -71,6 +72,7 @@ export class Main extends Components.Component {
         this._elements.level_value.textContent = level_value;
         this._elements.income_value.textContent = level_value;
         this._elements.max_energy.textContent = level_value * 1000;
+        this._elements.game.level = level_value;
     }
 
     get balance() {
@@ -104,6 +106,14 @@ export class Main extends Components.Component {
         this._attribute__set('language', language);
         this._translator.replace_object = language;
         this._translator.replace(this._elements.root);
+    }
+
+    get hero() {
+        return this._attributes.hero;
+    }
+    set hero(hero) {
+        this._attribute__set('hero', hero);
+        this._elements.game.hero = hero;
     }
 
 

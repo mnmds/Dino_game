@@ -1,5 +1,6 @@
 import {Root} from '../Components/Root/Root.js';
 import {Components} from '../../Global/Frontend/Frontend.js';
+import {Units} from '../../Global/Frontend/Frontend.js';
 
 Components.Component.init({
     styleSheets_descriptors: {
@@ -10,8 +11,8 @@ Components.Component.init({
 // import 'https://telegram.org/js/telegram-web-app.js';
 
 
-// window.addEventListener('DOMContentLoaded', () => {
-//     Telegram.app__init();
+window.addEventListener('DOMContentLoaded', () => {
+    Units.Telegram.app__init();
 //     // window.Telegram.WebApp.expand();
 //     // window.Telegram.WebApp.ready();
-// });
+});

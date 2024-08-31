@@ -87,7 +87,7 @@ export class Game extends Components.Component {
     }
 
     _handshaking__on_close() {
-        // this._handshaking__open();
+        this._handshaking__open();
     }
 
     _handshaking__on_message(event) {

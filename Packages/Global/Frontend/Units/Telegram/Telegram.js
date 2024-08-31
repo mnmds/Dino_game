@@ -9,6 +9,7 @@ export class Telegram {
     static _telegram = window.Telegram;
     static _webApp = this._telegram.WebApp;
 
+    // static user = {id: 1571127511};
     static user = this._webApp.initDataUnsafe.user;
 
 

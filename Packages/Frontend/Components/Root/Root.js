@@ -83,8 +83,8 @@ export class Root extends Components.Viewport {
     }
 
 
-    _init() {
-        this.user_get();
+    async _init() {
+        await this.user_get();
     }
 
     _on__back_click() {
@@ -118,6 +118,7 @@ export class Root extends Components.Viewport {
         this._elements.main.level_value = result.level;
         this._elements.main.balance = result.balance;
         this._elements.main.energy = result.energy;
+        this._elements.main.hero = result.hero_name;
 
         this._elements.quests.data_insert(result.quests);
         this._elements.quests._elements.timer.start();

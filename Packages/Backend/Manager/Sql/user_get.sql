@@ -1,6 +1,7 @@
 select
     `Game`.`energy` as `energy`,
     `Users`.`balance` as `balance`,
+    `Users`.`hero_name` as `hero_name`,
     `Users`.`level` as `level`,
     `Users`.`offline_delivery` as `offline_delivery`
 from
