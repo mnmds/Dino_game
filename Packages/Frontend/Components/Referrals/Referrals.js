@@ -1,10 +1,9 @@
 import {Components} from '../../../Global/Frontend/Frontend.js';
+import {Units} from '../../../Global/Frontend/Frontend.js';
 
 import {Replacement} from '../../Units/Units.js';
-import {Units} from '../../../Global/Frontend/Frontend.js';
 import {ButtonBack} from '../ButtonBack/ButtonBack.js';
 import {Referral} from '../Referral/Referral.js';
-import {RestClient} from '../../../Global/Js/Js.js';
 
 
 export class Referrals extends Components.Component {
@@ -17,13 +16,14 @@ export class Referrals extends Components.Component {
 
     static _css_url = true;
     static _html_url = true;
+    static _key_parameter = 'referrals_count__this_week';
     static _url = import.meta.url;
 
     static _attributes = {
         ...super._attributes,
 
         _date: {
-            default: 'all_time',
+            default: 'this_week',
             persistent: true,
         },
         _score: {
@@ -59,13 +59,15 @@ export class Referrals extends Components.Component {
         },
     };
 
+
+    static referrals = [];
+
     static Repeater_manager = class extends Components.Repeater.Manager {
         data__apply() {
-            this._item.date = this._model_item.user_date;
             this._item.image_url = this._model_item.image_url;
-            this._item.index = this._model_item.user_index;
+            this._item.index = Referrals.referrals.indexOf(this._model_item) + 1;
             this._item.name = this._model_item.user_name;
-            this._item.score = this._model_item.user_score;
+            this._item.score = this._model_item[Referrals._key_parameter];
         }
 
         init() {
@@ -80,9 +82,6 @@ export class Referrals extends Components.Component {
 
 
     _translator = new Replacement();
-
-
-    referrals = [];
 
 
     get _date() {
@@ -112,85 +111,52 @@ export class Referrals extends Components.Component {
 
     _init() {
         this._elements.repeater.Manager = this.constructor.Repeater_manager;
-        this.data_insert();
         this.props__sync();
     }
 
     _repeater__on_add() {
-        this.refresh();
+        this._elements.display.refresh();
     }
 
-    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+    _referrals__sort() {
+        switch (this._date) {
+            case 'this_week':
+                this.constructor._key_parameter = this._score == 'referral' ? 'referrals_count__this_week' : 'week_balance';
+                break;
+            case 'last_week':
+                this.constructor._key_parameter = this._score == 'referral' ? 'referrals_count__last_week' : 'week_prev_balance';
+                break;
+            case 'all_time':
+                this.constructor._key_parameter = this._score == 'referral' ? 'referrals_count__all' : 'balance';
+                break;
+        }
+
+        this.constructor.referrals.sort((item_prev, item_next) => item_next[this.constructor._key_parameter] - item_prev[this.constructor._key_parameter]);
+    }
 
     _sort_buttons_date__on_pointerDown(event) {
         if (!event.target.dataset.type) return;
 
         this._date = event.target.dataset.type;
+        this.refresh();
     }
 
-    async _sort_buttons_referrals__on_pointerDown(event) {
+    _sort_buttons_referrals__on_pointerDown(event) {
         if (!event.target.dataset.type) return;
 
         this._score = event.target.dataset.type;
-        let {result} = await this._rest.call('referrals__get', Units.Telegram.user?.id, this._date, this._score)
+        this.refresh();
     }
 
 
-
-    // _date_buttons_referrals__on_pointerDown(event) {
-    //     if (!event.target.dataset.type) return;
-
-    //     this._date = event.target.dataset.type;
-    // }
-
-    // async _referral_button__on_pointerDown() {
-    //     await this._rest.call('referrals__get', Units.Telegram.user.id);
-    // }
-
-
-    data_insert() {
+    data__insert(referrals) {
         this._elements.repeater.model.clear();
-        this._elements.repeater.model.add([
-            {
-                user_index: '123',
-                image_url: '../referral/test_user_image.jpg',
-                user_name: 'us',
-                user_score: '232',
-            },
-            {
-                user_index: '123',
-                image_url: '../referral/test_user_image.jpg',
-                user_name: 'us',
-                user_score: '232',
-            },
-            {
-                user_index: '123',
-                image_url: '../referral/test_user_image.jpg',
-                user_name: 'us',
-                user_score: '232',
-            },
-            {
-                user_index: '123',
-                image_url: '../referral/test_user_image.jpg',
-                user_name: 'us',
-                user_score: '232',
-            },
-            {
-                user_index: '123',
-                image_url: '../referral/test_user_image.jpg',
-                user_name: 'us',
-                user_score: '232',
-            },
-            {
-                user_index: '123',
-                image_url: '../referral/test_user_image.jpg',
-                user_name: 'us',
-                user_score: '232',
-            },
-        ]);
+        this._elements.repeater.model.add(referrals);
     }
 
     refresh() {
         this._elements.display.refresh();
+        this._referrals__sort();
+        this.data__insert(this.constructor.referrals);
     }
 }

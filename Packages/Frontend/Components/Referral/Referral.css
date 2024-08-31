@@ -30,6 +30,7 @@
         background: gray;
         border-radius: 15px;
         object-fit: cover;
+        height: 50px;
         /* height: 80%; */
     }
 

@@ -127,6 +127,7 @@ export class Root extends Components.Viewport {
         this._elements.shop.offline_delivery = result.offline_delivery;
         this._elements.shop.level = result.level;
 
-        this._elements.referrals.referrals = result.referrals;
+        this._elements.referrals.constructor.referrals = result.referrals;
+        this._elements.referrals.refresh();
     }
 }
