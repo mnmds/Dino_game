@@ -107,9 +107,9 @@ export class Root extends Components.Viewport {
     async user_get() {
         let is__time_requests = this._time_last_request ? (Date.now() - this._time_last_request) > this.limit_time__requests : true;
 
-        // if (!Units.Telegram.user?.id || !is__time_requests) return;
+        if (!Units.Telegram.user?.id || !is__time_requests) return;
 
-        let {result} = await this._rest.call('user_get', Units.Telegram.user?.id ?? 509815216);
+        let {result} = await this._rest.call('user_get', Units.Telegram.user?.id);
 
         if (!result) return;
 
