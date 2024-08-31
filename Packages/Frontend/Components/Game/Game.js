@@ -91,7 +91,7 @@ export class Game extends Components.Component {
     }
 
     _handshaking__on_message(event) {
-        let {result} = event.data;
+        let {result} = JSON.parse(event.data);
         this._refresh(result);
     }
 

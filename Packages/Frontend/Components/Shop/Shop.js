@@ -18,12 +18,12 @@ export class Shop extends Components.Component {
     static _attributes = {
         ...super._attributes,
 
-        balance: 10000,
+        balance: 0,
         language: {
             default: 'ru',
             persistent: true,
         },
-        level: 3,
+        level: 1,
         offline_delivery: false,
     };
 

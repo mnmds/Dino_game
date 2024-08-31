@@ -66,15 +66,12 @@ class Game_manager(WebSocketServer):
             self._clients__data[tg_id]['taps'] += 1
 
         if (self._timeStamp - self._clients__data[tg_id]['energy_date_refresh']) >= self._energy_refresh__interval:
-            # pass
             self._energy__refresh(tg_id)
 
         if self._clients__data[tg_id]['offline_delivery'] and ((self._timeStamp - self._clients__data[tg_id]['energy_date_collect']) >= self._auto_profit__interval):
-            # pass
             self._energy_auto__refresh(tg_id)
 
         if (self._timeStamp - self._clients__data[tg_id]['date_refresh']) >= self._user_refresh__interval:
-            # pass
             self._user__save(tg_id)
             self._user__get(tg_id)
 

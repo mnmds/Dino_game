@@ -239,7 +239,8 @@ class Manager extends \Apache\RestServer {
             'tg_id' => $tg_id,
         ];
 
-        $result = $this->_db->fetch('user_get', $request_data);
+        $result = [];
+        $result = $this->_db->fetch('user_get', $request_data)[0];
         $quests_get = $this->_db->fetch('quests_get');
 
         $result += [

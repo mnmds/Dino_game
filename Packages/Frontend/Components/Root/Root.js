@@ -27,13 +27,22 @@ export class Root extends Components.Viewport {
 
     static _attributes = {
         ...super._attributes,
+
+        _time_last_request: 0,
+
+        limit_time__requests: {
+            default: 6e4,
+            persistent: true,
+            range: [0, Infinity],
+        },
     };
 
     static _elements = {
         leafable: '',
-        settings: '',
         main: '',
         quests: '',
+        settings: '',
+        shop: '',
     };
 
     static _eventListeners_elements = {
@@ -55,6 +64,22 @@ export class Root extends Components.Viewport {
     }
 
     _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+
+
+    get _time_last_request() {
+        return this._attributes._time_last_request;
+    }
+    set _time_last_request(time_last_request) {
+        this._attribute__set('_time_last_request', time_last_request);
+    }
+
+
+    get limit_time__requests() {
+        return this._attributes.limit_time__requests;
+    }
+    set limit_time__requests(limit_time__requests) {
+        this._attribute__set('limit_time__requests', limit_time__requests);
+    }
 
 
     _init() {
@@ -79,11 +104,15 @@ export class Root extends Components.Viewport {
     }
 
     async user_get() {
-        if (!Units.Telegram.user?.id) return;
+        let is__time_requests = this._time_last_request ? (Date.now() - this._time_last_request) > this.limit_time__requests : true;
 
-        let {result} = await this._rest.call('user_get', Units.Telegram.user.id);
+        // if (!Units.Telegram.user?.id || !is__time_requests) return;
+
+        let {result} = await this._rest.call('user_get', Units.Telegram.user?.id ?? 1571127511);
 
         if (!result) return;
+
+        this._time_last_request = Date.now();
 
         this._elements.main.level_value = result.level;
         this._elements.main.balance = result.balance;
@@ -93,5 +122,8 @@ export class Root extends Components.Viewport {
         this._elements.quests._elements.timer.start();
 
         this._elements.shop.data__insert(result.shop);
+        this._elements.shop.balance = result.balance;
+        this._elements.shop.offline_delivery = result.offline_delivery;
+        this._elements.shop.level = result.level;
     }
 }

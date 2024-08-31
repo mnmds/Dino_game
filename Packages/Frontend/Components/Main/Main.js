@@ -13,36 +13,41 @@ export class Main extends Components.Component {
 
     static _attributes = {
         ...super._attributes,
-        language: 'ru',
-        level_value: 1,
+
         balance: 0,
         energy: 0,
+        language: 'ru',
+        level_value: 1,
         time: 0,
     };
 
     static _elements = {
+        balance: '',
+        energy: '',
+        game: '',
+        income_value: '',
+        level_value: '',
+        max_energy: '',
         quests: '',
         referrals: '',
         root: '',
         settings: '',
         shop: '',
-        income_value: '',
-        level_value: '',
-        balance: '',
-        energy: '',
-        max_energy: '',
         timer: '',
     };
 
     static _eventListeners_elements = {
-        settings: {
-            pointerdown: '_settings__on_pointerDown',
+        game: {
+            data__ping: '_game__on_dataPing',
+        },
+        quests: {
+            pointerdown: '_quests__on_pointerDown',
         },
         referrals: {
             pointerdown: '_referrals__on_pointerDown',
         },
-        quests: {
-            pointerdown: '_quests__on_pointerDown',
+        settings: {
+            pointerdown: '_settings__on_pointerDown',
         },
         shop: {
             pointerdown: '_shop__on_pointerDown',
@@ -53,6 +58,10 @@ export class Main extends Components.Component {
     static {
         this.init();
     }
+
+
+    _profit_temp = 0;
+
 
     get level_value() {
         return this._attributes.level_value;
@@ -101,6 +110,12 @@ export class Main extends Components.Component {
     _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager.php', location));
     _translator = new Replacement();
 
+
+    _game__on_dataPing(event) {
+        this.balance += event.detail.profit - this._profit_temp;
+        this.energy = Math.trunc(event.detail.energy);
+        this._profit_temp = event.detail.profit;
+    }
 
     _init() {
         this.props__sync();
