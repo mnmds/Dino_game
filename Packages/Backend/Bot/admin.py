@@ -2,8 +2,6 @@ import os
 import shutil
 import zipfile
 import re
-import sys
-
 
 from aiogram.filters import BaseFilter
 from aiogram import types, Bot
@@ -11,10 +9,6 @@ from aiogram.fsm.state import StatesGroup, State
 
 from config import TG_BOT_TOKEN
 from db import DataBase
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname('admin.py'), '../Game_manager/')))
-from Game_manager import Game_manager
-
 
 db = DataBase()
 bot = Bot(token=TG_BOT_TOKEN)
@@ -194,14 +188,14 @@ class Admin:
                 exists = any(quest['name'] == text[0] for quest in db.quests__get())
 
                 if not exists:
-                    if len(text) == 3 and self.isdigit(text[1]) and self.is_valid_url(text[2]):
+                    if len(text) == 3 and self.is_digit(text[1]) and self.is_valid_url(text[2]):
                         db.quests__add_quest(text[0], text[1], text[2])
                         await message.answer(
                             text=f"Задание '{text[0]}' добавлено"
                         )
-                    elif not self.isdigit(text[1]):
+                    elif not self.is_digit(text[1]):
                         await message.answer(
-                            text=f'Цена должна быть числом'
+                            text=f'Награда должна быть числом'
                         )
                     elif not self.is_valid_url(text[2]):
                         await message.answer(
@@ -259,25 +253,28 @@ class Admin:
         )
 
     async def products_remove_files(self, file_name):
-        # video_path = os.path.join('video', file_name)
-        # images_path = os.path.join('images', f'{file_name}.png')
+        video_path = os.path.join('video', file_name)
+        images_path = os.path.join('images', f'{file_name}.png')
 
         # Удаление папки
-        if os.path.exists(f'../../../Storage/Videos/Game/{file_name}'):
-            shutil.rmtree(f'../../../Storage/Videos/Game/{file_name}')
+        if os.path.exists(video_path):
+            shutil.rmtree(video_path)
             # await message.answer(f"Папка {file_name} удалена")
 
         # Удаление файла
-        if os.path.exists(f'../../../Storage/Images/Heroes/{file_name}.png'):
-            os.remove(f'../../../Storage/Images/Heroes/{file_name}.png')
+        if os.path.exists(images_path):
+            os.remove(images_path)
             # await message.answer(f"Файл {file_name} удален")
 
     async def archive_remove_files(self):
-        archive_path = os.path.join('extracted_files')
+        extracted_files_path = os.path.join('extracted_files')
+        archives_path = os.path.join('archives')
 
         # Удаление папки
-        if os.path.exists(archive_path):
-            shutil.rmtree(archive_path)
+        if os.path.exists(extracted_files_path):
+            shutil.rmtree(extracted_files_path)
+        if os.path.exists(archives_path):
+            shutil.rmtree(archives_path)
 
     async def products_add(self, message: types.Message):
         await message.edit_text(
@@ -286,37 +283,38 @@ class Admin:
         )
 
     async def products_add_file(self, message: types.Message):
-        file_id = message.document.file_id
-        file_name = message.document.file_name
-        file = await bot.get_file(file_id)
-        hero_name = file_name.replace('.zip', '')
-
-        # Скачиваем архив
-        os.makedirs('archives', exist_ok=True)
-        await bot.download_file(file.file_path, f'./archives/{file_name}')
-
         try:
+            file_id = message.document.file_id
+            file_name = message.document.file_name
+            file = await bot.get_file(file_id)
+            hero_name = file_name.replace('.zip', '')
+
+            # Скачиваем архив
+            os.makedirs('archives', exist_ok=True)
+            await bot.download_file(file.file_path, f'./archives/{file_name}')
+
             # Разархивируем
             with zipfile.ZipFile(f"./archives/{file_name}", 'r') as zip_ref:
                 zip_ref.extractall('extracted_files')
-                await self.archive_remove_files()
 
             # Проверяем файлы
             for file in os.listdir('extracted_files'):
                 if file.endswith('.png'):
                     # image_name = file.replace('.png', '')
-                    # os.makedirs(f'../../../Storage/Images/Heroes/{file_name}.png', exist_ok=True)
-                    os.rename(f'extracted_files/{file}', f'../../../Storage/Images/Heroes/{file_name}.png')
+                    os.makedirs('images', exist_ok=True)
+                    os.rename(f'extracted_files/{file}', f'images/{hero_name}.png')
                 elif file.endswith('.gif'):
                     # image_name = file.replace('.webm', '.png')
-                    os.makedirs(f'../../../Storage/Videos/Game/{hero_name}', exist_ok=True)
-                    os.rename(f'extracted_files/{file}', f'../../../Storage/Videos/Game/{hero_name}/{file}')
+                    os.makedirs(f'video/{hero_name}', exist_ok=True)
+                    os.rename(f'extracфкted_files/{file}', f'video/{hero_name}/{file}')
                 else:
                     await message.answer(f"Некорректый формат файла {file}")
+                    await self.archive_remove_files()
                     await self.products_remove_files(hero_name)
                     return
 
             await message.reply("Файлы успешно обработаны!")
+            await self.archive_remove_files()
 
             await message.answer(
                 f"Теперь отправьте стоимость персонажа",
@@ -328,6 +326,8 @@ class Admin:
             await message.reply(f"Файл {file} уже есть")
             await self.archive_remove_files()
             return
+        except AttributeError:
+            await message.answer(f"Некорректый формат ввода")
 
     async def products_add_state(self, message: types.Message, hero_name):
         text = message.text
@@ -356,19 +356,24 @@ class Admin:
         )
 
     async def products_remove_state(self, message: types.Message):
-        name = message.text
-        exists = any(quest['name'] == name for quest in db.products__get())
+        try:
+            name = message.text
+            exists = any(quest['name'] == name for quest in db.products__get())
 
-        await self.products_remove_files(name, message)
+            await self.products_remove_files(name, message)
 
-        if exists:
-            db.table__remove_for_name('Products', name)
+            if exists:
+                db.table__remove_for_name('Products', name)
+                await message.answer(
+                    text=f"Продукт удалён"
+                )
+            else:
+                await message.answer(
+                    text=f"Имя '{name}' не найдено в списке"
+                )
+        except TypeError:
             await message.answer(
-                text=f"Продукт удалён"
-            )
-        else:
-            await message.answer(
-                text=f"Имя '{name}' не найдено в списке"
+                text=f"Неправельный формат ввода"
             )
 
     async def newsletters(self, message: types.Message):
@@ -379,7 +384,7 @@ class Admin:
 
     async def newsletters_state_link(self, message: types.Message):
         await message.edit_text(
-            f"Отправьте ссылку на источник",
+            f"Отправьте ссылку на источник в формате: текст|ссылка",
             reply_markup=self.cancel_keybord()
         )
 
@@ -389,11 +394,11 @@ class Admin:
             reply_markup=self.cancel_keybord()
         )
 
-    async def newsletters_state(self, message: types.Message, link_newsletters):
+    async def newsletters_state(self, message: types.Message, text_newsletters, link_newsletters):
         users = db.users__get_all()
         buttons = [
             [
-                types.InlineKeyboardButton(text="ПЕРЕХОДИ В ИСТОЧНИК!!!", url=link_newsletters)
+                types.InlineKeyboardButton(text=str(text_newsletters), url=link_newsletters)
             ]
         ]
 
@@ -502,8 +507,13 @@ class Admin:
         result = []
         users_for_date = {'0': db.users__get_col_for_date()['col'], '1': db.users__get_col_for_date(1)['col'],
                           '7': db.users__get_col_for_date(7)['col']}
-        online = Game_manager.clients_count__get()
+        users_top = db.users__get_top()
+        online = 0
+        users_top_text = ''
         users_for_level = dict()
+
+        for user in users_top:
+            users_top_text += f"{user['tg_id']} - {user['balance']}\n"
 
         for i in range(1, max_level + 1):
             users_for_level[str(i)] = db.users__get_col_for_level(i)['col']
@@ -522,7 +532,10 @@ class Admin:
             f"\nПользователей онлайн: {online}"
             f"\n"
             f"\nПользователей по уровням: "
-            f"\n{formatted_string}",
+            f"\n{formatted_string}"
+            f"\n"
+            f"\nТоп игроков (телеграмм id - баланс):"
+            f"\n{users_top_text}",
             reply_markup=self.statistics_get_keyboard()
         )
 

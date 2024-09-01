@@ -1,14 +1,15 @@
 import asyncio
 import logging
 import os
+import time
 import zipfile
+from datetime import datetime
 
 from aiogram import Bot, Dispatcher, types, F, Router
 from aiogram.enums import ParseMode
-from aiogram.filters import StateFilter
 from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile, WebAppInfo
 
 from db import DataBase
 from config import TG_BOT_TOKEN, ADMINS
@@ -31,12 +32,56 @@ link_newsletters = ''
 hero_name = ''
 
 
+# async def scheduler(message):
+#     while True:
+#         # print(datetime.now().weekday())
+#         now = datetime.now()
+#         # Проверяем, если сегодня понедельник
+#         if now.weekday() == 6:  # 0 - понедельник
+#             print(123)
+#             # await message.answer(f"{now}")
+#         #     # Проверяем, если время 10:00
+#         #     if now.hour == 0 and now.minute == 5 and now.second == 0:
+#         #         tg_ids = [item['tg_id'] for item in db.users__get_top()]
+#         #         for tg_id in tg_ids:
+#         #             await bot.send_message(chat_id=tg_id, text="Сообщение отправлено!")
+#         #         # Ждем 60 секунд, чтобы избежать повторной отправки в течение минуты
+#         #         time.sleep(60)
+
+
+# @router.message(Command("time"))
+# async def cmd_admin(message: types.Message):
+#     # await message.answer("123")
+#     # await scheduler(message)
+#     tg_ids = [item['tg_id'] for item in db.users__get_top()]
+#     for tg_id in tg_ids:
+#         await bot.send_message(chat_id=tg_id, text="Сообщение отправлено!")
+
+async def auto_posting():
+    tg_ids = [item['tg_id'] for item in db.users__get_post()]
+    for tg_id in tg_ids:
+        await bot.send_message(chat_id=tg_id, text=f"Началась раздача на сайте")
+
+
+async def promocodes_posting():
+    tg_ids = [item['tg_id'] for item in db.users__get_top()]
+    codes = [item['name'] for item in db.promocodes__get()]
+    for content in zip(tg_ids, codes):
+        await bot.send_message(chat_id=content[0], text=f"Вот твой персональный промокод: {content[1]}")
+
+
+@router.message(Command('ref'))
+async def cmd_ref(message: types.Message):
+    await message.answer((f'🚀 Вот твоя персональная ссылка на приглашение: '
+                          f'https://t.me/testmmn_bot?start={message.from_user.id}'))
+
+
 def start__get_keyboard():
     buttons = [
         [
-            types.InlineKeyboardButton(text="Наш тг канал", url="https://t.me/genshindropcom"),
-            types.InlineKeyboardButton(text="Купить гемы", url="genshindrop.com"),
-            types.InlineKeyboardButton(text="Играть", callback_data="a")
+            types.InlineKeyboardButton(text="Наш тг канал", url="https://genshindrop.top/gdchannel"),
+            types.InlineKeyboardButton(text="Купить гемы", url="https://genshindrop.top/gdshop"),
+            types.InlineKeyboardButton(text="Играть", web_app=WebAppInfo(url=f'https://mnmds.github.io/Dino_game/'))
         ],
     ]
     return types.InlineKeyboardMarkup(inline_keyboard=buttons)
@@ -44,7 +89,6 @@ def start__get_keyboard():
 
 @router.message(Command('start'))
 async def process_start_command(message: types.Message, bot: Bot):
-    db.connection__open()
     tg_id = message.from_user.id
     user = db.user__get(tg_id)
     referral = db.referral__get(tg_id)
@@ -74,7 +118,6 @@ async def process_start_command(message: types.Message, bot: Bot):
 
     if len(message.text.split()) != 2:
         # await message.answer(f'Вы уже авторизованы')
-        db.connection__cose()
 
         return
 
@@ -94,8 +137,6 @@ async def process_start_command(message: types.Message, bot: Bot):
     #     await message.answer(f'Нельзя добавить самого себя')
     # elif referral:
     #     await message.answer(f'Вас уже добавил пользователь')
-
-    db.connection__cose()
 
 
 @router.message(IsAdmin(ADMINS), Command("admin"))
@@ -188,16 +229,24 @@ async def products_add_state(message: types.Message, state: FSMContext):
 async def newsletters_state(message: types.Message, state: FSMContext):
     global link_newsletters
     link_newsletters = message.text
-    await admin.newsletters_state_message(message)
-    await state.set_state(AdminStates.waiting__newsletters_link)
+    if '|' in link_newsletters:
+        link_newsletters = link_newsletters.split('|')
+        await admin.newsletters_state_message(message)
+        await state.set_state(AdminStates.waiting__newsletters_link)
+    else:
+        await message.answer("Некорректный формат")
+        await message.answer("Админ панель", reply_markup=admin.get_keyboard())
 
 
 @router.message(AdminStates.waiting__newsletters_link)
 async def newsletters_state(message: types.Message, state: FSMContext):
     global link_newsletters
-    await admin.newsletters_state(message, link_newsletters)
-    link_newsletters = ''
-    await state.clear()
+    if admin.is_valid_url(link_newsletters[1]):
+        await admin.newsletters_state(message, link_newsletters[0], link_newsletters[1])
+        link_newsletters = ''
+        await state.clear()
+    else:
+        await message.answer("Некорректная ссылка")
     await message.answer("Админ панель", reply_markup=admin.get_keyboard())
 
 

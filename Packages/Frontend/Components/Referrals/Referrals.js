@@ -32,7 +32,6 @@ export class Referrals extends Components.Component {
         },
 
         language: 'ru',
-        check: false,
     };
 
     static _elements = {
@@ -112,22 +111,10 @@ export class Referrals extends Components.Component {
         this._translator.replace(this._elements.root);
     }
 
-    get check() {
-        return this._attributes.check;
-    }
-    set check(check) {
-        this._attribute__set('check', check);
-    }
-
     _invite_button__on_pointerDown() {
-        navigator.clipboard.writeText(`https://t.me/testmmn_bot?start=${Units.Telegram.user?.id}`).then(() => {
-            this.check = true
-            setTimeout(() => this.check = false, 5000)
-            const message = `https://t.me/testmmn_bot?start=${Units.Telegram.user?.id}`;
-            const url = `https://t.me/share/url?url=${encodeURIComponent(message)}&text=ПОМОГИ ГДЗАВРИКУ ДОСТАВИТЬ ГЕМЫ!`;
-            // window.open(url, '_blank');
-            Units.Telegram.link_telegram__open(url)
-            });
+        let message = `https://t.me/gdtapbot?start=${Units.Telegram.user?.id}`;
+        let url = `https://t.me/share/url?url=${encodeURIComponent(message)}&text=ПОМОГИ ГДЗАВРИКУ ДОСТАВИТЬ ГЕМЫ!`;
+        Units.Telegram.link_telegram__open(url)
     }
 
 
