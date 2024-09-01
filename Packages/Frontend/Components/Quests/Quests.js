@@ -83,23 +83,53 @@ export class Quests extends Components.Component {
       return now.getTime() - startOfDay.getTime();
     }
 
-    async refresh() {
-        let time = this.millisSinceStartOfDay();
-        let current_time = new Date();
+    getTimeToNextSeventeenInMilliseconds() {
+      // Устанавливаем часовой пояс Москвы
+      const moscowTime = new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" });
 
-        if (current_time.getHours() == 17) {
+      // Получаем текущее время в московском часовом поясе
+      const now = new Date(moscowTime);
+
+      // Получаем часы и минуты текущего времени
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      // Проверяем, находимся ли мы между 17:00 и 18:00
+      if (hours === 14 && minutes >= 0 && minutes < 60) {
+        console.log("Сейчас между 17:00 и 18:00 по Московскому времени.");
+        return 0; // Если сейчас между 17:00 и 18:00, возвращаем 0 миллисекунд
+      } else {
+        // Создаем объект Date для следующих 17:00
+        const nextSeventeen = new Date(now);
+        nextSeventeen.setHours(14, 0, 0, 0); // Устанавливаем время на 17:00
+
+        // Если текущее время после 17:00, добавляем 1 день
+        if (hours > 14 || (hours === 14 && minutes >= 0)) {
+          nextSeventeen.setDate(nextSeventeen.getDate() + 1);
+        }
+
+        // Вычисляем время до следующих 17:00 в миллисекундах
+        const timeToNext = nextSeventeen.getTime() - now.getTime();
+
+        return timeToNext; // Возвращаем время в миллисекундах
+      }
+    }
+
+
+
+    async refresh() {
+            // Пример использования
+        const timeInMilliseconds = this.getTimeToNextSeventeenInMilliseconds();
+        console.log(`Время до следующих 17:00 по Московскому времени: ${timeInMilliseconds} миллисекунд.`);
+
+        if (timeInMilliseconds == 0) {
             this._elements.timer.style.display = 'none';
             this._elements.timer_button.style.background = 'var(--Theme__block__background_accent)';
             this._elements.present.style.display = 'block';
         }
-        else if (current_time.getHours() < 17) {
+        else {
             this._elements.present.style.display = 'none';
-            this._elements.timer.duration = 14 * 60 * 60 * 1000 - time;
-            this._elements.timer.start();
-        }
-        else if (current_time.getHours() > 17) {
-            this._elements.present.style.display = 'none';
-            this._elements.timer.duration = 38 * 60 * 60 * 1000 - time;
+            this._elements.timer.duration = timeInMilliseconds;
             this._elements.timer.start();
         }
     }
