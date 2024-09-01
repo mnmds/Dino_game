@@ -13,6 +13,8 @@ from db import DataBase
 db = DataBase()
 bot = Bot(token=TG_BOT_TOKEN)
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname('admin.py'), '../Game_manager')))
+from Game_manager import Game_manager
 
 class IsAdmin(BaseFilter):
     def __init__(self, admin_ids) -> None:
@@ -253,17 +255,17 @@ class Admin:
         )
 
     async def products_remove_files(self, file_name):
-        video_path = os.path.join('video', file_name)
-        images_path = os.path.join('images', f'{file_name}.png')
+        # video_path = os.path.join('video', file_name)
+        # images_path = os.path.join('images', f'{file_name}.png')
 
         # Удаление папки
-        if os.path.exists(video_path):
-            shutil.rmtree(video_path)
+        if os.path.exists(f"../../../Storage/Videos/Game/{file_name}/"):
+            shutil.rmtree(f"../../../Storage/Videos/Game/{file_name}/")
             # await message.answer(f"Папка {file_name} удалена")
 
         # Удаление файла
-        if os.path.exists(images_path):
-            os.remove(images_path)
+        if os.path.exists(f"../../../Storage/Images/Heroes/{file_name}.png"):
+            os.remove(f"../../../Storage/Images/Heroes/{file_name}.png")
             # await message.answer(f"Файл {file_name} удален")
 
     async def archive_remove_files(self):
@@ -301,12 +303,12 @@ class Admin:
             for file in os.listdir('extracted_files'):
                 if file.endswith('.png'):
                     # image_name = file.replace('.png', '')
-                    os.makedirs('images', exist_ok=True)
-                    os.rename(f'extracted_files/{file}', f'images/{hero_name}.png')
+                    os.makedirs('../../../Storage/Images/Heroes/', exist_ok=True)
+                    os.rename(f'extracted_files/{file}', f'../../../Storage/Images/Heroes/{hero_name}.png')
                 elif file.endswith('.gif'):
                     # image_name = file.replace('.webm', '.png')
-                    os.makedirs(f'video/{hero_name}', exist_ok=True)
-                    os.rename(f'extracфкted_files/{file}', f'video/{hero_name}/{file}')
+                    os.makedirs(f'../../../Storage/Videos/Game/{hero_name}', exist_ok=True)
+                    os.rename(f'extracted_files/{file}', f'../../../Storage/Videos/Game/{hero_name}/{file}')
                 else:
                     await message.answer(f"Некорректый формат файла {file}")
                     await self.archive_remove_files()
@@ -508,7 +510,7 @@ class Admin:
         users_for_date = {'0': db.users__get_col_for_date()['col'], '1': db.users__get_col_for_date(1)['col'],
                           '7': db.users__get_col_for_date(7)['col']}
         users_top = db.users__get_top()
-        online = 0
+        online = Game_manager.clients_count__get()
         users_top_text = ''
         users_for_level = dict()
 
