@@ -32,6 +32,7 @@ export class Referrals extends Components.Component {
         },
 
         language: 'ru',
+        check: false,
     };
 
     static _elements = {
@@ -41,6 +42,7 @@ export class Referrals extends Components.Component {
         sort_buttons_date: '',
         sort_buttons_referrals: '',
         referral_button: '',
+        invite_button: '',
     };
 
     static _eventListeners_elements = {
@@ -57,6 +59,9 @@ export class Referrals extends Components.Component {
         referral_button: {
             pointerdown: '_referral_button__on_pointerDown'
         },
+        invite_button: {
+            pointerdown: '_invite_button__on_pointerDown',
+        }
     };
 
 
@@ -105,6 +110,23 @@ export class Referrals extends Components.Component {
         this._attribute__set('language', language);
         this._translator.replace_object = language;
         this._translator.replace(this._elements.root);
+    }
+
+    get check() {
+        return this._attributes.check;
+    }
+    set check(check) {
+        this._attribute__set('check', check);
+    }
+
+    _invite_button__on_pointerDown() {
+        navigator.clipboard.writeText(`https://t.me/testmmn_bot?start=${Units.Telegram.user?.id}`).then(() => {
+            this.check = true
+            setTimeout(() => this.check = false, 5000)
+            const message = "Ваше сообщение для пересылки";
+            const url = `tg://msg?text=${encodeURIComponent(message)}`;
+            Units.Telegram.link_telegram__open(url)
+            });
     }
 
 

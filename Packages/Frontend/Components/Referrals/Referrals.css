@@ -51,6 +51,13 @@
         }
     }
 
+    .check {
+        visibility: hidden;
+        :host([check]) & {
+            visibility: visible;
+        }
+    }
+
     .progressBar_score {
         :host([_score='referral']) & {
             background: linear-gradient(to right, var(--Theme__block__background) 0% 50%, var(--Theme__block__background_light) 50%);
