@@ -13,12 +13,12 @@ import {Units} from '../../../Global/Frontend/Frontend.js';
 export class Root extends Components.Viewport {
     static _components = [
         Components.Leafable,
-        Game,
-        Main,
         Quests,
+        Game,
         Referrals,
         Settings,
         Shop,
+        Main,
     ];
 
     static _css_url = true;
@@ -92,6 +92,7 @@ export class Root extends Components.Viewport {
     }
 
     _on__menu_click(event) {
+        // console.log(event.detail.page);
         this.user_get();
         this._elements.leafable.index = event.detail.page;
         this._elements.leafable.children[event.detail.page].refresh?.();
@@ -114,20 +115,22 @@ export class Root extends Components.Viewport {
 
         this._time_last_request = Date.now();
 
+        this._elements.main.level_value = result.level;
         this._elements.main.balance = result.balance;
         this._elements.main.energy = result.energy;
         this._elements.main.hero = result.hero_name;
-        this._elements.main.level_value = result.level;
 
         this._elements.quests.data_insert(result.quests);
         this._elements.quests._elements.timer.start();
 
-        this._elements.shop.balance = result.balance;
-        this._elements.shop.level = result.level;
-        this._elements.shop.offline_delivery = result.offline_delivery;
         this._elements.shop.data__insert(result.shop);
+        this._elements.shop.balance = result.balance;
+        this._elements.shop.offline_delivery = result.offline_delivery;
+        this._elements.shop.level = result.level;
 
         this._elements.referrals.constructor.referrals = result.referrals;
         this._elements.referrals.refresh();
+
+        this._elements.settings.newsletter = result.newsletter;
     }
 }

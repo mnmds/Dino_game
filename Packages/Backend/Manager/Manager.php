@@ -353,6 +353,16 @@ class Manager extends \Apache\RestServer {
 
         return $result;
     }
+
+    public function newsletter_set($tg_id, $key) {
+        $request_data = [
+            'tg_id' => $tg_id,
+            'key' => (int)$key,
+        ];
+        $this->_db->execute('newsletter_data__set', $request_data);
+
+        return true;
+    }
 }
 
 

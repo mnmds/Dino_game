@@ -75,7 +75,6 @@ export class Referrals extends Components.Component {
         }
     };
 
-
     static {
         this.init();
     }
