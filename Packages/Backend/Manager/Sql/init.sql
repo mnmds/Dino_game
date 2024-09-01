@@ -23,7 +23,7 @@ create table if not exists `Products` (
 create table if not exists `Users` (
     `balance` int default 0,
     `date_registration` dateTime default current_timeStamp,
-    `hero_name` varchar(255),
+    `hero_name` varchar(255) default 'Dino',
     `id` int auto_increment,
     `level` int default 1,
     `newsletter` boolean default false,
