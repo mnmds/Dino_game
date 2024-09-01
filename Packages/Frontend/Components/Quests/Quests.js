@@ -95,7 +95,7 @@ export class Quests extends Components.Component {
       const minutes = now.getMinutes();
 
       // Проверяем, находимся ли мы между 17:00 и 18:00
-      if (hours === 14 && minutes >= 0 && minutes < 60) {
+      if (hours === 17 && minutes >= 0 && minutes < 60) {
         console.log("Сейчас между 17:00 и 18:00 по Московскому времени.");
         return 0; // Если сейчас между 17:00 и 18:00, возвращаем 0 миллисекунд
       } else {
