@@ -218,14 +218,99 @@ class Manager extends \Apache\RestServer {
 
         $request_data = [
             'tg_id' => $tg_id,
+            'quest_name' => $chanall_url,
         ];
         $user_quests = $this->_db->fetch('user_quests__get', $request_data);
 
         if (!$user_quests) {
+            $request_data = [
+                'quest_name' => $chanall_url,
+            ];
+            $value = $this->_db->fetch('quest_get', $request_data);
+            $request_data = [
+                'tg_id' => $tg_id,
+                'value' => $value,
+            ];
+            $this->_db->execute('quest__solve', $request_data);
+            $request_data = [
+                'tg_id' => $tg_id,
+                'quest_name' => $chanall_url,
+            ];
+        }
+
+        return true;
+    }
+
+    public function bonus_check($url, $tg_id) {
+        $request_data = [
+            'tg_id' => $tg_id,
+            'quest_name' => $url,
+        ];
+        $user_quests = $this->_db->fetch('user_quests__get', $request_data);
+
+        if (!$user_quests) {
+            $request_data = [
+                'quest_name' => $url,
+            ];
+            $value = $this->_db->fetch('quest_get', $request_data);
+            $request_data = [
+                'tg_id' => $tg_id,
+                'value' => intval($value),
+            ];
+            $this->_db->execute('quest__solve', $request_data);
+            $request_data = [
+                'tg_id' => $tg_id,
+                'quest_name' => $url,
+            ];
             $this->_db->execute('user_quests__add', $request_data);
         }
 
-        $this->_db->execute('quest_tg__solve', $request_data);
+        return true;
+    }
+
+    public function time_quest($tg_id) {
+        $request_data = [
+            'tg_id' => $tg_id,
+            'quest_name' => 'timeQuest',
+        ];
+        $user_quests = $this->_db->fetch('user_quests__get', $request_data);
+
+        if (!$user_quests) {
+            $request_data = [
+                'quest_name' => 'timeQuest',
+            ];
+            $request_data = [
+                'tg_id' => $tg_id,
+                'value' => 1000,
+            ];
+            $this->_db->execute('quest__solve', $request_data);
+            $request_data = [
+                'tg_id' => $tg_id,
+                'quest_name' => 'timeQuest',
+            ];
+            $this->_db->execute('user_quests__add', $request_data);
+        }
+        else {
+            $date = $user_quests[0]['date_quest'];
+            $date = new \DateTime($date);
+            $newDate = $date->format('Y-m-d');
+            date_default_timezone_set("Europe/Moscow");
+            $today = date('Y-m-d');
+            if ($newDate !== $today) {
+                return $today;
+            } else {
+                $request_data = [
+                    'tg_id' => $tg_id,
+                    'value' => 1000,
+                ];
+                $this->_db->execute('quest__solve', $request_data);
+                $request_data = [
+                    'tg_id' => $tg_id,
+                    'quest_name' => 'timeQuest',
+                ];
+                $this->_db->execute('user_quests__add', $request_data);
+            }
+        }
 
         return true;
     }

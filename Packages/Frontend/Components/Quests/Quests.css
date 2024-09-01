@@ -13,11 +13,13 @@
     }
 
     .timer_button {
+        display: flex;
         border-radius: var(--Theme__block_rounding);
         align-items: center;
         background: var(--Theme_button_back);
         padding: 5px;
         text-align: center;
+        justify-content: center;
     }
 
     .timer_task {

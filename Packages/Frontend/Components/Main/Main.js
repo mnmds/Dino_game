@@ -34,7 +34,11 @@ export class Main extends Components.Component {
         root: '',
         settings: '',
         shop: '',
-        timer: '',
+        income_value: '',
+        level_value: '',
+        balance: '',
+        energy: '',
+        max_energy: '',
     };
 
     static _eventListeners_elements = {
@@ -91,14 +95,7 @@ export class Main extends Components.Component {
         this._elements.energy.textContent = energy;
     }
 
-    get time() {
         return this._attributes.time;
-    }
-    set time(time) {
-        this._elements.timer.duration = time;
-        this._elements.timer.start();
-    }
-
     get language() {
         return this._attributes.language;
     }

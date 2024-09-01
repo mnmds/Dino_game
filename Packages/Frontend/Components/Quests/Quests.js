@@ -26,6 +26,7 @@ export class Quests extends Components.Component {
         repeater: '',
         timer: '',
         timer_button: '',
+        present: '',
     };
 
     static _eventListeners = {};
@@ -58,11 +59,10 @@ export class Quests extends Components.Component {
     _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
 
     async _reward__on_pointerDown() {
-        let time = await this._rest.call('time_distribution');
-        // time = 0;
+        let current_time = new Date();
 
-        if (!time) {
-            Units.Telegram.link_outside__open('https://www.youtube.com/watch?v=dk1xiiDpJ2M');
+        if (current_time.getHours() == 17) {
+            await this._rest.call('time_quest', Units.Telegram.user.id);
         }
     }
 
@@ -74,20 +74,7 @@ export class Quests extends Components.Component {
 
     data_insert(data) {
         this._elements.repeater.model.clear();
-        this._elements.repeater.model.add([
-            {
-                name: 'Подписка на Геншиндроп',
-                description: '50000',
-                status: 'sale',
-                url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            },
-            {
-                name: 'Перейти к отметкам на сайте',
-                description: '1000',
-                status: 'selected',
-                url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-            },
-        ]);
+        this._elements.repeater.model.add(data);
     }
 
     millisSinceStartOfDay() {
@@ -100,17 +87,20 @@ export class Quests extends Components.Component {
         let time = this.millisSinceStartOfDay();
         let current_time = new Date();
 
-        if (current_time.getHours() == 22) {
+        if (current_time.getHours() == 17) {
             this._elements.timer.style.display = 'none';
             this._elements.timer_button.style.background = 'var(--Theme__block__background_accent)';
+            this._elements.present.style.display = 'block';
         }
-        // else if (current_time.getHours() < 17) {
-        //     this._elements.timer.duration = 14 * 60 * 60 * 1000 - time;
-        //     this._elements.timer.start();
-        // }
-        // else if (current_time.getHours() > 17) {
-        //     this._elements.timer.duration = 38 * 60 * 60 * 1000 - time;
-        //     this._elements.timer.start();
-        // }
+        else if (current_time.getHours() < 17) {
+            this._elements.present.style.display = 'none';
+            this._elements.timer.duration = 14 * 60 * 60 * 1000 - time;
+            this._elements.timer.start();
+        }
+        else if (current_time.getHours() > 17) {
+            this._elements.present.style.display = 'none';
+            this._elements.timer.duration = 38 * 60 * 60 * 1000 - time;
+            this._elements.timer.start();
+        }
     }
 }
