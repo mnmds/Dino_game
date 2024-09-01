@@ -95,7 +95,6 @@ export class Main extends Components.Component {
         this._elements.energy.textContent = energy;
     }
 
-        return this._attributes.time;
     get language() {
         return this._attributes.language;
     }
