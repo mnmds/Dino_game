@@ -124,8 +124,7 @@ export class Referrals extends Components.Component {
             this.check = true
             setTimeout(() => this.check = false, 5000)
             const message = "Ваше сообщение для пересылки";
-            // const url = `tg://msg?text=${encodeURIComponent(message)}`;
-            const url = `https://t.me/testmmn_bot?start=${Units.Telegram.user?.id}`;
+            const url = `tg://msg?text=${encodeURIComponent(message)}`;
             Units.Telegram.link_outside__open(url)
             });
     }
