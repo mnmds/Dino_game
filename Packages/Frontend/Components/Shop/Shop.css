@@ -16,7 +16,7 @@
         align-items: center;
         display: grid;
         grid-template: repeat(2, auto) / repeat(3, auto);
-        justify-content: space-evenly;
+        justify-content: space-between;
         gap: 20px 0px;
 
         [active] {
