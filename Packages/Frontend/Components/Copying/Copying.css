@@ -1,0 +1,55 @@
+@layer init {
+    :host {
+        display: contents;
+    }
+
+    :host([_active]) {
+        .notification {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    .button {
+        background: var(--Theme__block__background_accent);
+        border-radius: var(--Theme__block_rounding);
+        box-sizing: border-box;
+        padding: 7px;
+        text-align: center;
+    }
+
+    .field {
+        align-items: center;
+        background: var(--Theme__button__foreground);
+        border-radius: var(--Theme__block_rounding);
+        display: flex;
+        font-size: 12px;
+        line-height: 1em;
+        padding: 7px;
+    }
+
+    .notification {
+        background: #aaa;
+        border-radius: var(--Theme__block_rounding);
+        color: #000d;
+        font-weight: 600;
+        opacity: 0;
+        position: absolute;
+        text-align: center;
+        transition: opacity 1s ease-in-out;
+        transition-property: opacity, visibility;
+        visibility: hidden;
+        width: calc(100% - 2 * var(--Theme__block__padding));
+    }
+
+    /* .panel { */
+    /*     display: grid; */
+    /*     grid-gap: 0px 10px; */
+    /*     grid-template-columns: 3fr 1fr; */
+    /* } */
+
+    .root {
+        box-sizing: border-box;
+        width: 100%;
+    }
+}
