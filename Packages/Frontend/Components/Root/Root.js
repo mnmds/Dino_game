@@ -31,7 +31,7 @@ export class Root extends Components.Viewport {
         _time_last_request: 0,
 
         limit_time__requests: {
-            default: 6e4,
+            default: 1e4,
             persistent: true,
             range: [0, Infinity],
         },

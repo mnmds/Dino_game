@@ -19,6 +19,7 @@
         background: var(--Theme_button_back);
         padding: 5px;
         text-align: center;
+        height: 3em;
         justify-content: center;
     }
 
@@ -37,9 +38,5 @@
         padding: 5px;
         text-align: center;
         justify-align: center;
-    }
-
-    .timer {
-        height: 6dvh;
     }
 }
