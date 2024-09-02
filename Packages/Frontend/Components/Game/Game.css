@@ -2,6 +2,7 @@
     :host {
         display: contents;
         height: 400px;
+        width: 400px;
     }
 
     .hero {
