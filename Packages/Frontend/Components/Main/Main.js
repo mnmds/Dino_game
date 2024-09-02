@@ -6,7 +6,7 @@ import {Timer} from '../Timer/Timer.js';
 
 
 export class Main extends Components.Component {
-    // static _components = [Game, Timer];
+    static _components = [Game, Timer];
     static _css_url = true;
     static _html_url = true;
     static _url = import.meta.url;
@@ -25,7 +25,7 @@ export class Main extends Components.Component {
     static _elements = {
         balance: '',
         energy: '',
-        // game: '',
+        game: '',
         income_value: '',
         level_value: '',
         max_energy: '',
@@ -42,9 +42,9 @@ export class Main extends Components.Component {
     };
 
     static _eventListeners_elements = {
-        // game: {
-        //     data__ping: '_game__on_dataPing',
-        // },
+        game: {
+            data__ping: '_game__on_dataPing',
+        },
         quests: {
             pointerdown: '_quests__on_pointerDown',
         },
@@ -76,7 +76,7 @@ export class Main extends Components.Component {
         this._elements.level_value.textContent = level_value;
         this._elements.income_value.textContent = level_value;
         this._elements.max_energy.textContent = level_value * 1000;
-        // this._elements.game.level = level_value;
+        this._elements.game.level = level_value;
     }
 
     get balance() {
@@ -109,7 +109,7 @@ export class Main extends Components.Component {
     }
     set hero(hero) {
         this._attribute__set('hero', hero);
-        // this._elements.game.hero = hero;
+        this._elements.game.hero = hero;
     }
 
 
