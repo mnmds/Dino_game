@@ -8,8 +8,8 @@
     .hero {
         grid-area: 1 / 1 / 2 / 2;
         height: inherit;
-        width: inherit;
         pointer-events: none;
+        /* width: inherit; */
         z-index: 2;
     }
 
