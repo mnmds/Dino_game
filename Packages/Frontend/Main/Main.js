@@ -14,4 +14,4 @@ alert(`${import.meta.url}, ${Settings}`)
 //     Units.Telegram.app__init();
 //     // window.Telegram.WebApp.expand();
 //     // window.Telegram.WebApp.ready();
-});
+// });
