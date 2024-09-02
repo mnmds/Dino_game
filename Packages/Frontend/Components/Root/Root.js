@@ -84,8 +84,8 @@ export class Root extends Components.Viewport {
 
 
     async _init() {
-        alert(import.meta.url)
-        // await this.user_get();
+        // alert(import.meta.url)
+        await this.user_get();
     }
 
     _on__back_click() {
