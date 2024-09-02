@@ -7,8 +7,8 @@
 
     .hero {
         grid-area: 1 / 1 / 2 / 2;
-        height: inherit;
-        width: inherit;
+        height: 400px;
+        width: 400px;
         z-index: -1;
     }
 
