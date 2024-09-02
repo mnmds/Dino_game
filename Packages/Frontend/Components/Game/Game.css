@@ -7,15 +7,17 @@
 
     .hero {
         grid-area: 1 / 1 / 2 / 2;
-        height: 400px;
-        width: 400px;
-        z-index: 10;
+        height: inherit;
+        width: inherit;
+        pointer-events: none;
+        z-index: 2;
     }
 
     .points {
         box-sizing: border-box;
         grid-area: 1 / 1 / 2 / 2;
         height: 100%;
+        z-index: 3;
     }
 
     .root {
