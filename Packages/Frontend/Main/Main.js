@@ -1,10 +1,10 @@
-import {Game} from '../Components/Game/Game.js';
+import {Main} from '../Components/Main/Main.js';
 // import {Root} from '../Components/Root/Root.js';
 // import {Components} from '../../Global/Frontend/Frontend.js';
 // import {Units} from '../../Global/Frontend/Frontend.js';
 
 
-alert(`${import.meta.url}, ${Game}`)
+alert(`${import.meta.url}, ${Main}`)
 Components.Component.init({
     styleSheets_descriptors: {
         dark: new URL('../Theme/Theme.css', import.meta.url),
