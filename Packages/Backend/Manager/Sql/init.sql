@@ -112,3 +112,17 @@ create table if not exists `User_quests` (
     foreign key (`tg_id`) references Users(`tg_id`),
     primary key (`id`)
 );
+
+insert into `Products`
+    (`price`, `name`, `resource_url`)
+values
+    (0, 'Dino', './Storage/Images/Heroes/Dino.png'),
+    (0, '1', null),
+    (100000, '2', null),
+    (200000, '3', null),
+    (500000, '4', null),
+    (1000000, '5', null),
+    (5000000, '6', null),
+    (10000000, '7', null),
+    (100000000, '8', null),
+    (1000000000, '9', null);

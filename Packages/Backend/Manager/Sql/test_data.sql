@@ -2,7 +2,6 @@ insert into `Products`
     (`price`, `name`, `resource_url`)
 values
     (1000, 'Dino', './Storage/Images/Heroes/Dino.png'),
-    (10, 'Duck', './Storage/Images/Heroes/Duck.png'),
     (1001, '1', null),
     (1002, '2', null),
     (1003, '3', null),
