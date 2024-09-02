@@ -24,12 +24,18 @@ export class Quests extends Components.Component {
 
     static _elements = {
         repeater: '',
-        timer: '',
+        timer1: '',
+        timer2: '',
         timer_button: '',
-        present: '',
+        present2: '',
+        timer_button1: '',
+        timer_button2: '',
+        present1: '',
     };
 
-    static _eventListeners = {};
+    static _eventListeners = {
+
+    };
 
     static Repeater_manager = class extends Components.Repeater.Manager {
         data__apply() {
@@ -48,7 +54,13 @@ export class Quests extends Components.Component {
     static _eventListeners_elements = {
         timer_button: {
             pointerdown: '_reward__on_pointerDown',
-        }
+        },
+        timer_button1: {
+            pointerdown: '_timer_button1__on_pointerDown',
+        },
+        timer_button2: {
+            pointerdown: '_timer_button2__on_pointerDown',
+        },
     };
 
 
@@ -70,6 +82,18 @@ export class Quests extends Components.Component {
         this._elements.repeater.Manager = this.constructor.Repeater_manager;
         this.data_insert();
         this.refresh();
+    }
+
+    _timer_button1__on_pointerDown() {
+        if (this.getTimeToNextSeventeenInMilliseconds() == 0) {
+            Units.Telegram.link_outside__open('https://genshindrop.top/give');
+        }
+    }
+
+    _timer_button2__on_pointerDown() {
+        if (this.getTimeToNextSeventeenInMilliseconds() == 0) {
+            Units.Telegram.link_outside__open('https://genshindrop.top/checkin');
+        }
     }
 
     data_insert(data) {
@@ -123,14 +147,20 @@ export class Quests extends Components.Component {
         console.log(`Время до следующих 17:00 по Московскому времени: ${timeInMilliseconds} миллисекунд.`);
 
         if (timeInMilliseconds == 0) {
-            this._elements.timer.style.display = 'none';
-            this._elements.timer_button.style.background = 'var(--Theme__block__background_accent)';
-            this._elements.present.style.display = 'block';
+            this._elements.timer1.style.display = 'none';
+            this._elements.timer2.style.display = 'none';
+            this._elements.timer_button1.style.background = 'var(--Theme__block__background_accent)';
+            this._elements.timer_button2.style.background = 'var(--Theme__block__background_accent)';
+            this._elements.present1.style.display = 'block';
+            this._elements.present2.style.display = 'block';
         }
         else {
-            this._elements.present.style.display = 'none';
-            this._elements.timer.duration = timeInMilliseconds;
-            this._elements.timer.start();
+            this._elements.present1.style.display = 'none';
+            this._elements.present2.style.display = 'none';
+            this._elements.timer1.duration = timeInMilliseconds;
+            this._elements.timer1.start();
+            this._elements.timer2.duration = timeInMilliseconds;
+            this._elements.timer2.start();
         }
     }
 }
