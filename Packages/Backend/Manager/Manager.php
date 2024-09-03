@@ -6,7 +6,7 @@ require_once __dir__ . '/../../Global/Apache/Apache.php';
 
 
 class Manager extends \Apache\RestServer {
-    static public $bot_token = '7451507935:AAFyRR6SS5X2htKQ8pD340bkKtL841ykGnA';
+    static public $bot_token = '7439740472:AAGQcG63Uq0iPOFEaVUm1bh5FPUeXT5UEnw';
     static public $request_method = '';
     static public $sql_charset = 'utf8';
     static public $sql_db_name = 'Dino_game';
