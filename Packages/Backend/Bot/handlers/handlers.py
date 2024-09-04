@@ -73,7 +73,7 @@ async def promocodes_posting():
 @router.message(Command('ref'))
 async def cmd_ref(message: types.Message):
     await message.answer((f'🚀 Вот твоя персональная ссылка на приглашение: '
-                          f'https://t.me/testmmn_bot?start={message.from_user.id}'))
+                          f'https://t.me/gdtapbot?start={message.from_user.id}'))
 
 
 def start__get_keyboard():
