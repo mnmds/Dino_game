@@ -66,6 +66,7 @@ export class Main extends Components.Component {
 
 
     _profit_temp = 0;
+    _translator = new Replacement();
 
 
     get level_value() {
@@ -111,10 +112,6 @@ export class Main extends Components.Component {
         this._attribute__set('hero', hero);
         this._elements.game.hero = hero;
     }
-
-
-    _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager.php', location));
-    _translator = new Replacement();
 
 
     _game__on_dataPing(event) {

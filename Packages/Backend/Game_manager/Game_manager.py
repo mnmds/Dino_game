@@ -13,7 +13,6 @@ class Game_manager(WebSocketServer):
     _user_refresh__interval = 30
 
 
-    @staticmethod
     def clients_count__get(self):
         return self.clients_count
 
@@ -98,4 +97,5 @@ class Game_manager(WebSocketServer):
         self.run()
 
 
-Game_manager()
+if __name__ == '__main__':
+    Game_manager()
