@@ -83,7 +83,7 @@ class Game_manager(WebSocketServer):
 
 
     def __init__(self):
-        super().__init__('localhost', 8000)
+        super().__init__('localhost', 8000, './cert.pem', './key.pem')
 
         self._db = Db(
             'Dino_game',

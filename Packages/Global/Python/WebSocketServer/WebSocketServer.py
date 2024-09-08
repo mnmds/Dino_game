@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname('WebSocketServer.py
 import base64
 import hashlib
 import socket
+import ssl
 import threading
 import time
 
@@ -16,13 +17,15 @@ class WebSocketServer:
     clients_count = 0
 
 
-    def __init__(self, host, port):
+    def __init__(self, host, port, ssl_cert, ssl_key):
         self._client_count_lock = threading.Lock()
         self._host = host
         self._method = ''
         self._method_args = []
         self._port = port
         self._server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._ssl_cert = ssl_cert
+        self._ssl_key = ssl_key
         self._timeStamp = 0
 
 
@@ -140,11 +143,15 @@ class WebSocketServer:
     def run(self):
         self._server_socket.bind((self._host, self._port))
         self._server_socket.listen(5)
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        ssl_context.load_cert_chain(certfile = self._ssl_cert, keyfile = self._ssl_key)
 
         print(f'Echo server started on {self._host}:{self._port}')
 
         while (True):
             client_socket, client_address = self._server_socket.accept()
+            client_socket = ssl_context.wrap_socket(client_socket, server_side = True)
+
             self._handshaking__open(client_socket)
             threading.Thread(target=self._message__get, args=(client_socket,)).start()
             # print(f'New connection from {client_address}')
