@@ -80,7 +80,7 @@ export class Game extends Components.Component {
 
         // this._promise_resolve = null;
         this._promise = new Promise((resolve) => this._promise_resolve = resolve);
-        this._handshaking = new WebSocket('ws://127.0.0.1:8000');
+        this._handshaking = new WebSocket('wss://127.0.0.1:8000');
         this._handshaking.addEventListener('close', this._handshaking__on_close.bind(this));
         this._handshaking.addEventListener('message', this._handshaking__on_message.bind(this));
         this._handshaking.addEventListener('open', this._handshaking__on_open.bind(this));

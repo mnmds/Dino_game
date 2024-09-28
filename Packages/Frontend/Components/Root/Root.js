@@ -65,6 +65,7 @@ export class Root extends Components.Viewport {
     }
 
     _rest = new RestClient(new URL('./Packages/Backend/Manager/Manager', location));
+    _user_data = {};
 
 
     get _time_last_request() {
@@ -82,6 +83,26 @@ export class Root extends Components.Viewport {
         this._attribute__set('limit_time__requests', limit_time__requests);
     }
 
+
+    _data__apply() {
+        this._elements.main.level_value = this._user_data.level;
+        this._elements.main.balance = this._user_data.balance;
+        this._elements.main.energy = Math.trunc(this._user_data.energy);
+        this._elements.main.hero = this._user_data.hero_name;
+
+        this._elements.quests.data_insert(this._user_data.quests);
+        // this._elements.quests._elements.timer.start();
+
+        this._elements.shop.data__insert(this._user_data.shop);
+        this._elements.shop.balance = this._user_data.balance;
+        this._elements.shop.offline_delivery = this._user_data.offline_delivery;
+        this._elements.shop.level = this._user_data.level;
+
+        this._elements.referrals.constructor.referrals = this._user_data.referrals;
+        this._elements.referrals.refresh();
+
+        this._elements.settings.newsletter = this._user_data.newsletter;
+    }
 
     async _init() {
         // alert(import.meta.url)
@@ -106,6 +127,7 @@ export class Root extends Components.Viewport {
         }
     }
 
+
     async user_get() {
         let is__time_requests = this._time_last_request ? (Date.now() - this._time_last_request) > this.limit_time__requests : true;
 
@@ -115,24 +137,8 @@ export class Root extends Components.Viewport {
 
         if (!result) return;
 
+        this._user_data = result;
         this._time_last_request = Date.now();
-
-        this._elements.main.level_value = result.level;
-        this._elements.main.balance = result.balance;
-        this._elements.main.energy = Math.trunc(result.energy);
-        this._elements.main.hero = result.hero_name;
-
-        this._elements.quests.data_insert(result.quests);
-        this._elements.quests._elements.timer.start();
-
-        this._elements.shop.data__insert(result.shop);
-        this._elements.shop.balance = result.balance;
-        this._elements.shop.offline_delivery = result.offline_delivery;
-        this._elements.shop.level = result.level;
-
-        this._elements.referrals.constructor.referrals = result.referrals;
-        this._elements.referrals.refresh();
-
-        this._elements.settings.newsletter = result.newsletter;
+        this._data__apply();
     }
 }

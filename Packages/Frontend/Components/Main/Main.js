@@ -115,6 +115,10 @@ export class Main extends Components.Component {
 
 
     _game__on_dataPing(event) {
+        if (event.detail.profit < this._profit_temp) {
+            this._profit_temp = 0;
+        }
+
         this.balance += event.detail.profit - this._profit_temp;
         this.energy = Math.trunc(event.detail.energy);
         this._profit_temp = event.detail.profit;
